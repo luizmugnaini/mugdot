@@ -1,7 +1,8 @@
 lua << EOF
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  ensure_installed = { "rust", "haskell", "c", "cpp", "python", "latex", "vim", "lua" },
   highlight = {
     custom_captures = {
       -- Highlight the @foo.bar capture group with the "Identifier" highlight group.
