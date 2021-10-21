@@ -1,0 +1,12 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Luiz Mugnaini
+	email = luizmugnaini@gmail.com
+# Please adapt and uncomment the following lines:
+#	name = Luiz Gustavo Mugnaini
+#	email = luiz@luizmug.localdomain
+[core]
+	editor = nvim
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
