@@ -3,8 +3,8 @@
 
 ;; Font size:
 (set-face-attribute 'default nil :height 120)
-(add-to-list 'default-frame-alist '(font . "Hack"))
-(set-face-attribute 'default t :font "Hack")
+(add-to-list 'default-frame-alist '(font . "Hasklug Nerd Font"))
+(set-face-attribute 'default t :font "Hasklug Nerd Font")
 
 ;; Line numbers:
 (column-number-mode) (global-display-line-numbers-mode t)
