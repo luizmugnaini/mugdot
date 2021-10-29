@@ -1,4 +1,4 @@
-" My init.vim 
+" My init.vim
 "
 " Luiz Mugnaini
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -18,6 +18,7 @@ source $HOME/.config/nvim/plugins/rooter.vim
 " Language support
 source $HOME/.config/nvim/plugins/treesitter.vim
 source $HOME/.config/nvim/plugins/lsp_conf.lua
+source $HOME/.config/nvim/plugins/rust.vim
 source $HOME/.config/nvim/plugins/haskell-vim.vim
 
 " File searching

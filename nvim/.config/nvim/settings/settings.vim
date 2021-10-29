@@ -1,4 +1,4 @@
-" Python provider 
+" Python provider
 let g:python_host_prog = '/usr/bin/python2'
 let g:python3_host_skip_check=1
 let g:python3_host_prog = '/usr/bin/python3'
@@ -13,7 +13,10 @@ nnoremap <C-h> :bp<CR>
 nnoremap <C-l> :bn<CR>
 
 " Remove trailing whitespace
-autocmd FileType c,cpp,java,python,rust autocmd BufWritePre <buffer> %s/\s\+$//e
+autocmd FileType c,cpp,java,python,rust,vim,lua autocmd BufWritePre <buffer> %s/\s\+$//e
+
+" If you want to have beam in insert mode, just comment this line out
+"set guicursor=i:block
 
 syntax enable                           " Enables syntax highlighing
 set lazyredraw                          " Don't redraw while executing macros (good performance config)
@@ -28,7 +31,7 @@ set fileencoding=utf-8                  " The encoding written to file
 set ruler              			            " Show the cursor position all the time
 set number                              " Line numbers
 set relativenumber                      " Shows number relative to the line you are in
-set cursorline                          " Enable highlighting of the current line
+"set cursorline                          " Enable highlighting of the current line
 set cmdheight=2                         " More space for displaying messages
 set iskeyword+=-                      	" treat dash separated words as a word text object
 set mouse=a                             " Enable your mouse
@@ -57,8 +60,8 @@ set scrolloff=1                         " show at least 1 lines above/below curs
 
 " More on clipboard:
 set clipboard+=unnamedplus              " Copy paste between everything else to vim
-"vnoremap <C-c> "+y                      
-"map <C-v> "+P
+vnoremap <C-c> "+y
+map <C-v> "+P
 """"""""
 
 au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC

@@ -5,14 +5,8 @@ export ZSH="/home/luiz/.oh-my-zsh"
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell" # "refined"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes 
+ZSH_THEME="mugnaini-refined"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -102,8 +96,9 @@ function zle-keymap-select {
   elif [[ ${KEYMAP} == main ]] ||
        [[ ${KEYMAP} == viins ]] ||
        [[ ${KEYMAP} = '' ]] ||
-       [[ $1 = 'beam' ]]; then
-    echo -ne '\e[5 q'
+       [[ $1 = 'beam' ]]; then 
+    #echo -ne '\e[1 q' # Uncomment this if you want block in insert mode 
+    echo -ne '\e[5 q' 
   fi
 }
 zle -N zle-keymap-select
@@ -119,11 +114,17 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
 
+alias vim="nvim"
+alias blue="bluetoothctl"
+alias red="redshift -P -O"
 
-export PATH="$(ruby -e 'puts Gem.user_dir')/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
+
+# nnn integration
+alias n="nnn"
+export NNN_PLUG='c:cdpath;o:nuke;p:preview-tui'
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
