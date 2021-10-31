@@ -31,7 +31,8 @@ Plug 'preservim/nerdcommenter'
 Plug 'ryanoasis/vim-devicons'
 
 " Finders
-Plug 'kevinhwang91/rnvimr' ", {'do': 'make sync'}
+"Plug 'kevinhwang91/rnvimr'
+Plug 'mcchrish/nnn.vim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
@@ -43,9 +44,7 @@ Plug 'tpope/vim-fugitive'
 " Language stuff
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'neovim/nvim-lspconfig'
-" Haskell
 Plug 'neovimhaskell/haskell-vim'
-" Rust
 Plug 'rust-lang/rust.vim'
 
 " Completions

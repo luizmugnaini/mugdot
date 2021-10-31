@@ -16,7 +16,7 @@ nnoremap <C-l> :bn<CR>
 autocmd FileType c,cpp,java,python,rust,vim,lua autocmd BufWritePre <buffer> %s/\s\+$//e
 
 " If you want to have beam in insert mode, just comment this line out
-"set guicursor=i:block
+set guicursor=i:block
 
 syntax enable                           " Enables syntax highlighing
 set lazyredraw                          " Don't redraw while executing macros (good performance config)

@@ -14,8 +14,7 @@ ZSH_THEME="mugnaini-refined"
 # Uncomment the following line to automatically update without prompting.
 # DISABLE_UPDATE_PROMPT="true"
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
+# Uncomment the following line if you want to disable marking untracked files under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
@@ -123,8 +122,30 @@ export PATH="$HOME/.local/bin:$PATH"
 
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
 
-# nnn integration
-alias n="nnn"
-export NNN_PLUG='c:cdpath;o:nuke;p:preview-tui'
+
+# NNN integration
+alias n="nnn -Hdce"
+
+# Auto cd function for nnn
+#nnn ()
+#{
+  #if [ -n $NNNLVL ] && [ "${NNNLVL:-0}" -ge 1 ]; then
+    #echo "nnn is already running"
+    #return
+  #fi
+
+  #export NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+
+  #nnn -Rd "$@"
+
+  #if [ -f "$NNN_TMPFILE" ]; then
+    #. "$NNN_TMPFILE"
+    #rm -f "$NNN_TMPFILE" > /dev/null
+  #fi
+#}
+
+export NNN_PLUG="p:preview-tui"
+#export NNN_USE_EDITOR=1
+export NNN_OPENER="nnn-opener"
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null

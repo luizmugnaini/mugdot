@@ -23,7 +23,8 @@ source $HOME/.config/nvim/plugins/haskell-vim.vim
 
 " File searching
 source $HOME/.config/nvim/plugins/telescope.vim
-source $HOME/.config/nvim/plugins/rnvimr.vim
+source $HOME/.config/nvim/plugins/nnn.vim
+"source $HOME/.config/nvim/plugins/rnvimr.vim
 
 " Git integration
 source $HOME/.config/nvim/plugins/fugitive.vim
