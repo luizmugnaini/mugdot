@@ -6,7 +6,7 @@ export ZSH="/home/luiz/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes 
-ZSH_THEME="mugnaini-refined"
+ZSH_THEME="mugnaini" #"mugnaini-refined"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -124,28 +124,10 @@ bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
 
 
 # NNN integration
-alias n="nnn -Hdce"
+alias n="nnn -Hde"
 
-# Auto cd function for nnn
-#nnn ()
-#{
-  #if [ -n $NNNLVL ] && [ "${NNNLVL:-0}" -ge 1 ]; then
-    #echo "nnn is already running"
-    #return
-  #fi
-
-  #export NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
-
-  #nnn -Rd "$@"
-
-  #if [ -f "$NNN_TMPFILE" ]; then
-    #. "$NNN_TMPFILE"
-    #rm -f "$NNN_TMPFILE" > /dev/null
-  #fi
-#}
-
-export NNN_PLUG="p:preview-tui"
-#export NNN_USE_EDITOR=1
+export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"
+export NNN_USE_EDITOR=1
 export NNN_OPENER="nnn-opener"
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null

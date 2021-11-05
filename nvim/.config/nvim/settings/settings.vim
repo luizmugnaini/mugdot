@@ -6,17 +6,18 @@ let g:python3_host_prog = '/usr/bin/python3'
 nnoremap <SPACE> <Nop>
 let mapleader=" "
 
-" Change cwd and print it
+" Change cwd
 nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
-" Cycling through buffers
-nnoremap <C-h> :bp<CR>
-nnoremap <C-l> :bn<CR>
 
-" Remove trailing whitespace
-autocmd FileType c,cpp,java,python,rust,vim,lua autocmd BufWritePre <buffer> %s/\s\+$//e
+" Cycling through buffers
+nnoremap <silent> <C-h> :bp<CR>
+nnoremap <silent> <C-l> :bn<CR>
+
+" Strip trailing white-spaces
+autocmd FileType c,cpp,java,python,rust,vim,lua,tex autocmd BufWritePre <buffer> %s/\s\+$//e
 
 " If you want to have beam in insert mode, just comment this line out
-set guicursor=i:block
+"set guicursor=i:block
 
 syntax enable                           " Enables syntax highlighing
 set lazyredraw                          " Don't redraw while executing macros (good performance config)
@@ -58,10 +59,10 @@ set smartcase                           " Smart searching on cases
 set hlsearch                            " highlighted search as default
 set scrolloff=1                         " show at least 1 lines above/below cursor
 
-" More on clipboard:
+" More on clipboard: requires xclip or tmux
 set clipboard+=unnamedplus              " Copy paste between everything else to vim
-vnoremap <C-c> "+y
-map <C-v> "+P
+vnoremap <C-y> "+y
+map <C-p> "+P
 """"""""
 
 au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
