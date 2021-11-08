@@ -1,14 +1,12 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-# Path to your oh-my-zsh installation.  
+# Path to your oh-my-zsh installation.
 export ZSH="/home/luiz/.oh-my-zsh"
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes 
-ZSH_THEME="mugnaini" #"mugnaini-refined"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
+ZSH_THEME="mugnaini" #"mugnaini-refined" Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
@@ -113,21 +111,30 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
 
+# aliases
 alias vim="nvim"
 alias blue="bluetoothctl"
 alias red="redshift -P -O"
+alias kbd="setxkbmap us -option caps:swapescape"
 
+# git
+alias glog="git log --decorate --graph"
+alias gst="git status"
+
+# path stuff
 export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
+# tmux sessionizer binding
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
 
+# ipython stuff
+export IPYTHONDIR="~/.config/ipython"
+alias ipy="ipython --profile=mugipy"
 
-# NNN integration
+# nnn integration
 alias n="nnn -Hde"
-
-export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"
-export NNN_USE_EDITOR=1
 export NNN_OPENER="nnn-opener"
+export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null

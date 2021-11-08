@@ -4,7 +4,7 @@ let g:python3_host_skip_check=1
 let g:python3_host_prog = '/usr/bin/python3'
 
 nnoremap <SPACE> <Nop>
-let mapleader=" "
+let mapleader="\<Space>"
 
 " Change cwd
 nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
@@ -58,6 +58,16 @@ set formatoptions-=cro                  " Stop newline continuation of comments
 set smartcase                           " Smart searching on cases
 set hlsearch                            " highlighted search as default
 set scrolloff=1                         " show at least 1 lines above/below cursor
+
+nnoremap <C-k> <Esc>
+inoremap <C-k> <Esc>
+vnoremap <C-k> <Esc>
+snoremap <C-k> <Esc>
+xnoremap <C-k> <Esc>
+cnoremap <C-k> <C-c>
+onoremap <C-k> <Esc>
+lnoremap <C-k> <Esc>
+tnoremap <C-k> <Esc>
 
 " More on clipboard: requires xclip or tmux
 set clipboard+=unnamedplus              " Copy paste between everything else to vim

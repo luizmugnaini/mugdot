@@ -1,4 +1,6 @@
-/* See LICENSE file for copyright and license details. */
+// Luiz Mugnaini configuration for dwm window manager
+// dependencies: fullgaps, movestack
+
 #include <X11/XF86keysym.h>
 
 /* appearance */
@@ -13,7 +15,7 @@ static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#674ea7"; //"#005577";
+static const char col_cyan[]        = "#674ea7"; // "#005577"; this is actually purple :)
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -48,7 +50,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod4Mask
+#define MODKEY Mod1Mask // use Mod4Mask for win key
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -65,36 +67,38 @@ static const char *roficmd[]        = { "rofi", "-show", "run", NULL };
 static const char *termcmd[]        = { "kitty", NULL };
 static const char *browsercmd[]     = { "brave", NULL };
 // scrot -s ~/Pictures/screenshots/%Y-%m-%d-%T-screenshot.png
-static const char *printcmd[]       = { "scrot", "-s", "~/Pictures/screenshots/%Y-%m-%d-%T-screenshot.png", NULL };
+static const char *printcmd[]       = { "scrot", "-s", "~/Pictures/screenshots/%Y-%m-%d-screenshot.png", NULL };
 static const char *xscreenlockcmd[] = { "xscreensaver-command", "-lock", NULL };
+static const char *suspendsys[] = { "systemctl", "suspend", NULL };
 static const char *mutecmd[]        = { "pamixer", "-t", NULL};
 static const char *downvolcmd[]     = { "pamixer", "-d", "5", NULL };
 static const char *upvolcmd[]       = { "pamixer", "-i", "5", NULL};
-static const char *kbdNoDead[]      = { "setxkbmap", "-layout", "br", "-variant", "nodeadkeys", "-option", "caps:swapescape", NULL };
+static const char *kbdswap[]        = { "setxkbmap", "us", "-option", "caps:swapescape", NULL };
 static const char *kbdDead[]        = { "setxkbmap", "-layout", "br", "-option", "caps:swapescape", NULL };
 
 #include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
   // dmenu
-  { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = dmenucmd } },
+  { MODKEY|ShiftMask,             XK_p,            spawn,          {.v = dmenucmd } },
   // Rofi
-	{ MODKEY,                       XK_p,      spawn,          {.v = roficmd } },
+	{ MODKEY,                       XK_p,            spawn,          {.v = roficmd } },
   // Terminal
-	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_Return,       spawn,          {.v = termcmd } },
   // Browser
-	{ MODKEY,                 XK_bracketright, spawn,          {.v = browsercmd } },
+	{ MODKEY,                       XK_bracketright, spawn,          {.v = browsercmd } },
   // Print screen
-	{ 0,                        XK_Print,      spawn,          {.v = printcmd } },
+	{ 0,                            XK_Print,        spawn,          {.v = printcmd } },
   // Audio
-  { 0, 				           XF86XK_AudioMute,   spawn,          {.v = mutecmd } },
-	{ 0,             XF86XK_AudioLowerVolume,  spawn,          {.v = downvolcmd } },
-	{ 0,             XF86XK_AudioRaiseVolume,  spawn,          {.v = upvolcmd } },
+  { 0, 				                    XF86XK_AudioMute,        spawn,  {.v = mutecmd } },
+	{ 0,                            XF86XK_AudioLowerVolume, spawn,  {.v = downvolcmd } },
+	{ 0,                            XF86XK_AudioRaiseVolume, spawn,  {.v = upvolcmd } },
   // Keyboard
-  { MODKEY,                       XK_slash, spawn,           {.v = kbdNoDead } },
-  { MODKEY,                   XK_backslash, spawn,           {.v = kbdDead } },
-  // Screen locker
-  { MODKEY|ShiftMask,             XK_z,      spawn,          {.v = xscreenlockcmd } },
+  { MODKEY,                       XK_semicolon, spawn,             {.v = kbdswap} },
+  { MODKEY,                       XK_backslash, spawn,             {.v = kbdDead } },
+  // Screen locker and suspension
+  { MODKEY|ShiftMask,             XK_z,         spawn,             {.v = xscreenlockcmd } },
+  { MODKEY|ShiftMask,             XK_s,         spawn,             {.v = suspendsys } },
   // Misc
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },

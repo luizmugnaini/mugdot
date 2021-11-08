@@ -205,8 +205,8 @@
   :bind-keymap
   ("C-c p" . projectile-command-map) ;; Every projectile command starts with C-c p
   :init
-  (when (file-directory-p "~/luizm/math")
-    (setq projectile-project-search-path '("~/luizm/math")))
+  (when (file-directory-p "~/luizm/Projects")
+    (setq projectile-project-search-path '("~/luizm/Projects")))
   (setq projectile-switch-project-action #'projectile-dired))
 
 
