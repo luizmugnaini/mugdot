@@ -52,6 +52,9 @@ fi
 [ -f /etc/xprofile ] && . /etc/xprofile
 [ -f ~/.xprofile ] && . ~/.xprofile
 
+# xmodmap for key remappings 
+[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
+
 # dwm bar 
 #exec dwm
 
