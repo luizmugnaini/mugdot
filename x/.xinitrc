@@ -53,7 +53,7 @@ fi
 [ -f ~/.xprofile ] && . ~/.xprofile
 
 # xmodmap for key remappings 
-[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
+[[ -f ~/.Xmodmap ]] && xmodmap ~/.xmodmap_caps_esc
 
 # dwm bar 
 #exec dwm

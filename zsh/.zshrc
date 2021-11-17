@@ -1,60 +1,20 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-# Path to your oh-my-zsh installation.
 export ZSH="/home/luiz/.oh-my-zsh"
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes 
-ZSH_THEME="mugnaini" #"mugnaini-refined" Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
-
-# Uncomment the following line if you want to disable marking untracked files under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+ZSH_THEME="mugnaini" # "mugnaini-refined"
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Here starts my config:
-
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
+# ** set by zsh **
+HISTFILE=~/.cache/.histfile-zsh
 HISTSIZE=1000
 SAVEHIST=1000
 unsetopt beep
 bindkey -v
-# End of lines configured by zsh-newuser-install
 
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/luiz/.zshrc'
@@ -65,16 +25,9 @@ zmodload zsh/complist
 compinit
 _comp_options+=(globdots)
 
-#utoload -Uz promptinit
-#promptinit
-#prompt walters
 
-export EDITOR="nvim"
-export VISUAL="nvim"
-export TERMINAL="kitty"
-export BROWSER="brave"
 
-# vi mode
+# ** vi mode **
 bindkey -v
 export KEYTIMEOUT=1
 
@@ -86,6 +39,9 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
 
 # Change cursor shape for different vi modes.
+# Notice that there are two main options:
+#   - block: '\e[1 q'
+#   - beam:  '\e[5 q'
 function zle-keymap-select {
   if [[ ${KEYMAP} == vicmd ]] ||
      [[ $1 = 'block' ]]; then
@@ -94,7 +50,6 @@ function zle-keymap-select {
        [[ ${KEYMAP} == viins ]] ||
        [[ ${KEYMAP} = '' ]] ||
        [[ $1 = 'beam' ]]; then 
-    #echo -ne '\e[1 q' # Uncomment this if you want block in insert mode 
     echo -ne '\e[5 q' 
   fi
 }
@@ -107,32 +62,35 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-# Edit line in nvim with ctrl+e:
-autoload edit-command-line; zle -N edit-command-line
-bindkey '^e' edit-command-line
+# ** env variables **
+export EDITOR="nvim"
+export VISUAL="nvim"
+export TERMINAL="kitty"
+export BROWSER="brave"
 
-# aliases
-alias vim="nvim"
-alias blue="bluetoothctl"
-alias red="redshift -P -O"
-alias kbd="setxkbmap us -option caps:swapescape"
-
-# git
-alias glog="git log --decorate --graph"
-alias gst="git status"
-
-# path stuff
+# ** path exports **
 export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
-# tmux sessionizer binding
+# ** aliases **
+alias vim="nvim"
+alias ls="exa"
+alias cat="bat"
+alias blue="bluetoothctl"
+alias red="redshift -P -O"
+alias kbd="setxkbmap us -option caps:swapescape"
+alias glog="git log --decorate --graph"
+alias gst="git status"
+
+
+# ** tmux sessionizer binding **
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
 
-# ipython stuff
+# ** ipython **
 export IPYTHONDIR="~/.config/ipython"
 alias ipy="ipython --profile=mugipy"
 
-# nnn integration
+# ** nnn integration **
 alias n="nnn -Hde"
 export NNN_OPENER="nnn-opener"
 export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"

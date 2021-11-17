@@ -9,6 +9,12 @@ let mapleader="\<Space>"
 " Change cwd
 nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
 
+" Quick save
+nnoremap <leader>w :w<CR>
+
+" Stop annoying highlighting
+nnoremap <leader>hh :noh<CR>
+
 " Cycling through buffers
 nnoremap <silent> <C-h> :bp<CR>
 nnoremap <silent> <C-l> :bn<CR>
@@ -58,6 +64,9 @@ set formatoptions-=cro                  " Stop newline continuation of comments
 set smartcase                           " Smart searching on cases
 set hlsearch                            " highlighted search as default
 set scrolloff=1                         " show at least 1 lines above/below cursor
+
+set undodir=~/.cache/nvim/.undovim
+set undofile
 
 nnoremap <C-k> <Esc>
 inoremap <C-k> <Esc>

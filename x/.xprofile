@@ -8,3 +8,4 @@ xscreensaver -no-splash &
 feh --bg-fill --no-fehbg ~/Pictures/wallpapers/to_camp.jpg &
 setxkbmap us -option caps:swapescape &
 redshift -P -O 4500 &
+xautolock -time 10 -locker slock &
