@@ -22,6 +22,7 @@ Plug 'KeitaNakamura/tex-conceal.vim'
 
 " Themes
 Plug 'morhetz/gruvbox'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -31,12 +32,12 @@ Plug 'preservim/nerdcommenter'
 Plug 'ryanoasis/vim-devicons'
 
 " Finders
-"Plug 'kevinhwang91/rnvimr'
 Plug 'mcchrish/nnn.vim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'airblade/vim-rooter'
 
 " Git integration
 Plug 'tpope/vim-fugitive'
@@ -53,8 +54,5 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 Plug 'hrsh7th/cmp-path'
-
-
-Plug 'airblade/vim-rooter'
 
 call plug#end()

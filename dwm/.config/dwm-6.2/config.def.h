@@ -33,9 +33,9 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class      instance    title   tags mask  isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,   0,         1,           -1 },
+	{ "Firefox",  NULL,       NULL,   1 << 8,    0,           -1 },
 };
 
 /* layout(s) */
@@ -84,7 +84,7 @@ static const char *browsercmd[] = { "firefox", NULL };
 
 // screenshot
 static const char *printcmd[] = {
-  "scrot", "-s", "~/Pictures/screenshots/screenshot.png", NULL
+  "scrot -s ~/Pictures/screenshots/screenshot.png", NULL
 };
 
 // System locking and suspend
@@ -93,8 +93,8 @@ static const char *suspendcmd[] = { "systemctl", "suspend", NULL };
 
 // Keyboard
 // "-option caps:swapescape" is not needed since we are using xmodmap
-static const char *kbdus[] = { "setxkbmap", "us", NULL };
-static const char *kbdbr[] = { "setxkbmap", "br", NULL };
+static const char *kbdus[] = { "setxkbmap us -option caps:swapescape", NULL };
+static const char *kbdbr[] = { "setxkbmap br -option caps:swapescape", NULL };
 
 // Audio
 static const char *mutecmd[]    = { "pamixer", "-t", NULL};

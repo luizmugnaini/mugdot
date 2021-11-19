@@ -79,7 +79,7 @@ lnoremap <C-k> <Esc>
 tnoremap <C-k> <Esc>
 
 " More on clipboard: requires xclip or tmux
-set clipboard+=unnamedplus              " Copy paste between everything else to vim
+"set clipboard+=unnamedplus              " Copy paste between everything else to vim
 vnoremap <C-y> "+y
 map <C-p> "+P
 """"""""

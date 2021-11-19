@@ -10,7 +10,7 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # ** set by zsh **
-HISTFILE=~/.cache/.histfile-zsh
+HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 unsetopt beep
@@ -42,25 +42,32 @@ bindkey -v '^?' backward-delete-char
 # Notice that there are two main options:
 #   - block: '\e[1 q'
 #   - beam:  '\e[5 q'
+vim_normal='\e[1 q'
+vim_insert='\e[1 q'
 function zle-keymap-select {
+  # normal, visual, cmd modes
   if [[ ${KEYMAP} == vicmd ]] ||
      [[ $1 = 'block' ]]; then
-    echo -ne '\e[1 q'
+    echo -ne $vim_normal
+  # insert mode
   elif [[ ${KEYMAP} == main ]] ||
        [[ ${KEYMAP} == viins ]] ||
        [[ ${KEYMAP} = '' ]] ||
        [[ $1 = 'beam' ]]; then 
-    echo -ne '\e[5 q' 
+    echo -ne $vim_insert
   fi
 }
+
 zle -N zle-keymap-select
 zle-line-init() {
     zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-    echo -ne "\e[5 q"
+    echo -ne $vim_insert
 }
+
 zle -N zle-line-init
-echo -ne '\e[5 q' # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+echo -ne $vim_insert # Use beam shape cursor on startup.
+
+preexec() { echo -ne $vim_insert ;} # Use cursor shape for each new prompt.
 
 # ** env variables **
 export EDITOR="nvim"

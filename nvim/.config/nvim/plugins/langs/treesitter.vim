@@ -16,7 +16,7 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = { "rust", "haskell", "c", "cpp", "python", "latex", "vim", "lua" },
   },
   indent = {
-      enable = false --{ "rust", "haskell", "c", "cpp", "python", "latex", "vim", "lua" },
+      enable = false,
   }
 }
 

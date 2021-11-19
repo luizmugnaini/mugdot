@@ -3,7 +3,6 @@ picom -b &
 xrandr --output HDMI1 --auto &
 xrandr --output eDP-1 --auto --right-of HDMI-1 &
 /home/luiz/.config/dwm-bar/dwm_bar.sh &
-trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 0 --transparent true --alpha 0 --tint 0x282c34  --height 18 &
 xscreensaver -no-splash &
 feh --bg-fill --no-fehbg ~/Pictures/wallpapers/to_camp.jpg &
 setxkbmap us -option caps:swapescape &

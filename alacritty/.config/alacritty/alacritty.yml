@@ -33,7 +33,7 @@ font:
     style: Regular 
 
   # Point size
-  size: 13.0
+  size: 13
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
@@ -42,80 +42,44 @@ font:
      x: 0
      y: 0
 
-# Colors (Tomorrow Night)
 colors:
   # Default colors
   primary:
     background: '#282828'
-    foreground: '#fbf1c7'
+    foreground: '#f8f8f2'
 
   cursor:
-    text: '#1d2021'
-    cursor: '#d5c4a1'
-
-
-  #vi_mode_cursor:
-  #  text: CellBackground
-  #  cursor: CellForeground
-
-  # Selection colors
-  #selection:
-  #  text: CellBackground
-  #  background: CellForeground
+    text:   '#111111'
+    cursor: '#cccccc'
 
   # Normal colors
   normal:
-    black:   '0x1c1f24'
-    red:     '0xff6c6b'
-    green:   '0x98be65'
-    yellow:  '0xda8548'
-    blue:    '0x51afef'
-    magenta: '0xc678dd'
-    cyan:    '0x5699af'
-    white:   '0x202328'
+    black:   '#1c1f24'
+    red:     '#ff6c6b'
+    green:   '#98be65'
+    yellow:  '#da8548'
+    blue:    '#51afef'
+    magenta: '#c678dd'
+    cyan:    '#5699af'
+    white:   '#f8f8f2'
 
 
   # Bright colors
   bright:
-    black:   '0x5b6268'
-    red:     '0xda8548'
-    green:   '0x4db5bd'
-    yellow:  '0xecbe7b'
-    blue:    '0x3071db'
-    magenta: '0xa9a1e1'
-    cyan:    '0x46d9ff'
-    white:   '0xdfdfdf'
-
-  # Dim colors
-  #
-  # If the dim colors are not set, they will be calculated automatically based
-  # on the `normal` colors.
-  #dim:
-  #  black:   '#131415'
-  #  red:     '#864343'
-  #  green:   '#777c44'
-  #  yellow:  '#9e824c'
-  #  blue:    '#556a7d'
-  #  magenta: '#75617b'
-  #  cyan:    '#5b7d78'
-  #  white:   '#828482'
-
-  # Indexed Colors
-  #
-  # The indexed colors include all colors from 16 to 256.
-  # When these are not set, they're filled with sensible defaults.
-  #
-  # Example:
-  #   `- { index: 16, color: '#ff00ff' }`
-  #
-  #indexed_colors: []
-
+    black:   '#5b6268'
+    red:     '#da8548'
+    green:   '#4db5bd'
+    yellow:  '#ecbe7b'
+    blue:    '#3071db'
+    magenta: '#a9a1e1'
+    cyan:    '#46d9ff'
+    white:   '#e5e5e5'
 
 # Background opacity
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 0.8
+background_opacity: 0.9
 
 selection:
   # When set to `true`, selected text will be copied to the primary clipboard.
@@ -134,7 +98,7 @@ cursor:
     #   - Off: Disable blinking by default
     #   - On: Enable blinking by default
     #   - Always: Force the cursor to always blink
-    blinking: Off 
+    blinking: Never 
 
 # Startup directory
 #

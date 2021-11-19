@@ -9,22 +9,19 @@ source $HOME/.config/nvim/settings/settings.vim
 source $HOME/.config/nvim/plugins/plugins.vim
 
 " Themes
-source $HOME/.config/nvim/themes/gruvbox.vim
-source $HOME/.config/nvim/themes/airline.vim
-
-" cwd
-source $HOME/.config/nvim/plugins/rooter.vim
+source $HOME/.config/nvim/plugins/themes/gruvbox.vim
+source $HOME/.config/nvim/plugins/themes/airline.vim
 
 " Language support
-source $HOME/.config/nvim/plugins/treesitter.vim
-source $HOME/.config/nvim/plugins/lsp_conf.lua
-source $HOME/.config/nvim/plugins/rust.vim
-source $HOME/.config/nvim/plugins/haskell-vim.vim
+source $HOME/.config/nvim/plugins/langs/treesitter.vim
+source $HOME/.config/nvim/plugins/langs/lsp_conf.lua
+source $HOME/.config/nvim/plugins/langs/rust.vim
+source $HOME/.config/nvim/plugins/langs/haskell-vim.vim
 
-" File searching
-source $HOME/.config/nvim/plugins/telescope.vim
-source $HOME/.config/nvim/plugins/nnn.vim
-"source $HOME/.config/nvim/plugins/rnvimr.vim
+" Finders and such
+source $HOME/.config/nvim/plugins/finders/rooter.vim
+source $HOME/.config/nvim/plugins/finders/telescope.vim
+source $HOME/.config/nvim/plugins/finders/nnn.vim
 
 " Git integration
-source $HOME/.config/nvim/plugins/fugitive.vim
+source $HOME/.config/nvim/plugins/git/fugitive.vim
