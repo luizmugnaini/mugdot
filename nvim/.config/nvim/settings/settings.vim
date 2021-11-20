@@ -23,7 +23,7 @@ nnoremap <silent> <C-l> :bn<CR>
 autocmd FileType c,cpp,java,python,rust,vim,lua,tex autocmd BufWritePre <buffer> %s/\s\+$//e
 
 " If you want to have beam in insert mode, just comment this line out
-"set guicursor=i:block
+set guicursor=i:block
 
 syntax enable                           " Enables syntax highlighing
 set lazyredraw                          " Don't redraw while executing macros (good performance config)
@@ -68,6 +68,7 @@ set scrolloff=1                         " show at least 1 lines above/below curs
 set undodir=~/.cache/nvim/.undovim
 set undofile
 
+" Other alternatives for using escape
 nnoremap <C-k> <Esc>
 inoremap <C-k> <Esc>
 vnoremap <C-k> <Esc>

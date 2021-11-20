@@ -22,9 +22,13 @@ Plug 'KeitaNakamura/tex-conceal.vim'
 
 " Themes
 Plug 'morhetz/gruvbox'
-Plug 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'liuchengxu/space-vim-theme'
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
+Plug 'lifepillar/vim-colortemplate'
+Plug 'glepnir/dashboard-nvim'
 
 " <leader> + cc comments out the marked lines
 Plug 'preservim/nerdcommenter'
@@ -33,10 +37,12 @@ Plug 'ryanoasis/vim-devicons'
 
 " Finders
 Plug 'mcchrish/nnn.vim'
+
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+
 Plug 'airblade/vim-rooter'
 
 " Git integration
@@ -45,8 +51,10 @@ Plug 'tpope/vim-fugitive'
 " Language stuff
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'neovim/nvim-lspconfig'
+
 Plug 'neovimhaskell/haskell-vim'
 Plug 'rust-lang/rust.vim'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
 " Completions
 Plug 'hrsh7th/cmp-nvim-lsp'

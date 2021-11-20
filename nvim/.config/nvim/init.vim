@@ -1,7 +1,3 @@
-" My init.vim
-"
-" Luiz Mugnaini
-""""""""""""""""""""""""""""""""""""""""""""""""""
 " General settings
 source $HOME/.config/nvim/settings/settings.vim
 
@@ -9,8 +5,9 @@ source $HOME/.config/nvim/settings/settings.vim
 source $HOME/.config/nvim/plugins/plugins.vim
 
 " Themes
-source $HOME/.config/nvim/plugins/themes/gruvbox.vim
+source $HOME/.config/nvim/plugins/themes/space.vim
 source $HOME/.config/nvim/plugins/themes/airline.vim
+source $HOME/.config/nvim/plugins/themes/dashboard.vim
 
 " Language support
 source $HOME/.config/nvim/plugins/langs/treesitter.vim
