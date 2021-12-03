@@ -1,0 +1,7 @@
+# dwm
+*.o
+*.diff
+*.orig
+config.h
+dwm/.config/dwm-6.2/dwm
+dwm/.config/dwm-6.2/dwm.png
