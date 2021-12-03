@@ -1,10 +1,23 @@
+#!/bin/bash
 nm-applet &
 picom -b &
+
+# HDMI support
 xrandr --output HDMI1 --auto &
 xrandr --output eDP-1 --auto --right-of HDMI-1 &
+
+# dwm bar
 /home/luiz/.config/dwm-bar/dwm_bar.sh &
-xscreensaver -no-splash &
+
+# Wallpaper
 feh --bg-fill --no-fehbg ~/Pictures/wallpapers/to_camp.jpg &
+
+# Keyboard layout
 setxkbmap us -option caps:swapescape &
+#setxkbmap br -variant nodeadkeys -option caps:swapescape &
+
+# screen filter
 redshift -P -O 4500 &
+
+# Locking
 xautolock -time 10 -locker slock &

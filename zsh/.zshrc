@@ -72,7 +72,7 @@ preexec() { echo -ne $vim_insert ;} # Use cursor shape for each new prompt.
 # ** env variables **
 export EDITOR="nvim"
 export VISUAL="nvim"
-export TERMINAL="kitty"
+export TERMINAL="alacritty"
 export BROWSER="brave"
 
 # ** path exports **
@@ -86,6 +86,7 @@ alias cat="bat"
 alias blue="bluetoothctl"
 alias red="redshift -P -O"
 alias kbd="setxkbmap us -option caps:swapescape"
+alias kbdbr="setxkbmap br -option caps:swapescape"
 alias glog="git log --decorate --graph"
 alias gst="git status"
 

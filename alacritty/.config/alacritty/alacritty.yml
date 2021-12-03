@@ -1,3 +1,6 @@
+env:
+  TERM: xterm-256color
+
 window:
   # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
@@ -33,7 +36,7 @@ font:
     style: Regular 
 
   # Point size
-  size: 12.5
+  size: 13
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
@@ -64,7 +67,7 @@ colors:
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 0.9
+background_opacity: 0.95
 
 selection:
   # When set to `true`, selected text will be copied to the primary clipboard.

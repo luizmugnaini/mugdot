@@ -1,19 +1,18 @@
-"----------------------------------------------------------------
 " Plugin manager - vim-plug
 call plug#begin('~/.config/plugged-nvim')
 
 " Snippets
 Plug 'SirVer/ultisnips'
-    let g:UltiSnipsExpandTrigger = '<tab>'
-    let g:UltiSnipsJumpForwardTrigger = '<tab>'
-    let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
+    let g:UltiSnipsExpandTrigger='<tab>'
+    let g:UltiSnipsJumpForwardTrigger='<tab>'
+    let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
 " Tex support
 Plug 'lervag/vimtex'
     let g:tex_flavor='latex'
     let g:vimtex_view_method='zathura'
     let g:vimtex_quickfix_mode=0
-    let g:vimtex_compiler_progname = '/home/luiz/.local/bin/nvr'
+    let g:vimtex_compiler_progname='/home/luiz/.local/bin/nvr'
 
 Plug 'KeitaNakamura/tex-conceal.vim'
     set conceallevel=0
@@ -26,9 +25,6 @@ Plug 'liuchengxu/space-vim-theme'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-
-Plug 'lifepillar/vim-colortemplate'
-Plug 'glepnir/dashboard-nvim'
 
 " <leader> + cc comments out the marked lines
 Plug 'preservim/nerdcommenter'
@@ -54,7 +50,7 @@ Plug 'neovim/nvim-lspconfig'
 
 Plug 'neovimhaskell/haskell-vim'
 Plug 'rust-lang/rust.vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
 " Completions
 Plug 'hrsh7th/cmp-nvim-lsp'

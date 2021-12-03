@@ -25,6 +25,8 @@ autocmd FileType c,cpp,java,python,rust,vim,lua,tex autocmd BufWritePre <buffer>
 " If you want to have beam in insert mode, just comment this line out
 set guicursor=i:block
 
+set colorcolumn=80
+
 syntax enable                           " Enables syntax highlighing
 set lazyredraw                          " Don't redraw while executing macros (good performance config)
 set hidden                              " Required to keep multiple buffers open multiple buffers
