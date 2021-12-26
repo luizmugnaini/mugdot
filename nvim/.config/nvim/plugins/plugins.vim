@@ -20,7 +20,7 @@ Plug 'KeitaNakamura/tex-conceal.vim'
     hi Conceal ctermbg=none
 
 " Themes
-Plug 'morhetz/gruvbox'
+"Plug 'morhetz/gruvbox'
 Plug 'liuchengxu/space-vim-theme'
 
 Plug 'vim-airline/vim-airline'
@@ -50,7 +50,7 @@ Plug 'neovim/nvim-lspconfig'
 
 Plug 'neovimhaskell/haskell-vim'
 Plug 'rust-lang/rust.vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+"Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
 " Completions
 Plug 'hrsh7th/cmp-nvim-lsp'

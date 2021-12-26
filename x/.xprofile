@@ -10,11 +10,11 @@ xrandr --output eDP-1 --auto --right-of HDMI-1 &
 /home/luiz/.config/dwm-bar/dwm_bar.sh &
 
 # Wallpaper
-feh --bg-fill --no-fehbg ~/Pictures/wallpapers/to_camp.jpg &
+feh --bg-fill --no-fehbg ~/Pictures/wallpapers/duaAnime.png &
 
 # Keyboard layout
 setxkbmap us -option caps:swapescape &
-#setxkbmap br -variant nodeadkeys -option caps:swapescape &
+xset r rate 500 60
 
 # screen filter
 redshift -P -O 4500 &

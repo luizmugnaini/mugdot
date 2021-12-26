@@ -89,6 +89,7 @@ alias kbd="setxkbmap us -option caps:swapescape"
 alias kbdbr="setxkbmap br -option caps:swapescape"
 alias glog="git log --decorate --graph"
 alias gst="git status"
+alias wallbg="feh feh --bg-fill --no-fehbg" 
 
 
 # ** tmux sessionizer binding **
