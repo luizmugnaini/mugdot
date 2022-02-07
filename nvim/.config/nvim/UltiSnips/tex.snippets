@@ -94,7 +94,8 @@ endsnippet
 snippet mk "Math" wA
 \(${1}\)`!p
 if t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
-	snip.rv = ' '
+	#snip.rv = ' '
+	snip.rv = ''
 else:
 	snip.rv = ''
 `$2
@@ -245,6 +246,11 @@ snippet cases "cases" wA
 endsnippet
 
 context "math()"
+snippet eps "epsilon" iA
+\varepsilon
+endsnippet
+
+context "math()"
 snippet OO "infinity" iA
 \infty
 endsnippet
@@ -274,6 +280,11 @@ snippet diag "tikzcd" wA
 \begin{tikzcd}
 	$0
 \end{tikzcd}
+endsnippet
+
+context "math()"
+snippet -> "to" iA
+\to
 endsnippet
 
 # vim:ft=snippets
