@@ -1,5 +1,5 @@
 export ZSH="/home/luiz/.oh-my-zsh"
-ZSH_THEME="mugnaini" # "mugnaini-refined"
+ZSH_THEME="robbyrussell" # "mugnaini-refined"
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -73,7 +73,7 @@ preexec() { echo -ne $vim_insert ;} # Use cursor shape for each new prompt.
 export EDITOR="nvim"
 export VISUAL="nvim"
 export TERMINAL="alacritty"
-export BROWSER="brave"
+export BROWSER="firefox"
 
 # ** path exports **
 export PATH="$HOME/.cabal/bin:$PATH"

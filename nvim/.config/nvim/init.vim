@@ -16,7 +16,7 @@ source $HOME/.config/nvim/plugins/langs/haskell-vim.vim
 
 " Finders and such
 source $HOME/.config/nvim/plugins/finders/rooter.vim
-source $HOME/.config/nvim/plugins/finders/telescope.vim
+"source $HOME/.config/nvim/plugins/finders/telescope.vim
 source $HOME/.config/nvim/plugins/finders/nnn.vim
 
 " Git integration

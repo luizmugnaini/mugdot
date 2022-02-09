@@ -3,5 +3,6 @@
 *.diff
 *.orig
 config.h
+blocks.h
 dwm/.config/dwm-6.2/dwm
 dwm/.config/dwm-6.2/dwm.png
