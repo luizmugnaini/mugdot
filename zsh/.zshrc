@@ -76,8 +76,9 @@ export TERMINAL="alacritty"
 export BROWSER="firefox"
 
 # ** path exports **
-export PATH="$HOME/.cabal/bin:$PATH"
+#export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 # ** aliases **
 alias vim="nvim"
