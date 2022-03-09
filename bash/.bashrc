@@ -10,6 +10,6 @@ PS1='[\u@\h \W]\$ '
 
 export EDITOR="nvim"
 export VISUAL="nvim"
-export TERMINAL="kitty"
-export BROWSER="brave"
+export TERMINAL="alacritty"
+export BROWSER="firefox"
 . "$HOME/.cargo/env"

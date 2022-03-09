@@ -1,10 +1,6 @@
 export ZSH="/home/luiz/.oh-my-zsh"
-ZSH_THEME="robbyrussell" # "mugnaini-refined"
+ZSH_THEME="robbyrussell"
 
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
@@ -24,8 +20,6 @@ zstyle ':completion:*' menu select
 zmodload zsh/complist
 compinit
 _comp_options+=(globdots)
-
-
 
 # ** vi mode **
 bindkey -v
@@ -82,27 +76,27 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 # ** aliases **
 alias vim="nvim"
-alias ls="exa"
-alias cat="bat"
+alias ls="exa --long --header --icons --git"
+alias cat="bat --theme=gruvbox-dark"
+alias bat="bat --theme=gruvbox-dark"
 alias blue="bluetoothctl"
 alias red="redshift -P -O"
 alias kbd="setxkbmap us -option caps:swapescape"
 alias kbdbr="setxkbmap br -option caps:swapescape"
 alias glog="git log --decorate --graph"
 alias gst="git status"
-alias wallbg="feh feh --bg-fill --no-fehbg" 
-
+alias wallbg="feh --bg-fill --no-fehbg" 
+alias ipy="ipython --profile=mugipy"
+alias n="nnn -Hde"
 
 # ** tmux sessionizer binding **
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
 
 # ** ipython **
 export IPYTHONDIR="~/.config/ipython"
-alias ipy="ipython --profile=mugipy"
 
 # ** nnn integration **
-alias n="nnn -Hde"
-export NNN_OPENER="nnn-opener"
+export NNN_OPENER="xdg-open"
 export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
