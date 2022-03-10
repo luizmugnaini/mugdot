@@ -74,11 +74,16 @@ export BROWSER="firefox"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
+# zoxide
+eval "$(zoxide init zsh)"
+
 # ** aliases **
 alias vim="nvim"
 alias ls="exa --long --header --icons --git"
 alias cat="bat --theme=gruvbox-dark"
 alias bat="bat --theme=gruvbox-dark"
+alias ..="z .."
+alias cd="cd"
 alias blue="bluetoothctl"
 alias red="redshift -P -O"
 alias kbd="setxkbmap us -option caps:swapescape"

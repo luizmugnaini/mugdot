@@ -50,7 +50,6 @@ Plug 'neovim/nvim-lspconfig'
 
 Plug 'neovimhaskell/haskell-vim'
 Plug 'rust-lang/rust.vim'
-"Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
 " Completions
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -58,5 +57,8 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 Plug 'hrsh7th/cmp-path'
+Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+Plug 'onsails/lspkind-nvim'
+
 
 call plug#end()

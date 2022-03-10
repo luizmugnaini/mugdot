@@ -1,7 +1,15 @@
 vim.o.completeopt = 'menuone,noselect'
 
 -- Setup nvim-cmp.
-local cmp = require'cmp'
+local cmp = require('cmp')
+
+local source_mapping = {
+	nvim_lsp = "[LSP]",
+	cmp_tabnine = "[TN]",
+	path = "[Path]",
+  ultisnips = "[Snip]"
+}
+local lspkind = require('lspkind')
 
 cmp.setup({
   snippet = {
@@ -11,9 +19,9 @@ cmp.setup({
   },
   mapping = {
     ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+ 		["<C-u>"] = cmp.mapping.scroll_docs(-4),
+		["<C-d>"] = cmp.mapping.scroll_docs(4),
     ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
     --['<C-Space>'] = cmp.mapping.complete(),
     ["<C-Space>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -32,17 +40,43 @@ cmp.setup({
       "s",
     }),
     ['<C-e>'] = cmp.mapping.close(),
-    --['<CR>'] = cmp.mapping.confirm({
-      --behavior = cmp.ConfirmBehavior.Replace,
-      --select = true 
-    --}),
+    ['<Tab>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true
+    }),
   },
+
+  formatting = {
+		format = function(entry, vim_item)
+			vim_item.kind = lspkind.presets.default[vim_item.kind]
+			local menu = source_mapping[entry.source.name]
+			if entry.source.name == "cmp_tabnine" then
+				if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
+					menu = entry.completion_item.data.detail .. " " .. menu
+				end
+				vim_item.kind = ""
+			end
+			vim_item.menu = menu
+			return vim_item
+		end,
+	},
+
   sources = {
+    { name = "cmp_tabnine" },
     { name = 'nvim_lsp' },
     { name = 'buffer' },
     { name = 'ultisnips' },
     { name = 'path' },
   }
+})
+
+local tabnine = require("cmp_tabnine.config")
+tabnine:setup({
+	max_lines = 1000,
+	max_num_results = 20,
+	sort = true,
+	run_on_every_keystroke = true,
+	snippet_placeholder = "..",
 })
 
 -- Setup nvim lspconfig
@@ -78,21 +112,21 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-
 end
 
 -- Setup of my servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
-require'lspconfig'.clangd.setup {
+require('lspconfig').clangd.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   flags = {
     debounce_text_changes = 150,
   }
 }
-require'lspconfig'.rust_analyzer.setup {
+
+require('lspconfig').rust_analyzer.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   flags = {
@@ -113,7 +147,8 @@ require'lspconfig'.rust_analyzer.setup {
       }
   }
 }
-require'lspconfig'.pyright.setup {
+
+require('lspconfig').pyright.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   flags = {
