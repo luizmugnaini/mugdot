@@ -155,3 +155,8 @@ require('lspconfig').pyright.setup {
     debounce_text_changes = 150,
   }
 }
+
+require('lspconfig').hls.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+}

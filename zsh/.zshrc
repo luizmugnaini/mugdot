@@ -70,9 +70,9 @@ export TERMINAL="alacritty"
 export BROWSER="firefox"
 
 # ** path exports **
-#export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.cabal/bin:$PATH"
 
 # zoxide
 eval "$(zoxide init zsh)"
@@ -93,6 +93,8 @@ alias gst="git status"
 alias wallbg="feh --bg-fill --no-fehbg" 
 alias ipy="ipython --profile=mugipy"
 alias n="nnn -Hde"
+#alias ghci="cabal repl"
+alias ghc="ghc -dynamic"
 
 # ** tmux sessionizer binding **
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
