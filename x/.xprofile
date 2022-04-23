@@ -11,8 +11,12 @@ dwmblocks &
 # Wallpaper
 feh --bg-fill --no-fehbg ~/Pictures/wallpapers/nordhills.png &
 
+# emacs
+/usr/bin/emacs --daemon &
+
 # Keyboard layout
 setxkbmap us -option caps:swapescape &
+#setxkbmap br -variant nodeadkeys -option caps:swapescape &
 xset r rate 500 60
 
 # screen filter

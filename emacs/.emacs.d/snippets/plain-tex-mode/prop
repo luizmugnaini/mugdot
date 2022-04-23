@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Proposition
+# group: Math
+# key: prop
+# --
+\\begin{proposition}\label{prop: $1}
+  $0
+\\end{proposition}

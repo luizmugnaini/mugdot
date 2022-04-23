@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Inverse
+# group: Math
+# key: inv
+# --
+^{-1}$0

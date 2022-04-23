@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Enumerate
+# key: enum
+# --
+\\begin{enumerate}
+  \\setlength\\itemsep{0.0em}
+  \\item $0
+\\end{enumerate}

@@ -73,6 +73,7 @@ export BROWSER="firefox"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
+export PATH="$HOME/.emacs.d/bin:$PATH"
 
 # zoxide
 eval "$(zoxide init zsh)"
@@ -88,13 +89,14 @@ alias blue="bluetoothctl"
 alias red="redshift -P -O"
 alias kbd="setxkbmap us -option caps:swapescape"
 alias kbdbr="setxkbmap br -option caps:swapescape"
+alias brdead="setxkbmap br -variant nodeadkeys -option caps:swapescape"
 alias glog="git log --decorate --graph"
 alias gst="git status"
 alias wallbg="feh --bg-fill --no-fehbg" 
 alias ipy="ipython --profile=mugipy"
 alias n="nnn -Hde"
-#alias ghci="cabal repl"
 alias ghc="ghc -dynamic"
+alias tec="tectonic -X"
 
 # ** tmux sessionizer binding **
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
@@ -105,5 +107,7 @@ export IPYTHONDIR="~/.config/ipython"
 # ** nnn integration **
 export NNN_OPENER="xdg-open"
 export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"
+
+#eval "$(starship init zsh)"
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null

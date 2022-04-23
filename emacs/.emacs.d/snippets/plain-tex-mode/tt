@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Text inside math
+# group: Math
+# key: tt
+# --
+\\text{$1}$0

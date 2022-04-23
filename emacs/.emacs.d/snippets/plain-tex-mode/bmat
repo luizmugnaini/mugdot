@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Braces matrix
+# group: Math
+# key: bmat
+# --
+\\begin{bmatrix}
+  $0
+\\end{bmatrix}

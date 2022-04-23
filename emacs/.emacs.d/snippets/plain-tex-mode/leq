@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: leq
+# group: Math
+# key: <=
+# --
+\\leq

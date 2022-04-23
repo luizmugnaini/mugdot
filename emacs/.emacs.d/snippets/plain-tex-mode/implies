@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Implies
+# group: Math
+# key: =>
+# --
+\\implies

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: neq
+# group: Math
+# key: !=
+# --
+\\neq

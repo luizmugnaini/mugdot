@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: square root
+# group: Math
+# key: sq
+# --
+\\sqrt{$1}$0

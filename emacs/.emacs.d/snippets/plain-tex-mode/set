@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Set
+# group: Math
+# key: set
+# --
+\\{$1\\}$0

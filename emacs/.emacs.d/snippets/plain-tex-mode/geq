@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: geq
+# group: Math
+# key: >=
+# --
+\\geq
