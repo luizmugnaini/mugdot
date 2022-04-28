@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: Proof
-# group: Math
-# key: proof
-# --
-\\begin{proof}
-  $0
-\\end{proof}

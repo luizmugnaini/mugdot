@@ -14,3 +14,5 @@ emacs/.emacs.d/elpa/
 emacs/.emacs.d/eshell/
 emacs/.emacs.d/projectile-bookmarks.eld
 emacs/.emacs.d/transient/
+emacs/.emacs.d/var/
+emacs/.emacs.d/.last-package-update-day

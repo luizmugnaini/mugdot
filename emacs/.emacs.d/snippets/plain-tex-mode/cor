@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: Corollary
-# key: cor
-# --
-\\begin{corollary}\label{cor: $1}
-  $0
-\\end{corollary}

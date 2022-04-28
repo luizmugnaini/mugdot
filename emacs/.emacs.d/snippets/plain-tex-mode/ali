@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: Align
-# group: Math
-# key: ali
-# --
-\\begin{align*}
-  $0
-\\end{align*}

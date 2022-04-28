@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Left Right
-# group: Math
-# key: lr
-# --
-\\left$1 $2 \\right$1$0

@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Fraction
-# group: Math
-# key: //
-# --
-\\frac{$1}{$2}$0
