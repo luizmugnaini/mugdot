@@ -11,13 +11,13 @@ static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Hasklug Nerd Font:size=10" };
-static const char dmenufont[]       = "Hasklug Nerd Font:size=10";
+static const char *fonts[]          = { "Fira Code:size=10" };
+static const char dmenufont[]       = "Fira Code:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_purple[]      = "#674ea7";
+static const char col_purple[]      = "#1e1c31"; /* Last: #674ea7 */
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -46,13 +46,12 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 static const Layout layouts[] = {
 	/* symbol arrange function */
 	{ "[]=",  tile    }, /* first entry is default */
+	{ "[M]",  monocle }, /* master layout */
 	{ "><>",  NULL    }, /* no layout function means floating behavior */
-	{ "[M]",  monocle },
 };
 
 /* key modifiers */
-// I'm currently using Alt as my mod key
-// for sup: Mod4Mask
+/* I'm currently using Alt as my mod key. For sup: Mod4Mask*/
 #define MODKEY Mod1Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY, view,       {.ui = 1 << TAG} }, \
@@ -65,27 +64,27 @@ static const Layout layouts[] = {
 
 /* commands */
 
-// dmenu
-// component of dmenucmd, manipulated in spawn()
+/* dmenu
+ * component of dmenucmd, manipulated in spawn() */
 static char dmenumon[2]         = "0";
 static const char *dmenucmd[]   = {
   "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1,
   "-nf", col_gray3, "-sb", col_purple, "-sf", col_gray4, NULL
 };
 
-// rofi
+/* rofi */
 static const char *roficmd[] = { "rofi", "-show", "run", NULL };
 
-// terminal
-static const char *termcmd[] = { "alacritty", NULL };
+/* terminal */
+static const char *termcmd[] = { "kitty", NULL };
 
-// browser
+/* browser */
 static const char *browsercmd[] = { "firefox", NULL };
 
-// screenshot
-static const char *printcmd[] = {
-  "scrot -s ~/Pictures/screenshots/screenshot.png", NULL
-};
+/* screenshot
+ * static const char *printcmd[] = {
+ *   "scrot -s ~/Pictures/screenshots/screenshot.png", NULL
+ * }; */
 
 // System locking and suspend
 static const char *lockcmd[]    = { "slock", NULL };
@@ -105,36 +104,36 @@ static const char *upvolcmd[]   = { "pamixer", "-i", "5", NULL};
 #include "movestack.c"
 static Key keys[] = {
   /* modifier            key        function        argument */
-  // dmenu
+  /* dmenu */
   { MODKEY|ShiftMask,    XK_p,       spawn,          {.v = dmenucmd } },
 
-  // rofi
+  /* rofi */
   { MODKEY,              XK_p,       spawn,          {.v = roficmd } },
 
-  // terminal
+  /* terminal */
   { MODKEY,              XK_Return,  spawn,          {.v = termcmd } },
 
-  // browser
+  /* browser */
   { MODKEY,              XK_bracketright, spawn,     {.v = browsercmd } },
 
-  // screenshot
-  { 0,                   XK_Print,        spawn,     {.v = printcmd } },
+  /* screenshot */
+  /* { 0,                   XK_Print,        spawn,     {.v = printcmd } }, */
 
-  // audio
+  /* audio */
   { 0,                   XF86XK_AudioMute,        spawn, {.v = mutecmd } },
   { 0,                   XF86XK_AudioLowerVolume, spawn, {.v = downvolcmd } },
   { 0,                   XF86XK_AudioRaiseVolume, spawn, {.v = upvolcmd } },
 
-  // keyboard
+  /* keyboard */
   { MODKEY|ShiftMask,  XK_u,     spawn,          {.v = kbdus} },
   { MODKEY|ShiftMask,  XK_i,     spawn,          {.v = kbdbr} },
   { MODKEY|ShiftMask,  XK_o,     spawn,          {.v = kbdbrdead} },
 
-  // Screen locker and suspension
+  /* Screen locker and suspension */
   { MODKEY|ShiftMask,    XK_z,            spawn,          {.v = lockcmd } },
   { MODKEY|ShiftMask,    XK_s,            spawn,          {.v = suspendcmd } },
 
-  // Misc
+  /* Misc */
   { MODKEY,              XK_b,      togglebar,      {0} },
   { MODKEY,              XK_j,      focusstack,     {.i = +1 } },
   { MODKEY,              XK_k,      focusstack,     {.i = -1 } },
@@ -189,4 +188,3 @@ static Button buttons[] = {
 	{ ClkTagBar,     MODKEY,     Button1,  tag,            {0} },
 	{ ClkTagBar,     MODKEY,     Button3,  toggletag,      {0} },
 };
-

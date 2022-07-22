@@ -5,8 +5,7 @@ source $HOME/.config/nvim/settings/settings.vim
 source $HOME/.config/nvim/plugins/plugins.vim
 
 " Themes
-"source $HOME/.config/nvim/plugins/themes/space.vim
-source $HOME/.config/nvim/plugins/themes/gruvbox.vim
+source $HOME/.config/nvim/plugins/themes/challenger.vim
 "source $HOME/.config/nvim/plugins/themes/lualine.lua
 source $HOME/.config/nvim/plugins/themes/airline.vim
 

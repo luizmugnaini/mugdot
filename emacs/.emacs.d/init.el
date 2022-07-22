@@ -36,7 +36,6 @@
 
 (defvar mug/default-font-size 140)
 (defvar mug/default-variable-font-size 140)
-;; (defvar symbola-font (font-spec :name "Symbola" :size 15))
 (set-face-attribute 'default nil :font "Fira Code" :height mug/default-font-size)
 (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height mug/default-variable-font-size)
 
@@ -69,10 +68,10 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; Highlight at current line
-(require 'hl-line)
-(add-hook 'prog-mode-hook #'hl-line-mode)
-(add-hook 'text-mode-hook #'hl-line-mode)
-(set-face-attribute 'hl-line nil :background "gray21")
+;; (require 'hl-line)
+;; (add-hook 'prog-mode-hook #'hl-line-mode)
+;; (add-hook 'text-mode-hook #'hl-line-mode)
+;; (set-face-attribute 'hl-line nil :background "gray21")
 
 ;; Wrapping lines with > 80 chars
 (setq-default fill-column 80)
@@ -403,21 +402,12 @@
   :ensure t)
 
 
-;; Spell checking --------------------------------------------------------------
-
-;; (setq-default ispell-library-directory "/usr/share/myspell/dicts/")
-;; (use-package flyspell
-;; 	:hook ((LaTeX-mode . flyspell-mode))
-;; 	:config
-;; 	(setq ispell-program-name "hunspell")
-;; 	(setq ispell-dictionary "en_GB")
-;; 	(setq flyspell-default-dictionary "/usr/share/myspell/dicts/en_GB.aff")
-;;   (setq flyspell-issue-message-flag nil)
-;; 	(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t))
-
-
 ;; Completion and snippets -----------------------------------------------------
 
+;; Automatic bracket pairing
+(electric-pair-mode 1)
+
+;; Text completion framework
 (use-package company
   :ensure t
   :defer t
@@ -441,7 +431,6 @@
   :config
   (setq yas-snippet-dirs '("~/.mugdot/emacs/.emacs.d/snippets/")))
 
-;; Disable
 (defun final-nl ()
   "Disable addition of newline to final of snippet.
 For future me --- if you run into trouble again with this shit, set the two
@@ -505,37 +494,48 @@ following lines and they will solve the problem --- I can only hope so
     ;; Text environments
     "!prop" (lambda () (interactive)
                "proposition environment"
-               (yas-expand-snippet "\\begin{proposition}\n\\label{prop:$1}\n$0\n\\end{proposition}"))
+               (yas-expand-snippet
+                "\\begin{proposition}\n\\label{prop:$1}\n$0\n\\end{proposition}"))
     "!thm" (lambda () (interactive)
                "theorem environment"
-               (yas-expand-snippet "\\begin{theorem}\n\\label{thm:$1}\n$0\n\\end{theorem}"))
+               (yas-expand-snippet
+                "\\begin{theorem}\n\\label{thm:$1}\n$0\n\\end{theorem}"))
     "!proof" (lambda () (interactive)
                "proof environment"
-               (yas-expand-snippet "\\begin{proof}\n$0\n\\end{proof}\n"))
+               (yas-expand-snippet
+                "\\begin{proof}\n$0\n\\end{proof}\n"))
     "!lem" (lambda () (interactive)
                "lemma environment"
-               (yas-expand-snippet "\\begin{lemma}\n\\label{lem:$1}\n$0\n\\end{lemma}"))
+               (yas-expand-snippet
+                "\\begin{lemma}\n\\label{lem:$1}\n$0\n\\end{lemma}"))
     "!cor" (lambda () (interactive)
                "corollary environment"
-               (yas-expand-snippet "\\begin{corollary}\n\\label{cor:$1}\n$0\n\\end{corollary}"))
+               (yas-expand-snippet
+                "\\begin{corollary}\n\\label{cor:$1}\n$0\n\\end{corollary}"))
     "!def" (lambda () (interactive)
                 "definition environment"
-                (yas-expand-snippet "\\begin{definition}\n\\label{def:$1}\n$0\n\\end{definition}"))
+                (yas-expand-snippet
+                 "\\begin{definition}\n\\label{def:$1}\n$0\n\\end{definition}"))
     "!exp" (lambda () (interactive)
                 "example environment"
-                (yas-expand-snippet "\\begin{example}\n\\label{exp:$1}\n$0\n\\end{example}"))
+                (yas-expand-snippet
+                 "\\begin{example}\n\\label{exp:$1}\n$0\n\\end{example}"))
     "!rem" (lambda () (interactive)
                 "remark environment"
-                (yas-expand-snippet "\\begin{remark}\n\\label{rem:$1}\n$0\n\\end{remark}"))
+                (yas-expand-snippet
+                 "\\begin{remark}\n\\label{rem:$1}\n$0\n\\end{remark}"))
     "!not" (lambda () (interactive)
                 "notation environment"
-                (yas-expand-snippet "\\begin{notation}\n\\label{not:$1}\n$0\n\\end{notation}"))
+                (yas-expand-snippet
+                 "\\begin{notation}\n\\label{not:$1}\n$0\n\\end{notation}"))
     "!enum" (lambda () (interactive)
                 "enumerate environment"
-                (yas-expand-snippet "\\begin{enumerate}\\setlength\\itemsep{0em}\n  \\item$0\n\\end{enumerate}"))
+                (yas-expand-snippet
+                 "\\begin{enumerate}\\setlength\\itemsep{0em}\n  \\item$0\n\\end{enumerate}"))
     "!item" (lambda () (interactive)
                 "itemize environment"
-                (yas-expand-snippet "\\begin{itemize}\\setlength\\itemsep{0em}\n  \\item$0\n\\end{itemize}"))
+                (yas-expand-snippet
+                 "\\begin{itemize}\\setlength\\itemsep{0em}\n  \\item$0\n\\end{itemize}"))
 
     :cond #'texmathp
       "NN" "\\N"
@@ -615,7 +615,7 @@ following lines and they will solve the problem --- I can only hope so
                (yas-expand-snippet "\\begin{bmatrix}\n  $0\n\\end{bmatrix}"))
       "cases" (lambda () (interactive)
                "Cases environment"
-               (yas-expand-snippet "\\begin{cases}\n $0\n\\end{cases}"))))
+               (yas-expand-snippet "\\begin{cases}\n  $0\n\\end{cases}"))))
 
 
 ;; LaTeX setup -----------------------------------------------------------------
@@ -663,7 +663,6 @@ following lines and they will solve the problem --- I can only hope so
   (auctex-latexmk-setup)
   (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
-
 ;;; Visual editing
 
 ;; Visualization with buffer preview --- use C-c C-p
@@ -674,22 +673,7 @@ following lines and they will solve the problem --- I can only hope so
                            (funcall (preview-scale-from-face)))))))
 
 
-;;; Latex lsp -- this really slows down the editing process and is not that
-;;; worthy
-
-;; (use-package lsp-latex
-;;   :config
-;;   (setq lsp-latex-texlab-executable "~/.cargo/bin/texlab")
-;;   (setq lsp-latex-forward-search-executable "zathura")
-;;   (setq lsp-latex-forward-search-args '("--synctex-forward" "%l:1:%f" "%p"))
-;; 	(setq lsp-latex-diagnostics-delay 500))
-;; (with-eval-after-load "LaTeX-mode"
-;;  (add-hook 'TeX-mode-hook 'lsp)
-;;  (add-hook 'LaTeX-mode-hook 'lsp))
-
-
 ;;; Latex text input configuration:
-
 
 ;; cdlatex stuff
 (use-package cdlatex
@@ -700,11 +684,9 @@ following lines and they will solve the problem --- I can only hope so
   :bind (:map cdlatex-mode-map
               ("<tab>" . cdlatex-tab))
   :config
-  (setq cdlatex-takeover-subsuperscript nil)
-  (setq cdlatex-takeover-parenthesis nil)
+  (setq cdlatex-use-dollar-to-ensure-math 0) ;; disables the use of dollar signs
   (local-unset-key (kbd "^"))
   (setq cdlatex-paired-parens "{([")
-  (setq cdlatex-sub-super-scripts-outside-math-mode nil)
   (setq cdlatex-simplify-sub-super-scripts t)
 
   ;; YaSnippet integration

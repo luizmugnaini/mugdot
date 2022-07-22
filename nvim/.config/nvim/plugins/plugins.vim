@@ -23,6 +23,7 @@ Plug 'KeitaNakamura/tex-conceal.vim'
 " Themes
 Plug 'morhetz/gruvbox'
 Plug 'liuchengxu/space-vim-theme'
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 "Plug 'nvim-lualine/lualine.nvim'
 
 Plug 'vim-airline/vim-airline'

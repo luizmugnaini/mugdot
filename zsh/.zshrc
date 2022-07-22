@@ -1,10 +1,3 @@
-# export ZSH="/home/luiz/.oh-my-zsh"
-# ZSH_THEME="robbyrussell"
-
-# plugins=(git)
-
-# source $ZSH/oh-my-zsh.sh
-
 # ** set by zsh **
 HISTFILE=~/.histfile
 HISTSIZE=1000
@@ -81,11 +74,8 @@ eval "$(zoxide init zsh)"
 # ** aliases **
 alias vim="nvim"
 alias ls="exa --long --header --icons --git"
-#alias cat="bat --theme=gruvbox-dark"
 alias bat="bat --theme=gruvbox-dark"
-#alias ccat="cat"
 alias ..="z .."
-alias cd="cd"
 alias blue="bluetoothctl"
 alias red="redshift -P -O"
 alias kbd="setxkbmap us -option ctrl:nocaps"
@@ -110,6 +100,7 @@ export IPYTHONDIR="~/.config/ipython"
 export NNN_OPENER="xdg-open"
 export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"
 
+# Prompt stuff
 eval "$(starship init zsh)"
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
