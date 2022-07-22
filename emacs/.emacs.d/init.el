@@ -1,4 +1,7 @@
-;; These are my configurations for GNU Emacs
+;;; emacs --- My emacs configurations
+
+;;; Commentary:
+;; Luiz Mugnaini -> luizmugnaini@gmail.com
 
 ;;; Code:
 
@@ -31,11 +34,11 @@
 
 ;; Font setup ------------------------------------------------------------------
 
-(defvar efs/default-font-size 140)
-(defvar efs/default-variable-font-size 140)
-(set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
-;; Set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "Fira Code" :height efs/default-variable-font-size)
+(defvar mug/default-font-size 140)
+(defvar mug/default-variable-font-size 140)
+;; (defvar symbola-font (font-spec :name "Symbola" :size 15))
+(set-face-attribute 'default nil :font "Fira Code" :height mug/default-font-size)
+(set-face-attribute 'fixed-pitch nil :font "Fira Code" :height mug/default-variable-font-size)
 
 ;; Font ligatures!
 (use-package fira-code-mode
@@ -101,6 +104,12 @@
 ;; Deal with whitespaces
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
+;; Never use tab characters!
+(setq-default indent-tabs-mode nil)
+
+;; Prompt for y or n instead of yes or no
+(defalias 'yes-or-no-p 'y-or-n-p)
+
 ;; Emacs look:
 (setq inhibit-startup-message t)
 (menu-bar-mode -1)
@@ -117,6 +126,7 @@
 (setq auto-window-vscroll nil)
 
 ;; Copy and paste from anywhere
+(use-package xclip)
 (xclip-mode 1)
 
 ;; Transparency settings
@@ -128,8 +138,35 @@
 ;; Keybindings:
 ; ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(define-key key-translation-map (kbd "C-k") (kbd "<escape>"))
+
 ; Moves through buffers with C-M-j
 (global-set-key (kbd "C-M-j") 'counsel-switch-buffer)
+
+;; Don't fuck up my flow --- problems using ctrl and esc for the same key
+(global-unset-key (kbd "C-h h"))
+(global-unset-key (kbd "C-h k"))
+(global-unset-key (kbd "C-h j"))
+(global-unset-key (kbd "C-h l"))
+
+;; always fucking pressing this shit and suspending my gui session
+(global-unset-key (kbd "C-x C-z"))
+(global-unset-key (kbd "C-z"))
+
+;; Fucked-up solution to my emacs pinky:
+;; This is needed for me because my keyboard uses the Caps Lock as an Fn key
+;; when pressed together with some other key, in order to prevent such a fucking
+;; bullshit, I translated every possible shit that could happen into the right
+;; thing that it should be binded to in the first place.
+(define-key key-translation-map (kbd "<up>") (kbd "w"))
+(define-key key-translation-map (kbd "C-<up>") (kbd "C-w"))
+(define-key key-translation-map (kbd "<left>") (kbd "a"))
+(define-key key-translation-map (kbd "C-<left>") (kbd "C-a"))
+(define-key key-translation-map (kbd "<down>") (kbd "s"))
+(define-key key-translation-map (kbd "C-<down>") (kbd "C-s"))
+(define-key key-translation-map (kbd "<right>") (kbd "d"))
+(define-key key-translation-map (kbd "C-<right>") (kbd "C-d"))
+(define-key key-translation-map (kbd "C-<print>") (kbd "C-p"))
 
 
 ;; ivy: Command completion ------------------------------------------------------
@@ -140,14 +177,10 @@
          :map ivy-minibuffer-map
          ("TAB" . ivy-alt-done)
          ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
          :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
          ("C-l" . ivy-done)
          ("C-d" . ivy-switch-buffer-kill)
          :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
          ("C-d" . ivy-reverse-i-search-kill))
   :config
   (ivy-mode 1))
@@ -155,7 +188,7 @@
 (use-package counsel
   :demand t
   :bind (("M-x" . counsel-M-x)
-         ("C-x b" . counsel-ibuffer)
+         ("C-x b" . counsel-switch-buffer)
          ("C-x C-f" . counsel-find-file)
          ("C-M-j" . counsel-switch-buffer)
          ("C-M-l" . counsel-imenu)
@@ -170,48 +203,66 @@
 ;; Terminal -----------------------------------------------------------------------
 
 (use-package vterm
-    :ensure t)
+  :ensure t)
+
+(defun vterm-directory-sync ()
+  "Synchronize current working directory."
+  (interactive)
+  (when vterm--process
+    (let* ((pid (process-id vterm--process))
+           (dir (file-truename (format "/proc/%d/cwd/" pid))))
+      (setq default-directory dir))))
 
 
 ;; Good utilities: ------------------------------------------------------------
 
-(use-package crux)
-(global-set-key (kbd "C-c o") #'crux-open-with)
-(global-set-key (kbd "C-c I") #'crux-find-user-init-file)
-(global-set-key (kbd "C-c k") #'crux-kill-other-buffers)
-(global-set-key (kbd "C-c e") 'eval-buffer)
+(use-package crux
+  :config
+  (global-set-key (kbd "C-c o") 'crux-open-with)
+  (global-set-key (kbd "C-c I") 'crux-find-user-init-file)
+  (global-set-key (kbd "C-c k") 'crux-kill-other-buffers))
+(add-hook 'emacs-lisp-mode-hook
+          (lambda () (local-set-key (kbd "C-c e") 'eval-buffer)))
 
 ;; Tells you the possible keys for certain commands
 (use-package which-key
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.3))
+  (setq which-key-idle-delay 0.7))
 
 
 ;; Git stuff with Magit -------------------------------------------------------
 
-(use-package magit)
+(use-package magit
+  :commands magit-status)
 
 
 ;; Icons, modeline and themes -------------------------------------------------
 
 ;; Install icons for the themes
 ;; On first time run: M-x all-the-icons-install-fonts
-(use-package all-the-icons)
+(use-package all-the-icons
+  :ensure t)
 
-;; A better mode line from Doom
+;; A better mode ooline from Doom
 (use-package doom-modeline
   :ensure t
-  :init (doom-modeline-mode 1))
+  :hook (after-init . doom-modeline-mode))
 
 ;; Theme
 (use-package doom-themes
-  :init (load-theme 'doom-palenight t))
+  :init (load-theme 'doom-challenger-deep t)) ;; last: palenight
 
 ;; Better delimiter coloring for emacs
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+
+;; Sintax highlighting
+(use-package tree-sitter)
+(use-package tree-sitter-langs)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
 
 ;; Evil ------------------------------------------------------------------------
@@ -230,19 +281,18 @@
   (add-to-list 'evil-emacs-state-modes mode)))
 
 ;; Sorry Emacs nerd, but Vim rules
+(setq-default evil-want-keybinding nil)
 (use-package evil
   :init
   (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-u-scroll nil)
   (setq evil-want-C-i-jump nil)
   (setq evil-respect-visual-line-mode t)
-  (setq evil-undo-system 'undo-fu) ;; Requires undo-tree-mode
+  (setq evil-undo-system 'undo-tree) ;; last: undo-fu
+  (setq evil-shift-width 2)
   :config
   (add-hook 'evil-mode-hook 'mug/evil-hook)
   (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
 
   ;; Use visual line motions even outside of visual-line-mode buffers
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
@@ -264,8 +314,8 @@
   :bind ("M-/" . evilnc-comment-or-uncomment-lines))
 
 ;; Allows the use of u for undos in evil mode
-(use-package undo-fu)
-
+(use-package undo-tree)
+(global-undo-tree-mode)
 
 ;; Project management ----------------------------------------------------------
 
@@ -279,27 +329,16 @@
   ;; Every projectile command starts with C-c p
   ("C-c p" . projectile-command-map)
   :init
-  (when (file-directory-p "~/luiz/Projects")
-    (setq projectile-project-search-path '("~/luiz/Projects")))
+  (when (file-directory-p "~/Projects")
+    (setq projectile-project-search-path '("~/Projects")))
   (setq projectile-switch-project-action #'projectile-dired))
-
-;; buffers by projects
-(use-package perspective
-  :ensure t  ; use `:straight t` if using straight.el!
-  :bind
-  (("C-x k" . persp-kill-buffer*))
-  (("C-x b" . persp-counsel-switch-buffer))
-  :custom
-  (persp-mode-prefix-key (kbd "C-x x"))
-  (persp-suppress-no-prefix-key-warning t)
-  :init
-  (persp-mode))
 
 
 ;; Dired -----------------------------------------------------------------------
 
 ;; File management
-(use-package all-the-icons-dired)
+(use-package all-the-icons-dired
+  :after dired)
 (use-package dired
   :ensure nil
   :defer 1
@@ -307,6 +346,12 @@
   :bind (("C-x C-j" . dired-jump))
   :config
   (setq dired-listing-switches "-agho --group-directories-first")
+
+  ;; Image previewing
+  (setq image-dired-external-viewer "feh")
+  (define-key dired-mode-map (kbd "C-t C-d") 'image-dired)
+  (define-key dired-mode-map (kbd "C-<return>") 'image-dired-dired-display-external)
+  (put 'dired-find-alternate-file 'disabled nil)
 
   (use-package dired-single
     :defer t)
@@ -324,13 +369,6 @@
     "y" 'dired-ranger-copy
     "X" 'dired-ranger-move
     "p" 'dired-ranger-paste))
-(put 'dired-find-alternate-file 'disabled nil)
-
-;; Image viewing within emacs
-(setq image-dired-external-viewer "feh")
-(with-eval-after-load 'dired
-  (define-key dired-mode-map (kbd "C-t C-d") 'image-dired)
-  (define-key dired-mode-map (kbd "C-<return>") 'image-dired-dired-display-external))
 
 
 ;; LSP setup -------------------------------------------------------------------
@@ -341,7 +379,7 @@
 	(haskell-mode . lsp-deferred)
 	(rust-mode . lsp-deferred)
 	(julia-mode . lsp-deferred)
-	(LaTeX-mode . lsp-deferred)
+	;; (LaTeX-mode . lsp-deferred)
 	(lsp-mode . lsp-enable-which-key-integration)
   :init
   (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
@@ -361,6 +399,22 @@
   :init
   (global-flycheck-mode t))
 
+(use-package company-tabnine
+  :ensure t)
+
+
+;; Spell checking --------------------------------------------------------------
+
+;; (setq-default ispell-library-directory "/usr/share/myspell/dicts/")
+;; (use-package flyspell
+;; 	:hook ((LaTeX-mode . flyspell-mode))
+;; 	:config
+;; 	(setq ispell-program-name "hunspell")
+;; 	(setq ispell-dictionary "en_GB")
+;; 	(setq flyspell-default-dictionary "/usr/share/myspell/dicts/en_GB.aff")
+;;   (setq flyspell-issue-message-flag nil)
+;; 	(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t))
+
 
 ;; Completion and snippets -----------------------------------------------------
 
@@ -370,7 +424,9 @@
   :diminish
   :config
   (setq company-dabbrev-other-buffers t
-        company-dabbrev-code-other-buffers t)
+        company-dabbrev-code-other-buffers t
+        company-idle-delay 0
+        company-show-numbers t)
   :hook ((text-mode . company-mode)
          (prog-mode . company-mode)))
 
@@ -381,16 +437,19 @@
 ;; YaSnippets configuration
 (use-package yasnippet
   :ensure t
+  :hook ((LaTeX-hook . yas-minor-mode))
   :config
   (setq yas-snippet-dirs '("~/.mugdot/emacs/.emacs.d/snippets/")))
 
-;; Disable addition of newline to final of snippet:
-;; For future me --- if you run into trouble again with this shit, set the two
-;; following lines and they will solve the problem (I only hope so):
-;; (setq mode-require-final-newline nil)
-;; (setq require-final-newline nil)
+;; Disable
 (defun final-nl ()
-  (interactive) (set (make-local-variable 'require-final-newline) nil))
+  "Disable addition of newline to final of snippet.
+For future me --- if you run into trouble again with this shit, set the two
+following lines and they will solve the problem --- I can only hope so
+`(setq mode-require-final-newline nil)`
+`(setq require-final-newline nil)`"
+  (interactive)
+  (set (make-local-variable 'require-final-newline) nil))
 (add-hook 'snippet-mode-hook 'final-nl)
 
 (use-package aas
@@ -399,32 +458,164 @@
   :config
   (aas-set-snippets 'text-mode
     ;; Common portuguese accents
-    ";-a" "ã"
-    ";-A" "Ã"
-    ";^a" "â"
-    ";^A" "Â"
-    ";'a" "á"
-    ";'A" "Á"
-    ";`a" "à"
-    ";`A" "À"
+    ".a" "ã"
+    ".A" "Ã"
+    "/a" "â"
+    "/A" "Â"
+    ";a" "á"
+    ";A" "Á"
+    ",a" "à"
+    ",A" "À"
 
-    ";-o" "õ"
-    ";-O" "Õ"
-    ";^o" "ô"
-    ";^O" "Ô"
-    ";'o" "ó"
-    ";'O" "Ó"
+    ".o" "õ"
+    ".O" "Õ"
+    "/o" "ô"
+    "/O" "Ô"
+    ";o" "ó"
+    ";O" "Ó"
 
-    ";'e" "é"
-    ";'E" "É"
-    ";^e" "ê"
-    ";^E" "Ê"
+    ";e" "é"
+    ";E" "É"
+    "/e" "ê"
+    "/E" "Ê"
 
     ";c" "ç"
-    ";'i" "í"
-    ";'I" "Í"
-    ";'u" "ú"
-    ";'U" "Ú"))
+    ";i" "í"
+    ";I" "Í"
+    ";u" "ú"
+    ";U" "Ú")
+  (aas-set-snippets 'latex-mode
+    ;; Math environments
+    "mk" (lambda () (interactive)
+           "Inline math"
+           (yas-expand-snippet "\\\\($0\\\\)"))
+    "dm" (lambda () (interactive)
+           "Display math"
+           (yas-expand-snippet "\\[\n  $0\n\\]"))
+    "!ali" (lambda () (interactive)
+             "align environment"
+             (yas-expand-snippet "\\begin{align*}\n  $0\n\\end{align*}\n"))
+    "!gather" (lambda () (interactive)
+                "gather environment"
+                (yas-expand-snippet "\\begin{gather*}\n  $0\n\\end{gather*}\n"))
+    "!eq" (lambda () (interactive)
+            "equation environment"
+            (yas-expand-snippet "\\begin{equation}\\label{eq:$1}\n  $0\n\\end{equation}"))
+
+    ;; Text environments
+    "!prop" (lambda () (interactive)
+               "proposition environment"
+               (yas-expand-snippet "\\begin{proposition}\n\\label{prop:$1}\n$0\n\\end{proposition}"))
+    "!thm" (lambda () (interactive)
+               "theorem environment"
+               (yas-expand-snippet "\\begin{theorem}\n\\label{thm:$1}\n$0\n\\end{theorem}"))
+    "!proof" (lambda () (interactive)
+               "proof environment"
+               (yas-expand-snippet "\\begin{proof}\n$0\n\\end{proof}\n"))
+    "!lem" (lambda () (interactive)
+               "lemma environment"
+               (yas-expand-snippet "\\begin{lemma}\n\\label{lem:$1}\n$0\n\\end{lemma}"))
+    "!cor" (lambda () (interactive)
+               "corollary environment"
+               (yas-expand-snippet "\\begin{corollary}\n\\label{cor:$1}\n$0\n\\end{corollary}"))
+    "!def" (lambda () (interactive)
+                "definition environment"
+                (yas-expand-snippet "\\begin{definition}\n\\label{def:$1}\n$0\n\\end{definition}"))
+    "!exp" (lambda () (interactive)
+                "example environment"
+                (yas-expand-snippet "\\begin{example}\n\\label{exp:$1}\n$0\n\\end{example}"))
+    "!rem" (lambda () (interactive)
+                "remark environment"
+                (yas-expand-snippet "\\begin{remark}\n\\label{rem:$1}\n$0\n\\end{remark}"))
+    "!not" (lambda () (interactive)
+                "notation environment"
+                (yas-expand-snippet "\\begin{notation}\n\\label{not:$1}\n$0\n\\end{notation}"))
+    "!enum" (lambda () (interactive)
+                "enumerate environment"
+                (yas-expand-snippet "\\begin{enumerate}\\setlength\\itemsep{0em}\n  \\item$0\n\\end{enumerate}"))
+    "!item" (lambda () (interactive)
+                "itemize environment"
+                (yas-expand-snippet "\\begin{itemize}\\setlength\\itemsep{0em}\n  \\item$0\n\\end{itemize}"))
+
+    :cond #'texmathp
+      "NN" "\\N"
+      "ZZ" "\\Z"
+      "QQ" "\\Q"
+      "RR" "\\R"
+      "CC" "\\CC"
+
+      ";0" "\\emptyset"
+
+      "ell" "\\ell"
+      "eps" "\\varepsilon"
+      ";p" "\\phi"
+      ";P" "\\Phi"
+      ";S" "\\Psi"
+      ";g" "\\gamma"
+      ";w" "\\omega"
+      ";W" "\\Omega"
+      ";l" "\\lambda"
+      ";m" "\\mu"
+      ";d" "\\delta"
+      ";D" "\\Delta"
+
+      "iso" "\\iso"
+      "->" "\\to"
+      "-->" "\\longrightarrow"
+      "!>" "\\mapsto"
+      "!->" "\\longmapsto"
+
+      "vv" "\\wedge"
+      "ox" "\\otimes"
+      "o+" "\\oplus"
+      "OO" "\\infty"
+      "dd" "\\diff"
+      ",," "\\,"
+      "**" "\\times"
+      ";*" "^{*}"
+      "cc" "\\subseteq"
+      ";sm" "\\setminus"
+      "inn" "\\in"
+      "inv" "^{-1}"
+      "..." "\\dots"
+
+      "leq" "\\leq"
+      "geq" "\\geq"
+      "!=" "\\neq"
+      ":=" "\\coloneq"
+      "<=" "\\leq"
+      ">=" "\\geq"
+
+      "cal" (lambda () (interactive)
+             "mathcal"
+             (yas-expand-snippet "\\mathcal{$1}$0"))
+      "//" (lambda () (interactive)
+             "Text in math environment"
+             (yas-expand-snippet "\\frac{$1}{$2}$0"))
+      "tt" (lambda () (interactive)
+             "Text in math environment"
+             (yas-expand-snippet "\\text{$1}$0"))
+      "?>" (lambda () (interactive)
+             "xmapsto"
+             (yas-expand-snippet "\\xmapsto{$1}$0"))
+      ";set" (lambda () (interactive)
+              "Collection --- set"
+              (yas-expand-snippet "\\\\{$1\\\\}$0"))
+      "norm" (lambda () (interactive)
+               "Norm"
+               (yas-expand-snippet "\\\\| $1 \\\\|$0"))
+      "Sum" (lambda () (interactive)
+              "Summation with limits"
+              (yas-expand-snippet "\\sum_{$1}^{$2}$0"))
+      "diag" (lambda () (interactive)
+               "diagram environment"
+               (yas-expand-snippet "\\begin{tikzcd}\n  $0\n\\end{tikzcd}"))
+      "bmat" (lambda () (interactive)
+               "Matrix"
+               (yas-expand-snippet "\\begin{bmatrix}\n  $0\n\\end{bmatrix}"))
+      "cases" (lambda () (interactive)
+               "Cases environment"
+               (yas-expand-snippet "\\begin{cases}\n $0\n\\end{cases}"))))
 
 
 ;; LaTeX setup -----------------------------------------------------------------
@@ -436,38 +627,34 @@
 (use-package latex
   :mode ("\\.tex\\'" . LaTeX-mode)
   :ensure auctex
-  :hook ((LaTeX-mode . prettify-symbols-mode)
-	 ;; Make AUCTeX aware of multifile doc structure
-	 (LaTeX-mode . TeX-source-correlate-mode))
-  :bind (:map LaTeX-mode-map
-         ("C-M-w" . latex-math-from-calc))
+  :hook ((LaTeX-mode . yas-minor-mode)
+         ;; Make AUCTeX aware of multifile doc structure
+         (LaTeX-mode . TeX-source-correlate-mode))
   :config
+  ;; Basic settings
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
   (setq-default TeX-master nil)
+  (setq visual-fill-column-center-text t)
+
+  (defun reftex-format-cref (label def-fmt) (format "\\cref{%s}" label))
+  (setq reftex-format-ref-function 'reftex-format-cref)
+
+  ;; Indentation settings
+  (setq LaTeX-indent-level 0)
+  (setq LaTeX-item-indent 0)
+
+  ;; Compilation and PDF
   (setq TeX-PDF-mode t
         TeX-source-correlate-mode t
         TeX-source-correlate-start-server t)
 
-  ;; Format math as a Latex string with Calc
-  ;; Use C-S-e
-  (defun latex-math-from-calc ()
-    "Evaluate `calc' on the contents of line at point."
-    (interactive)
-    (cond ((region-active-p)
-           (let* ((beg (region-beginning))
-                  (end (region-end))
-                  (string (buffer-substring-no-properties beg end)))
-             (kill-region beg end)
-             (insert (calc-eval `(,string calc-language latex
-                                          calc-prefer-frac t
-                                          calc-angle-mode rad)))))
-          (t (let ((l (thing-at-point 'line)))
-               (end-of-line 1) (kill-line 0)
-               (insert (calc-eval `(,l
-                                    calc-language latex
-                                    calc-prefer-frac t
-                                    calc-angle-mode rad))))))))
+  ;; References setup
+  (setq-default reftex-plug-into-AUCTeX t)
+
+  ;; Fold by section using C-tab
+  (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
+  (define-key LaTeX-mode-map (kbd "<C-tab>") 'outline-toggle-children))
 
 ;; Somewhat of a latexmk integration with AucTeX
 (use-package auctex-latexmk
@@ -479,153 +666,75 @@
 
 ;;; Visual editing
 
-;; PDF previewing with zathura and sinctex enabled
-(add-to-list 'TeX-expand-list
-	     '("%sn" (lambda () server-name)))
-(add-to-list 'TeX-view-program-list
-   '("Zathura"
-   ("zathura %o"
-    (mode-io-correlate " --synctex-forward %n:0:"%b" -x \"emacsclient --socket-name=%sn +%{line} %{input}\""))
-   "zathura"))
-(setcar (cdr (assoc 'output-pdf TeX-view-program-selection)) "Zathura")
-
 ;; Visualization with buffer preview --- use C-c C-p
 (add-hook 'LaTeX-mode-hook
           (defun preview-larger-previews ()
             (setq preview-scale-function
-                  (lambda () (* 1.25
+                  (lambda () (* 1.0 ;; Change this scale if need be
                            (funcall (preview-scale-from-face)))))))
 
 
-;;; Latex lsp
+;;; Latex lsp -- this really slows down the editing process and is not that
+;;; worthy
 
-(use-package lsp-latex
-  :config
-  (setq lsp-latex-texlab-executable "~/.cargo/bin/texlab")
-  (setq lsp-latex-forward-search-executable "zathura")
-  (setq lsp-latex-forward-search-args '("--synctex-forward" "%l:1:%f" "%p")) )
-(with-eval-after-load "LaTeX-mode"
- (add-hook 'TeX-mode-hook 'lsp)
- (add-hook 'LaTeX-mode-hook 'lsp))
+;; (use-package lsp-latex
+;;   :config
+;;   (setq lsp-latex-texlab-executable "~/.cargo/bin/texlab")
+;;   (setq lsp-latex-forward-search-executable "zathura")
+;;   (setq lsp-latex-forward-search-args '("--synctex-forward" "%l:1:%f" "%p"))
+;; 	(setq lsp-latex-diagnostics-delay 500))
+;; (with-eval-after-load "LaTeX-mode"
+;;  (add-hook 'TeX-mode-hook 'lsp)
+;;  (add-hook 'LaTeX-mode-hook 'lsp))
 
 
 ;;; Latex text input configuration:
+
 
 ;; cdlatex stuff
 (use-package cdlatex
   :ensure t
   :hook ((LaTeX-mode . turn-on-cdlatex)
-	 ;; YaSnippet integration
 	 (cdlatex-tab . yas-expand)
          (cdlatex-tab . cdlatex-in-yas-field))
   :bind (:map cdlatex-mode-map
               ("<tab>" . cdlatex-tab))
   :config
-  ;; Environments
-  (setq cdlatex-env-alist
-     '(("proposition" "\\begin{proposition}\n\\label{prop:$1}\n$0\n\\end{proposition}\n" nil)
-       ("theorem" "\\begin{theorem}\n\\label{thm:}\n?\n\\end{theorem}\n" nil)
-       ("corollary" "\\begin{corollary}\n\\label{cor:}\n?\n\\end{corollary}\n" nil)
-       ("definition" "\\begin{definition}\n\\label{def:}\n?\n\\end{definition}\n" nil)
-       ("proof" "\\begin{proof}\n?\n\\end{proof}\n" nil)
-       ("diagram" "\\begin{tikzcd}\n?\n\\end{tickzcd}")))
+  (setq cdlatex-takeover-subsuperscript nil)
+  (setq cdlatex-takeover-parenthesis nil)
+  (local-unset-key (kbd "^"))
+  (setq cdlatex-paired-parens "{([")
+  (setq cdlatex-sub-super-scripts-outside-math-mode nil)
+  (setq cdlatex-simplify-sub-super-scripts t)
 
-  ;; Commands
-  (setq cdlatex-command-alist
-    '(("prop" "Insert proposition env" "" cdlatex-environment ("proposition") t nil)
-      ("thm" "Insert theorem env" "" cdlatex-environment ("theorem") t nil)
-      ("cor" "Insert corollary env" "" cdlatex-environment ("corollary"))
-      ("def" "Insert definition env" "" cdlatex-environment ("definition"))
-      ("proof" "Insert proof env" "" cdlatex-environment ("proof"))
-      ("diag" "Insert diagram env " "" cdlatex-environment ("diagram")))))
+  ;; YaSnippet integration
+  (defun cdlatex-in-yas-field ()
+      ;; Check if we're at the end of the Yas field
+      (when-let* ((_ (overlayp yas--active-field-overlay))
+                  (end (overlay-end yas--active-field-overlay)))
+        (if (>= (point) end)
+            ;; Call yas-next-field if cdlatex can't expand here
+            (let ((s (thing-at-point 'sexp)))
+              (unless (and s (assoc (substring-no-properties s)
+                                    cdlatex-command-alist-comb))
+                (yas-next-field-or-maybe-expand)
+                t))
+          ;; otherwise expand and jump to the correct location
+          (let (cdlatex-tab-hook minp)
+            (setq minp
+                  (min (save-excursion (cdlatex-tab)
+                                       (point))
+                       (overlay-end yas--active-field-overlay)))
+            (goto-char minp) t))))
 
-;; YaSnippet integration for cdlatex
-;; I'm not using this, but I'll let this sit here for now, I may change my mind
-;; and try it out. To make this actually work, just add the following code to
-;; the :config section of cdlatex:
-;;
-;; (use-package yasnippet
-;; :bind (:map yas-keymap
-;; 	("<tab>" . yas-next-field-or-cdlatex)
-;; 	("TAB" . yas-next-field-or-cdlatex))
-;; :config
-;; (defun cdlatex-in-yas-field ()
-;;     ;; Check if we're at the end of the Yas field
-;;     (when-let* ((_ (overlayp yas--active-field-overlay))
-;; 		(end (overlay-end yas--active-field-overlay)))
-;;     (if (>= (point) end)
-;; 	;; Call yas-next-field if cdlatex can't expand here
-;; 	(let ((s (thing-at-point 'sexp)))
-;; 	    (unless (and s (assoc (substring-no-properties s)
-;; 				cdlatex-command-alist-comb))
-;; 	    (yas-next-field-or-maybe-expand)
-;; 	    t))
-;; 	;; otherwise expand and jump to the correct location
-;; 	(let (cdlatex-tab-hook minp)
-;; 	(setq minp
-;; 		(min (save-excursion (cdlatex-tab)
-;; 				    (point))
-;; 		    (overlay-end yas--active-field-overlay)))
-;; 	(goto-char minp) t))))
-;;
-;; (defun yas-next-field-or-cdlatex nil
-;;     (interactive)
-;;     "Jump to the next Yas field correctly with cdlatex active."
-;;     (if
-;; 	(or (bound-and-true-p cdlatex-mode)
-;; 	    (bound-and-true-p org-cdlatex-mode))
-;; 	(cdlatex-tab)
-;;     (yas-next-field-or-maybe-expand))))
-
-;; Auto-expanding snippets
-(use-package laas
-  :hook (LaTeX-mode . laas-mode)
-  :config ; do whatever here
-  (aas-set-snippets 'laas-mode
-		    ;; Math environments
-                    "mk" (lambda () (interactive)
-			   "Inline math"
-                          (yas-expand-snippet "\\\\($1\\\\)$0"))
-		    "dm" (lambda () (interactive)
-			   "Display math"
-			   (yas-expand-snippet "\\[\n$1\n\\]$0"))
-                    :cond #'texmathp
-		    "NN" "\\N"
-		    "ZZ" "\\Z"
-		    "QQ" "\\Q"
-		    "RR" "\\R"
-		    "CC" "\\C"
-		    "ox" "\\otimes"
-		    "o+" "\\oplus"
-		    "iso" "\\iso"
-		    "cc" "\\subseteq"
-		    "sm" "\\setminus"
-		    "tt" (lambda () (interactive)
-			    "Text in math environment"
-			    (yas-expand-snippet "\\text{$1}$0"))
-		    "set" (lambda () (interactive)
-			    "Set"
-			    (yas-expand-snippet "\\\\{$1\\\\}$0"))
-                    "Sum" (lambda () (interactive)
-			    "Summation with limitsk"
-                            (yas-expand-snippet "\\sum_{$1}^{$2} $0"))
-                    "Int" (lambda () (interactive)
-			    "Definite integral"
-                            (yas-expand-snippet "\\int_{$1}^{$2} $0"))
-		    "bmat" (lambda () (interactive)
-			     "Matrix"
-			     (yas-expand-snippet "\\begin{bmatrix}\n$1\n\\end{bmatrix}$0")
-		    "cases" (lambda () (interactive)
-			     "Cases environment"
-			     (yas-expand-snippet "\\begin{cases}\n$1\n\\end{cases}$0")
-		    ;; add accent snippets
-                    :cond #'laas-object-on-left-condition
-                    "qq" (lambda () (interactive)
-			   "Wrap sqrt on the left object"
-			   (laas-wrap-previous-object "sqrt"))
-		    "inv" (lambda () (interactive)
-			    "Inverse"
-			    (yas-expand-snippet "^{-1}"))))
+    (defun yas-next-field-or-cdlatex nil
+      (interactive)
+      "Jump to the next Yas field correctly with cdlatex active."
+      (if
+          (or (bound-and-true-p cdlatex-mode)
+              (bound-and-true-p org-cdlatex-mode))
+          (cdlatex-tab)
+        (yas-next-field-or-maybe-expand))))
 
 
 ;; Rust setup ------------------------------------------------------------------
@@ -636,6 +745,7 @@
 (setq rust-format-on-save t)
 (define-key rust-mode-map (kbd "C-c C-c") 'rust-run)
 
+
 ;; Python setup ----------------------------------------------------------------
 
 (use-package python
@@ -644,24 +754,24 @@
   ;; Remove guess indent python message
   (setq python-indent-guess-indent-offset-verbose nil)
   ;; Use IPython when available or fall back to regular Python
-  (cond
-   ((executable-find "ipython")
-    (progn
-      (setq python-shell-buffer-name "IPython")
-      (setq python-shell-interpreter "ipython")
-      (setq python-shell-interpreter-args "-i --simple-prompt")))
-   ((executable-find "python3")
-    (setq python-shell-interpreter "python3"))
-   ((executable-find "python2")
-    (setq python-shell-interpreter "python2"))
-   (t
-    (setq python-shell-interpreter "python"))))
+  (setq
+    python-shell-interpreter "/home/luiz/.local/bin/ipython"
+    python-shell-interpreter-args "--profile=mugipy -i --simple-prompt"
+    python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+    python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+    python-shell-completion-setup-code
+    "from IPython.core.completerlib import module_completion"))
 
 (use-package lsp-pyright
   :ensure t
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
+
+(use-package anaconda-mode
+  :ensure t
+  :hook ((python-mode . anaconda-mode)
+         (python-mode . anaconda-eldoc-mode)))
 
 ;; Julia -----------------------------------------------------------------------
 
@@ -707,6 +817,7 @@
 ;; Org mode --------------------------------------------------------------------
 
 (defun mug/org-mode-setup ()
+  "Orgmode setup."
   (org-indent-mode)
   (variable-pitch-mode 0) ;; Fira is horrible with this thing on
   (auto-fill-mode 0)
@@ -728,15 +839,14 @@
                         '(("^ *\\([-]\\) "
                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-;; Side columns filling to make org mode more presentable
 (defun mug/org-mode-visual-fill ()
-  (setq visual-fill-column-width 100
+  "Side columns filling to make org mode more presentable."
+  (setq visual-fill-column-width 80
     visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
 
 (use-package visual-fill-column
   :hook (org-mode . mug/org-mode-visual-fill))
-
 
 ;; Using latex snippets inside org mode
 ;; (defun my-org-latex-yas ()

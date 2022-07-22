@@ -1,9 +1,9 @@
-export ZSH="/home/luiz/.oh-my-zsh"
-ZSH_THEME="robbyrussell"
+# export ZSH="/home/luiz/.oh-my-zsh"
+# ZSH_THEME="robbyrussell"
 
-plugins=(git)
+# plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 # ** set by zsh **
 HISTFILE=~/.histfile
@@ -47,7 +47,7 @@ function zle-keymap-select {
   elif [[ ${KEYMAP} == main ]] ||
        [[ ${KEYMAP} == viins ]] ||
        [[ ${KEYMAP} = '' ]] ||
-       [[ $1 = 'beam' ]]; then 
+       [[ $1 = 'beam' ]]; then
     echo -ne $vim_insert
   fi
 }
@@ -81,22 +81,24 @@ eval "$(zoxide init zsh)"
 # ** aliases **
 alias vim="nvim"
 alias ls="exa --long --header --icons --git"
-alias cat="bat --theme=gruvbox-dark"
+#alias cat="bat --theme=gruvbox-dark"
 alias bat="bat --theme=gruvbox-dark"
+#alias ccat="cat"
 alias ..="z .."
 alias cd="cd"
 alias blue="bluetoothctl"
 alias red="redshift -P -O"
-alias kbd="setxkbmap us -option caps:swapescape"
-alias kbdbr="setxkbmap br -option caps:swapescape"
-alias brdead="setxkbmap br -variant nodeadkeys -option caps:swapescape"
+alias kbd="setxkbmap us -option ctrl:nocaps"
+alias kbdbr="setxkbmap br -option ctrl:nocaps"
+alias brdead="setxkbmap br -variant nodeadkeys -option ctrl:nocaps"
 alias glog="git log --decorate --graph"
 alias gst="git status"
-alias wallbg="feh --bg-fill --no-fehbg" 
+alias wallbg="feh --bg-fill --no-fehbg"
 alias ipy="ipython --profile=mugipy"
 alias n="nnn -Hde"
 alias ghc="ghc -dynamic"
-alias tec="tectonic -X"
+alias oneup="onedrive --synchronize --no-remote-delete --upload-only"
+alias bright="xrandr --output eDP-1 --brightness"
 
 # ** tmux sessionizer binding **
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
@@ -108,6 +110,6 @@ export IPYTHONDIR="~/.config/ipython"
 export NNN_OPENER="xdg-open"
 export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"
 
-#eval "$(starship init zsh)"
+eval "$(starship init zsh)"
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null

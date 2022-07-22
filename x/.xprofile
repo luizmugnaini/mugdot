@@ -11,16 +11,15 @@ dwmblocks &
 # Wallpaper
 feh --bg-fill --no-fehbg ~/Pictures/wallpapers/murky_peaks.jpg &
 
-# emacs
-#/usr/bin/emacs --daemon &
-
 # Keyboard layout
-setxkbmap us -option caps:swapescape &
-#setxkbmap br -variant nodeadkeys -option caps:swapescape &
+setxkbmap us -option ctrl:nocaps
+
+# Keyboard rate and frequency
 xset r rate 500 60
 
 # screen filter
 redshift -P -O 5000 &
 
 # Locking (for timer, just insert something like `-time 10`)
-xautolock -locker slock &
+# xautolock -locker slock &
+xidlehook --not-when-fullscreen --not-when-audio --timer 600 slock '' &
