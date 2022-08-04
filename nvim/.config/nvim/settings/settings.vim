@@ -12,6 +12,10 @@ nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
 " Quick save
 nnoremap <leader>w :w<CR>
 
+" Emacs save --- I got accostumed to using it
+nnoremap <C-x><C-s> :w<CR>
+inoremap <C-x><C-s> :w<CR>
+
 " Stop annoying highlighting
 nnoremap <leader>hh :noh<CR>
 
@@ -20,6 +24,9 @@ nnoremap <silent> <C-h> :bp<CR>
 nnoremap <silent> <C-l> :bn<CR>
 
 " Strip trailing white-spaces
+"
+" This is not really good because it throws you to the last line that vim
+" processed.
 autocmd FileType c,cpp,java,python,rust,vim,lua,tex autocmd BufWritePre <buffer> %s/\s\+$//e
 
 " If you want to have beam in insert mode, just comment this line out
@@ -82,7 +89,8 @@ vnoremap <C-y> "+y
 map <C-p> "+P
 """"""""
 
-au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
+" auto source when writing to init.vm alternatively you can run :source $MYVIMRC
+au! BufWritePost $MYVIMRC source %
 
 setlocal spell
 set spelllang=en

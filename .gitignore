@@ -10,7 +10,7 @@ dwm/.config/dwm-6.2/dwm.png
 # Emacs stuff
 emacs/.emacs.d/.local/
 emacs/.emacs.d/custom.el
-emacs/.emacs.d/elpa/
+emacs/.emacs.d/straight/
 emacs/.emacs.d/eshell/
 emacs/.emacs.d/projectile-bookmarks.eld
 emacs/.emacs.d/transient/

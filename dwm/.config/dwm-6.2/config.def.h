@@ -1,27 +1,28 @@
 // Luiz Mugnaini configuration for dwm window manager
 // patch dependencies: fullgaps, movestack
 //
-// external dependencies: firefox, kitty, scrot, slock
+// external dependencies: firefox, kitty, scrot, slock, rofi
 
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Fira Code:size=10" };
-static const char dmenufont[]       = "Fira Code:size=10";
+static const char *fonts[]          = { "FiraCode Nerd Font:size=10" };
+static const char dmenufont[]       = "FiraCode Nerd Font:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_purple[]      = "#1e1c31"; /* Last: #674ea7 */
+static const char col_border[]      = "#cd00cd";
 static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_purple,  col_purple },
+	/*               fg         bg          border   */
+	[SchemeNorm] = { col_gray3, col_gray1,  col_gray2  },
+	[SchemeSel]  = { col_gray4, col_purple, col_border },
 };
 
 /* tagging */
@@ -94,7 +95,9 @@ static const char *suspendcmd[] = { "systemctl", "suspend", NULL };
 // "-option caps:swapescape" is not needed since we are using xmodmap
 static const char *kbdus[]     = { "setxkbmap us -option caps:swapescape", NULL };
 static const char *kbdbr[]     = { "setxkbmap br -option caps:swapescape", NULL };
-static const char *kbdbrdead[] = { "setxkbmap br -variant nodeadkeys  -option caps:swapescape", NULL };
+static const char *kbdbrdead[] = {
+  "setxkbmap br -variant nodeadkeys  -option caps:swapescape", NULL
+};
 
 // Audio
 static const char *mutecmd[]    = { "pamixer", "-t", NULL};
