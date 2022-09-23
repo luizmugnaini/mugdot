@@ -89,46 +89,82 @@ PROMPT=$PROMPT'%{$(vterm_prompt_end)%}'
 # ** env variables **
 export EDITOR="nvim"
 export VISUAL="nvim"
-export TERMINAL="alacritty"
+export TERMINAL="kitty"
 export BROWSER="firefox"
 
 # ** path exports **
+# Local binaries
 export PATH="$HOME/.local/bin:$PATH"
+
+# Rust
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# Haskell
 export PATH="$HOME/.cabal/bin:$PATH"
+
+# Emacs
 export PATH="$HOME/.emacs.d/bin:$PATH"
 
 # zoxide
 eval "$(zoxide init zsh)"
 
 # ** aliases **
+
+# Editor
 alias vim="nvim"
+
+# Terminal utilities
 alias ls="exa --long --header --icons --git"
 alias bat="bat --theme=gruvbox-dark"
 alias ..="z .."
-alias blue="bluetoothctl"
+
+# nnn file explorer
+alias n="nnn -Hde"
+
+# Screen control
 alias red="redshift -P -O"
+alias bright="xrandr --output eDP-1 --brightness"
+
+# Keyboard stuff
 alias kbd="setxkbmap us -option ctrl:nocaps"
 alias kbdbr="setxkbmap br -option ctrl:nocaps"
 alias brdead="setxkbmap br -variant nodeadkeys -option ctrl:nocaps"
+alias kbdset="xset r rate 500 60"
+
+# Bluetooth
+alias blue="bluetoothctl"
+alias wallbg="feh --bg-fill --no-fehbg"
+
+# Git
 alias glog="git log --decorate --graph"
 alias gst="git status"
-alias wallbg="feh --bg-fill --no-fehbg"
-alias ipy="ipython --profile=mugipy"
-alias n="nnn -Hde"
+
+# Haskell
 alias ghc="ghc -dynamic"
+
+# Python
+alias ipy="ipython --profile=mugipy"
+
+# One-drive
 alias oneup="onedrive --synchronize --no-remote-delete --upload-only"
-alias bright="xrandr --output eDP-1 --brightness"
+
+# Latex
+alias lmk="latexmk -pvc -auxdir=aux -pdf"
+alias lc="latexmk -c"
+
 
 # ** tmux sessionizer binding **
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
 
+
 # ** ipython **
 export IPYTHONDIR="~/.config/ipython"
+
 
 # ** nnn integration **
 export NNN_OPENER="xdg-open"
 export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"
+
 
 # Prompt stuff
 eval "$(starship init zsh)"

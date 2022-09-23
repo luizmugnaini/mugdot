@@ -2,6 +2,24 @@
 ;;; Commentary:
 ;;; Code:
 
+;; (setq ispell-program-name "hunspell")
+;; (setq ispell-hunspell-dict-paths-alist
+;;   (setq ispell-local-dictionary "en_GB")
+
+;;   ;; (setq ispell-local-dictionary-alist
+;;   ;;   ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
+;;   ;;   '(("en_GB" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_GB") nil utf-8)))
+
+;;   ;; the following line won't make flyspell-mode enabled by default as you might think
+;;   (flyspell-mode 1)
+
+;;   ;; ispell-word for showing correcting options of the current misspelled word
+;;   ;; (global-set-key (kbd "M-\\") 'ispell-word)
+;;   ;;   '(("en_GB" "/usr/share/myspell/dicts/en_GB.aff")))
+;;   )
+
+;; (flyspell-check-tex-math-command t)
+
 ;;; AuCTeX configuration
 
 ;; Currently the support for autocompilation is a mess:
@@ -11,7 +29,8 @@
   :straight auctex
   :hook ((LaTeX-mode . yas-minor-mode)
          ;; Make AUCTeX aware of multifile doc structure
-         (LaTeX-mode . TeX-source-correlate-mode))
+         (LaTeX-mode . TeX-source-correlate-mode)
+         (LaTeX-mode . flyspell-mode))
   :config
   ;; Basic settings
   (setq TeX-auto-save t)
@@ -24,7 +43,7 @@
 
   ;; Indentation settings
   (setq LaTeX-indent-level 0)
-  (setq LaTeX-item-indent 0)
+  (setq LaTeX-item-indent -2)
 
   ;; Compilation and PDF
   (setq TeX-PDF-mode t
@@ -36,7 +55,9 @@
 
   ;; Fold by section using C-tab
   (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
-  (define-key LaTeX-mode-map (kbd "<C-tab>") 'outline-toggle-children))
+  (define-key LaTeX-mode-map (kbd "<C-tab>") 'outline-toggle-children)
+  (define-key LaTeX-mode-map (kbd "C-g C-q") 'LaTeX-fill-paragraph)
+  (define-key LaTeX-mode-map (kbd "C-f C-r") 'reftex-cleveref-cref))
 
 ;;; Visual editing
 
@@ -102,41 +123,41 @@
     "mk" (lambda () (interactive)
            "Inline math"
            (yas-expand-snippet "\\\\($0\\\\)"))
-    "dm" (lambda () (interactive)
+    "mmk" (lambda () (interactive)
            "Display math"
-           (yas-expand-snippet "\\[\n  $0\n\\]"))
+           (yas-expand-snippet "\\[\n$0\n\\]"))
     "!ali" (lambda () (interactive)
              "align environment"
-             (yas-expand-snippet "\\begin{align*}\n  $0\n\\end{align*}\n"))
+             (yas-expand-snippet "\\begin{align*}\n$0\n\\end{align*}"))
     "!gather" (lambda () (interactive)
                 "gather environment"
-                (yas-expand-snippet "\\begin{gather*}\n  $0\n\\end{gather*}\n"))
+                (yas-expand-snippet "\\begin{gather*}\n$0\n\\end{gather*}"))
     "!eq" (lambda () (interactive)
             "equation environment"
-            (yas-expand-snippet "\\begin{equation}\\label{eq:$1}\n  $0\n\\end{equation}"))
+            (yas-expand-snippet "\\begin{equation}\\label{eq:$1}\n$0\n\\end{equation}"))
 
     ;; Text environments
-    "!prop" (lambda () (interactive)
+    "!p" (lambda () (interactive)
                "proposition environment"
                (yas-expand-snippet
                 "\\begin{proposition}\n\\label{prop:$1}\n$0\n\\end{proposition}"))
-    "!thm" (lambda () (interactive)
+    "!t" (lambda () (interactive)
                "theorem environment"
                (yas-expand-snippet
                 "\\begin{theorem}\n\\label{thm:$1}\n$0\n\\end{theorem}"))
-    "!proof" (lambda () (interactive)
+    "!!p" (lambda () (interactive)
                "proof environment"
                (yas-expand-snippet
-                "\\begin{proof}\n$0\n\\end{proof}\n"))
-    "!lem" (lambda () (interactive)
+                "\\begin{proof}\n$0\n\\end{proof}"))
+    "!l" (lambda () (interactive)
                "lemma environment"
                (yas-expand-snippet
                 "\\begin{lemma}\n\\label{lem:$1}\n$0\n\\end{lemma}"))
-    "!cor" (lambda () (interactive)
+    "!c" (lambda () (interactive)
                "corollary environment"
                (yas-expand-snippet
                 "\\begin{corollary}\n\\label{cor:$1}\n$0\n\\end{corollary}"))
-    "!def" (lambda () (interactive)
+    "!d" (lambda () (interactive)
                 "definition environment"
                 (yas-expand-snippet
                  "\\begin{definition}\n\\label{def:$1}\n$0\n\\end{definition}"))
@@ -144,7 +165,7 @@
                 "example environment"
                 (yas-expand-snippet
                  "\\begin{example}\n\\label{exp:$1}\n$0\n\\end{example}"))
-    "!rem" (lambda () (interactive)
+    "!r" (lambda () (interactive)
                 "remark environment"
                 (yas-expand-snippet
                  "\\begin{remark}\n\\label{rem:$1}\n$0\n\\end{remark}"))
@@ -155,11 +176,11 @@
     "!enum" (lambda () (interactive)
                 "enumerate environment"
                 (yas-expand-snippet
-                 "\\begin{enumerate}\\setlength\\itemsep{0em}\n  \\item$0\n\\end{enumerate}"))
+                 "\\begin{enumerate}[(a)]\\setlength\\itemsep{0em}\n\\item$0\n\\end{enumerate}"))
     "!item" (lambda () (interactive)
                 "itemize environment"
                 (yas-expand-snippet
-                 "\\begin{itemize}\\setlength\\itemsep{0em}\n  \\item$0\n\\end{itemize}"))
+                 "\\begin{itemize}\\setlength\\itemsep{0em}\n\\item$0\n\\end{itemize}"))
 
     :cond #'texmathp
       "NN" "\\N"
@@ -207,8 +228,10 @@
       "geq" "\\geq"
       "!=" "\\neq"
       ":=" "\\coloneq"
-      "<=" "\\leq"
-      ">=" "\\geq"
+      "==" "\\iso"
+      "=>" "\\nat"
+      ";<" "\\leq"
+      ";>" "\\geq"
 
       "cal" (lambda () (interactive)
              "mathcal"

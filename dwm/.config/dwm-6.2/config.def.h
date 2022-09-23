@@ -8,7 +8,7 @@
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int gappx     = 5;        /* gaps between windows */
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int snap      = 10;       /* snap pixel (original: 32) */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "FiraCode Nerd Font:size=10" };
@@ -82,6 +82,9 @@ static const char *termcmd[] = { "kitty", NULL };
 /* browser */
 static const char *browsercmd[] = { "firefox", NULL };
 
+/* emacs */
+static const char *emacscmd[] = { "emacs", NULL };
+
 /* screenshot
  * static const char *printcmd[] = {
  *   "scrot -s ~/Pictures/screenshots/screenshot.png", NULL
@@ -115,6 +118,9 @@ static Key keys[] = {
 
   /* terminal */
   { MODKEY,              XK_Return,  spawn,          {.v = termcmd } },
+
+  /* emacs */
+  { MODKEY|ShiftMask,    XK_e,       spawn,          {.v = emacscmd} },
 
   /* browser */
   { MODKEY,              XK_bracketright, spawn,     {.v = browsercmd } },
