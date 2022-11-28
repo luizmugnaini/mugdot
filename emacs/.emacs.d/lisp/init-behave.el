@@ -4,18 +4,19 @@
 
 ;; Line numbers:
 (column-number-mode)
-(global-display-line-numbers-mode t)
+;; (global-display-line-numbers-mode t)
 
 ;; Enable line numbers for some modes
-(dolist (mode '(text-mode-hook
-                prog-mode-hook
-                conf-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 1))))
+;; (dolist (mode '(text-mode-hook
+;;                 prog-mode-hook
+;;                 conf-mode-hook))
+;;   (add-hook mode (lambda () (display-line-numbers-mode 1))))
 
 ;; Disable line numbers for some other modes
 (dolist (mode '(org-mode-hook
 	      	term-mode-hook
 		shell-mode-hook
+                dired-mode-hook
 		eshell-mode-hook
 		vterm-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))

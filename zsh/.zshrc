@@ -99,9 +99,6 @@ export PATH="$HOME/.local/bin:$PATH"
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# Haskell
-export PATH="$HOME/.cabal/bin:$PATH"
-
 # Emacs
 export PATH="$HOME/.emacs.d/bin:$PATH"
 
@@ -115,7 +112,8 @@ alias vim="nvim"
 
 # Terminal utilities
 alias ls="exa --long --header --icons --git"
-alias bat="bat --theme=gruvbox-dark"
+alias bat="bat --theme=OneHalfDark"
+alias cd="z"
 alias ..="z .."
 
 # nnn file explorer

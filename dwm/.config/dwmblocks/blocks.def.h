@@ -1,6 +1,6 @@
 static const Block blocks[] = {
   /*Icon*/	/*Command*/		/*Update Interval*/	/*Update Signal*/
-  {"", "~/.mugdot/dwm/.config/dwmblocks/scripts/wlan.sh", 30,  0},
+  {"", "~/.mugdot/dwm/.config/dwmblocks/scripts/wlan.sh", 5,  0},
 
   {"", "~/.mugdot/dwm/.config/dwmblocks/scripts/vol.sh",   5,  0},
 

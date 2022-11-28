@@ -1,7 +1,7 @@
 // Luiz Mugnaini configuration for dwm window manager
 // patch dependencies: fullgaps, movestack
 //
-// external dependencies: firefox, kitty, scrot, slock, rofi
+// external dependencies: firefox, kitty, scrot, slock, rofi, nerd fonts (Iosevka)
 
 #include <X11/XF86keysym.h>
 
@@ -11,13 +11,13 @@ static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int snap      = 10;       /* snap pixel (original: 32) */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "FiraCode Nerd Font:size=10" };
-static const char dmenufont[]       = "FiraCode Nerd Font:size=10";
+static const char *fonts[]          = { "Iosevka Nerd Font:size=10" };
+static const char dmenufont[]       = "Iosevka Nerd Font:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_purple[]      = "#1e1c31"; /* Last: #674ea7 */
+static const char col_purple[]      = "#1e1c31"; /* Last: #674ea7*/
 static const char col_border[]      = "#cd00cd";
 static const char *colors[][3]      = {
 	/*               fg         bg          border   */

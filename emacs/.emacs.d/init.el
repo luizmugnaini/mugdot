@@ -1,7 +1,7 @@
 ;;; Emacs --- My Emacs configurations
 
 ;;; Commentary:
-;; Luiz Mugnaini -> luizmugnaini@gmail.com
+;; Author: Luiz G. Mugnaini A. <luizmugnaini@gmail.com>
 
 ;;; Code:
 
@@ -25,10 +25,10 @@
 ;; Maps the location of the custom stuff to a better place
 (setq custom-file "~/.emacs.d/custom.el")
 
-;; Packaging
 (require 'init-package)
 
-;; General behaviour, appearence and keybindings
+;;; General behaviour
+
 (require 'init-font)
 (require 'init-behave)
 (require 'init-appearence)
@@ -36,44 +36,27 @@
 (require 'init-evil)
 (require 'init-counsel)
 
-;; Terminal emulator
-(require 'init-vterm)
+;;; File and project management:
 
-;; Version control
-(require 'init-git)
-
-;; File and project management
 (require 'init-dired)
 (require 'init-projectile)
 
-;; Completion
-;; (require 'init-ivy)
-(require 'init-completion)
-
-;; Language support and such
-(require 'init-lsp)
-
 ;;; Writing:
 
-;; Latex
 (require 'init-latex)
-
-;; Org
 (require 'init-org)
 
 ;;; Programming:
 
-;; Rust
+(require 'init-vterm)
+(require 'init-git)
+
+(require 'init-completion)
+(require 'init-lsp)
+
 (require 'init-rust)
-
-;; Python
 (require 'init-python)
-
-;; Julia
 (require 'init-julia)
-
-;; Haskell
-;; (require 'init-haskell)
 
 (provide 'init)
 ;;; Local Variables:

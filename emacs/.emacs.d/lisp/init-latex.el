@@ -65,7 +65,7 @@
 (add-hook 'LaTeX-mode-hook
           (defun preview-larger-previews ()
             (setq preview-scale-function
-                  (lambda () (* 1.0 ;; Change this scale if need be
+                  (lambda () (* 1.5 ;; Change this scale if need be
                            (funcall (preview-scale-from-face)))))))
 
 
@@ -204,7 +204,6 @@
       ";d" "\\delta"
       ";D" "\\Delta"
 
-      "iso" "\\iso"
       "->" "\\to"
       "-->" "\\longrightarrow"
       "!>" "\\mapsto"
@@ -230,8 +229,6 @@
       ":=" "\\coloneq"
       "==" "\\iso"
       "=>" "\\nat"
-      ";<" "\\leq"
-      ";>" "\\geq"
 
       "cal" (lambda () (interactive)
              "mathcal"

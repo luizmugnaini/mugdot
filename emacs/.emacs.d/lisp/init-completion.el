@@ -2,13 +2,20 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Enable vertico
-(use-package vertico
-  :init
-  (vertico-mode)
-  :custom
-  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  (vertico-cycle t))
+(use-package ivy
+  :diminish
+  :bind (("C-s" . swiper)
+         :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done)
+         ("C-l" . ivy-alt-done)
+         ("C-n" . ivy-next-line)
+         ("C-p" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ("C-p" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill))
+  :config
+  (ivy-mode 1))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist

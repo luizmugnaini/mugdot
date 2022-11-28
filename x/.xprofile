@@ -9,7 +9,7 @@ xrandr --output eDP-1 --auto --right-of HDMI-1 &
 dwmblocks &
 
 # Wallpaper
-feh --bg-fill --no-fehbg ~/Pictures/wallpapers/murky_peaks.jpg &
+feh --bg-fill --no-fehbg ~/Pictures/abstract.jpg &
 
 # Keyboard layout
 setxkbmap us -option ctrl:nocaps
@@ -21,5 +21,5 @@ xset r rate 500 60
 redshift -P -O 2800 &
 
 # Locking (for timer, just insert something like `-time 10`)
-# xautolock -locker slock &
+xautolock -locker slock &
 xidlehook --not-when-fullscreen --not-when-audio --timer 600 slock '' &
