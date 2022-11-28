@@ -12,6 +12,8 @@ emacs/.emacs.d/.local/
 emacs/.emacs.d/custom.el
 emacs/.emacs.d/straight/
 emacs/.emacs.d/eshell/
+emacs/.emacs.d/elpa/
+emacs/.emacs.d/.cask/
 emacs/.emacs.d/projectile-bookmarks.eld
 emacs/.emacs.d/transient/
 emacs/.emacs.d/var/

@@ -261,5 +261,12 @@
                "Cases environment"
                (yas-expand-snippet "\\begin{cases}\n  $0\n\\end{cases}"))))
 
+;;; PDF handling within Emacs:
+
+(use-package pdf-tools
+  :config
+  (pdf-loader-install)
+  (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer))
+
 (provide 'init-latex)
 ;;; init-latex.el ends here
