@@ -2,6 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
+(use-package transpose-frame)
+
+;;; Line numbers and stuff -------------------------------------------------------
+
 ;; Line numbers:
 (column-number-mode)
 ;; (global-display-line-numbers-mode nil)
@@ -81,9 +85,6 @@
 (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-;; (use-package golden-ratio)
-;; (golden-ratio-mode 1)
 
 (provide 'init-behave)
 ;;; init-behave.el ends here
