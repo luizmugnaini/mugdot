@@ -12,10 +12,6 @@ nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
 " Quick save
 nnoremap <leader>w :w<CR>
 
-" Emacs save --- I got accostumed to using it
-nnoremap <C-x><C-s> :w<CR>
-inoremap <C-x><C-s> :w<CR>
-
 " Stop annoying highlighting
 nnoremap <leader>hh :noh<CR>
 
@@ -32,7 +28,7 @@ autocmd FileType c,cpp,java,python,rust,vim,lua,tex autocmd BufWritePre <buffer>
 " If you want to have beam in insert mode, just comment this line out
 set guicursor=i:block
 
-set colorcolumn=81
+"set colorcolumn=81       " Ugly column indicating 81 characters mark
 
 syntax enable            " Enables syntax highlighing
 set lazyredraw           " Don't redraw while executing macros (good performance config)
@@ -45,8 +41,8 @@ set encoding=utf-8       " The encoding displayed
 set pumheight=10         " Makes popup menu smaller
 set fileencoding=utf-8   " The encoding written to file
 set ruler                " Show the cursor position all the time
-set number               " Line numbers
-set relativenumber       " Shows number relative to the line you are in
+"set number               " Line numbers
+"set relativenumber       " Shows number relative to the line you are in
 set cmdheight=2          " More space for displaying messages
 set iskeyword+=-         " treat dash separated words as a word text object
 set mouse=a              " Enable your mouse

@@ -24,7 +24,6 @@ Plug 'KeitaNakamura/tex-conceal.vim'
 Plug 'morhetz/gruvbox'
 Plug 'liuchengxu/space-vim-theme'
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-"Plug 'nvim-lualine/lualine.nvim'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -33,15 +32,9 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'preservim/nerdcommenter'
 
 Plug 'ryanoasis/vim-devicons'
-"Plug 'kyazdani42/nvim-web-devicons'
 
 " Finders
 Plug 'mcchrish/nnn.vim'
-
-"Plug 'nvim-lua/popup.nvim'
-"Plug 'nvim-lua/plenary.nvim'
-"Plug 'nvim-telescope/telescope.nvim'
-"Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 Plug 'airblade/vim-rooter'
 
@@ -53,7 +46,6 @@ Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'neovim/nvim-lspconfig'
 
 Plug 'neovimhaskell/haskell-vim'
-"Plug 'alx741/vim-hindent'
 Plug 'rust-lang/rust.vim'
 Plug 'ashinkarov/nvim-agda'
 
@@ -63,7 +55,6 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 Plug 'hrsh7th/cmp-path'
-"Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 Plug 'onsails/lspkind-nvim'
 
 call plug#end()

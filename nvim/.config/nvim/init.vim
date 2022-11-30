@@ -6,7 +6,6 @@ source $HOME/.config/nvim/plugins/plugins.vim
 
 " Themes
 source $HOME/.config/nvim/plugins/themes/challenger.vim
-"source $HOME/.config/nvim/plugins/themes/lualine.lua
 source $HOME/.config/nvim/plugins/themes/airline.vim
 
 " Language support

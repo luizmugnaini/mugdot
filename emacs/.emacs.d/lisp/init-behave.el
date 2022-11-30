@@ -4,22 +4,25 @@
 
 ;; Line numbers:
 (column-number-mode)
-;; (global-display-line-numbers-mode t)
+;; (global-display-line-numbers-mode nil)
 
-;; Enable line numbers for some modes
-;; (dolist (mode '(text-mode-hook
-;;                 prog-mode-hook
-;;                 conf-mode-hook))
-;;   (add-hook mode (lambda () (display-line-numbers-mode 1))))
+;; Configurations for programming modes
+(dolist (mode '(text-mode-hook
+                prog-mode-hook
+                LaTeX-mode-hook
+                conf-mode-hook))
+  (add-hook mode (lambda ()
+                   (display-line-numbers-mode 0))))
 
-;; Disable line numbers for some other modes
+;; Other modes
 (dolist (mode '(org-mode-hook
 	      	term-mode-hook
 		shell-mode-hook
                 dired-mode-hook
 		eshell-mode-hook
 		vterm-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (add-hook mode (lambda ()
+                   (display-line-numbers-mode 0))))
 
 ;; Wrapping lines with > 80 chars
 (setq-default fill-column 80)
@@ -28,10 +31,8 @@
 
 ;;; Filesystem backups ----------------------------------------------------------
 
-(setq
- make-backup-files nil ; disable backup
- ;; auto-save-default nil
- create-lockfiles nil)
+(setq make-backup-files nil ;; disable backup
+      create-lockfiles nil)
 
 ;; Use no-littering to automatically set common paths to the new
 ;; user-emacs-directory

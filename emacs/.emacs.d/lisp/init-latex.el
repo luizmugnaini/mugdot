@@ -2,23 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
-;; (setq ispell-program-name "hunspell")
-;; (setq ispell-hunspell-dict-paths-alist
-;;   (setq ispell-local-dictionary "en_GB")
+;;; PDF handling within Emacs:
 
-;;   ;; (setq ispell-local-dictionary-alist
-;;   ;;   ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
-;;   ;;   '(("en_GB" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_GB") nil utf-8)))
-
-;;   ;; the following line won't make flyspell-mode enabled by default as you might think
-;;   (flyspell-mode 1)
-
-;;   ;; ispell-word for showing correcting options of the current misspelled word
-;;   ;; (global-set-key (kbd "M-\\") 'ispell-word)
-;;   ;;   '(("en_GB" "/usr/share/myspell/dicts/en_GB.aff")))
-;;   )
-
-;; (flyspell-check-tex-math-command t)
+(use-package pdf-tools
+  :config
+  (pdf-loader-install)
+  (setq-default pdf-view-display-size 'fit-page)
+  (add-hook 'pdf-view-mode-hook 'visible-cursor)
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer))
 
 ;;; AuCTeX configuration
 
@@ -260,13 +252,6 @@
       "cases" (lambda () (interactive)
                "Cases environment"
                (yas-expand-snippet "\\begin{cases}\n  $0\n\\end{cases}"))))
-
-;;; PDF handling within Emacs:
-
-(use-package pdf-tools
-  :config
-  (pdf-loader-install)
-  (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer))
 
 (provide 'init-latex)
 ;;; init-latex.el ends here

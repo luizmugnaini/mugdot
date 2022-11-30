@@ -154,6 +154,7 @@ alias lc="latexmk -c"
 # ** tmux sessionizer binding **
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
 
+bindkey -s ^k "^["
 
 # ** ipython **
 export IPYTHONDIR="~/.config/ipython"
