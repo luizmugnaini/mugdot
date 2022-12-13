@@ -24,13 +24,9 @@
 ;; when pressed together with some other key, in order to prevent such a fucking
 ;; bullshit, I translated every possible shit that could happen into the right
 ;; thing that it should be binded to in the first place.
-;; (define-key key-translation-map (kbd "<up>") (kbd "w"))
 (define-key key-translation-map (kbd "C-<up>") (kbd "C-w"))
-;; (define-key key-translation-map (kbd "<left>") (kbd "a"))
 (define-key key-translation-map (kbd "C-<left>") (kbd "C-a"))
-;; (define-key key-translation-map (kbd "<down>") (kbd "s"))
 (define-key key-translation-map (kbd "C-<down>") (kbd "C-s"))
-;; (define-key key-translation-map (kbd "<right>") (kbd "d"))
 (define-key key-translation-map (kbd "C-<right>") (kbd "C-d"))
 (define-key key-translation-map (kbd "C-<print>") (kbd "C-p"))
 
@@ -38,7 +34,9 @@
   :config
   (global-set-key (kbd "C-c o") 'crux-open-with)
   (global-set-key (kbd "C-c I") 'crux-find-user-init-file)
-  (global-set-key (kbd "C-c k") 'crux-kill-other-buffers))
+  (global-set-key (kbd "C-c T") 'counsel-load-theme)
+  (global-set-key (kbd "C-c K") 'crux-kill-other-buffers)
+  (global-set-key (kbd "C-x K") 'kill-buffer-and-window))
 (add-hook 'emacs-lisp-mode-hook
           (lambda () (local-set-key (kbd "C-c e") 'eval-buffer)))
 

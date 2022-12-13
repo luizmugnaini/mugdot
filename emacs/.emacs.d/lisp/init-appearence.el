@@ -23,21 +23,21 @@
   :config
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
-  (setq dashboard-startup-banner "~/Pictures/doom.png")
+  (setq dashboard-startup-banner "~/.emacs.d/assets/doom.png")
   (dashboard-setup-startup-hook))
 
 ;; A better mode ooline from Doom
 (use-package doom-modeline
   :straight t
-  :hook (after-init . doom-modeline-mode))
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-buffer-encoding nil))
 
 ;; Please Emacs just stop asking if the theme is safe...
 (setq custom-safe-themes t)
-(use-package rebecca-theme)
-(use-package exotica-theme)
-(use-package challenger-deep-theme
-  :init (load-theme 'challenger-deep))
-(use-package gruvbox-theme)
+(use-package challenger-deep-theme)
+(use-package base16-theme
+  :init (load-theme 'base16-gruvbox-material-dark-hard))
 
 ;; Better delimiter coloring for emacs
 (use-package rainbow-delimiters
@@ -48,6 +48,10 @@
 (use-package tree-sitter-langs)
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
+;; Transparency settings
+(set-frame-parameter (selected-frame) 'alpha '(95 . 95))
+(add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 
 (provide 'init-appearence)
 ;;; init-appearence.el ends here

@@ -11,15 +11,47 @@
 
 (use-package org
   :hook (org-mode . mug/org-mode-setup)
+  :config
+  (define-key global-map (kbd "C-x C-t") 'org-capture)
+  (setq org-capture-templates
+    `(("t" "Tasks" entry (file+headline "~/Org/Agenda/Tasks.org" "Active")
+       "* TODO %?\n  %U\n  %a\n" :empty-lines 1)
+
+      ("d" "deep-dive" entry
+       (file+olp "~/Org/Agenda/Projects.org" "deep-dive")
+       "* TODO %?\n %U\n %a\n" :empty-lines 1)
+
+      ("p" "Projects")
+      ("pr" "ralg - Rust algorithms Library" entry
+       (file+olp "~/Org/Agenda/Projects.org" "ralg")
+       "* TODO %?\n %U\n %a\n" :empty-lines 1)
+      ("pg" "girl - Game Boy emulator" entry
+       (file+olp "~/Org/Agenda/Projects.org" "girl")
+       "* TODO %?\n %U\n %a\n" :empty-lines 1)
+      ("pc" "chirp - CHIP-8 emulator" entry
+       (file+olp "~/Org/Agenda/Projects.org" "chirp")
+       "* TODO %?\n %U\n %a\n" :empty-lines 1)
+      ("ph" "htpy - Homotopy theory library" entry
+       (file+olp "~/Org/Agenda/Projects.org" "htpy")
+       "* TODO %?\n %U\n %a\n" :empty-lines 1)
+
+      ("r" "Research")
+      ("rt" "Task" entry (file+olp "~/Org/Agenda/Research.org" "Active")
+       "* TODO %?\n %U\n %a\n" :empty-lines 1)))
   :custom
   (org-ellipsis " ▾")
   (org-directory "~/Org")
 
-  ;; ---------------- Agenda stuff ---------------
   (org-deadline-warning-days 14)
   (org-agenda-start-with-log-mode t)
   (org-log-done 'time) ;; Register the time of conclusion
   (org-log-into-drawer t)
+
+  (org-agenda-files
+   '("Agenda/Tasks.org"
+     "Agenda/Research.org"
+     "Agenda/Projects.org"
+     "Agenda/Reading.org"))
 
   (org-todo-keywords
     '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
@@ -76,18 +108,10 @@
             ((org-agenda-overriding-header "Cancelled Projects")
              (org-agenda-files org-agenda-files)))))))
 
-  (setq org-capture-templates
-    `(("t" "Tasks / Projects")
-      ("tt" "Task" entry (file+olp "~/Org/Agenda/Tasks.org" "Active")
-       "* TODO %?\n  %U\n  %a\n" :empty-lines 1)))
-
-  (define-key global-map (kbd "C-c t")
-    (lambda () (interactive) (org-capture nil "tt")))
-
   ;; Refiling: archive concluded tasks and such
   (org-refile-targets
     '(("~/Org/Agenda/Archive.org" :maxlevel . 1)
-      ("~/Org/Agenda/Tasks.org" :maxlevel . 1)))
+      ("~/Org/Agenda/Tasks.org"   :maxlevel . 1)))
 
   ;; Save Org buffers after refiling!
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
@@ -97,22 +121,16 @@
     '((:startgroup)
        ; Put mutually exclusive tags here
        (:endgroup)
-       ("@uni" . ?U)
-       ("@home" . ?H)
-       ("@work" . ?W)
-       ("@project" . ?P)
-       ("study" . ?s)
-       ("email" . ?e)
+       ("@uni"        . ?U)
+       ("@home"       . ?H)
+       ("@work"       . ?W)
+       ("@project"    . ?P)
+       ("study"       . ?s)
+       ("email"       . ?e)
        ("appointment" . ?a)
-       ("note" . ?n)
-       ("homework" . ?h)
-       ("idea" . ?i)))
-
-  (org-agenda-files
-   '("Agenda/Tasks.org"
-     "Agenda/Research.org"
-     "Agenda/Projects.org"
-     "Agenda/Reading.org")))
+       ("note"        . ?n)
+       ("homework"    . ?h)
+       ("idea"        . ?i))))
 
 (use-package org-bullets
   :after org
@@ -123,11 +141,12 @@
 ;; Replace list hyphen with dot
 (font-lock-add-keywords 'org-mode
                         '(("^ *\\([-]\\) "
-                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+                           (0 (prog1 () (compose-region (match-beginning 1)
+                                                        (match-end 1) "•"))))))
 
 (defun mug/org-mode-visual-fill ()
   "Side columns filling to make org mode more presentable."
-  (setq visual-fill-column-width 80
+  (setq visual-fill-column-width 85
     visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
 
