@@ -2,13 +2,68 @@
 ;;; Commentary:
 ;;; Code:
 
+;;; Buffer management ----------------------------------------------------------
+(use-package popwin
+  :init
+  (popwin-mode 1)
+  :config
+  (global-set-key (kbd "C-w") popwin:keymap)
+  (setq popwin:popup-window-height 10)
+
+  ;; Deal with flycheck exploding in your face while coding
+  (push '(flycheck-error-list-mode :height 7) popwin:special-display-config)
+  (push '(flycheck-error-message-mode :height 7) popwin:special-display-config)
+  (push '(lsp-help-mode :height 7) popwin:special-display-config)
+  (push '(lsp-diagnostics-mode :height 7) popwin:special-display-config))
+
+(defun bury-compile-buffer-if-successful (buffer string)
+ "Bury a compilation buffer if succeeded without warnings "
+ (when (and
+         (buffer-live-p buffer)
+         (string-match "compilation" (buffer-name buffer))
+         (string-match "finished" string)
+         (not
+          (with-current-buffer buffer
+            (goto-char (point-min))
+            (search-forward "warning" nil t))))
+    (run-with-timer 1 nil
+                    (lambda (buf)
+                      (bury-buffer buf)
+                      (switch-to-prev-buffer (get-buffer-window buf) 'kill))
+                    buffer)))
+(add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
+
 (use-package transpose-frame)
 
-;;; Line numbers and stuff -------------------------------------------------------
+;;; Text position on the screen ------------------------------------------------
 
-;; Line numbers:
+(defun mug/prog-mode-visual-fill ()
+  "Side columns filling."
+  (setq visual-fill-column-width 101
+    visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(defun mug/latex-mode-visual-fill ()
+  "Side columns filling."
+  (setq visual-fill-column-width 90
+    visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(use-package visual-fill-column
+  :hook ((prog-mode  . mug/prog-mode-visual-fill)
+         (LaTeX-mode . mug/latex-mode-visual-fill)))
+
+;; Wrapping lines with > 80 chars
+(setq-default fill-column 80)
+(add-hook 'text-mode-hook #'auto-fill-mode)
+;; (add-hook 'prog-mode-hook #'auto-fill-mode)
+
+;;; Line numbers and stuff -----------------------------------------------------
+;; The current behaviour is to not display line numbers, since I find them more
+;; annoying than helpful on a daily basis.
+
+;; Shows the column number in the modeline
 (column-number-mode)
-;; (global-display-line-numbers-mode nil)
 
 ;; Configurations for programming modes
 (dolist (mode '(text-mode-hook
@@ -28,12 +83,7 @@
   (add-hook mode (lambda ()
                    (display-line-numbers-mode 0))))
 
-;; Wrapping lines with > 80 chars
-(setq-default fill-column 80)
-(add-hook 'text-mode-hook #'auto-fill-mode)
-(add-hook 'prog-mode-hook #'auto-fill-mode)
-
-;;; Filesystem backups ----------------------------------------------------------
+;;; Filesystem backups ---------------------------------------------------------
 
 (setq make-backup-files nil ;; disable backup
       create-lockfiles nil)
@@ -42,15 +92,14 @@
 ;; user-emacs-directory
 (use-package no-littering)
 
-
-;;; .emacs.d dir ----------------------------------------------------------------
+;;; .emacs.d dir ---------------------------------------------------------------
 
 ;; Change the user-emacs-directory to keep unwanted things out of ~/.emacs.d
 (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
       url-history-file (expand-file-name "url/history" user-emacs-directory))
 
 
-;;; Emacs behaviour: ------------------------------------------------------------
+;;; Emacs behaviour: -----------------------------------------------------------
 
 ;; Deal with whitespaces
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
@@ -80,9 +129,7 @@
 (use-package xclip)
 (xclip-mode 1)
 
-;; Transparency settings
-(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+;; Window sizing
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 

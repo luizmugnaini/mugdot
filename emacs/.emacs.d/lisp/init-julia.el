@@ -3,6 +3,7 @@
 ;;; Code:
 
 (use-package julia-mode
+  :hook (julia-mode . lsp-deferred)
   :config
   (add-to-list 'load-path "/usr/bin/julia"))
 

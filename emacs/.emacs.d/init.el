@@ -35,6 +35,7 @@
 (require 'init-keybindings)
 (require 'init-evil)
 (require 'init-counsel)
+(require 'init-utils)
 
 ;;; File and project management:
 

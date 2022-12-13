@@ -48,6 +48,7 @@
   ;; Fold by section using C-tab
   (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
   (define-key LaTeX-mode-map (kbd "<C-tab>") 'outline-toggle-children)
+  (define-key LaTeX-mode-map (kbd "C-c C-c") 'tex-compile)
   (define-key LaTeX-mode-map (kbd "C-g C-q") 'LaTeX-fill-paragraph)
   (define-key LaTeX-mode-map (kbd "C-f C-r") 'reftex-cleveref-cref))
 
@@ -111,17 +112,19 @@
   :hook (LaTeX-mode . aas-activate-for-major-mode)
   :config
   (aas-set-snippets 'latex-mode
+    ";;" "\\"
+
     ;; Math environments
     "mk" (lambda () (interactive)
            "Inline math"
            (yas-expand-snippet "\\\\($0\\\\)"))
-    "mmk" (lambda () (interactive)
+    "!m" (lambda () (interactive)
            "Display math"
            (yas-expand-snippet "\\[\n$0\n\\]"))
     "!ali" (lambda () (interactive)
              "align environment"
              (yas-expand-snippet "\\begin{align*}\n$0\n\\end{align*}"))
-    "!gather" (lambda () (interactive)
+    "!g" (lambda () (interactive)
                 "gather environment"
                 (yas-expand-snippet "\\begin{gather*}\n$0\n\\end{gather*}"))
     "!eq" (lambda () (interactive)
@@ -157,7 +160,7 @@
                 "example environment"
                 (yas-expand-snippet
                  "\\begin{example}\n\\label{exp:$1}\n$0\n\\end{example}"))
-    "!r" (lambda () (interactive)
+    "!rem" (lambda () (interactive)
                 "remark environment"
                 (yas-expand-snippet
                  "\\begin{remark}\n\\label{rem:$1}\n$0\n\\end{remark}"))
@@ -165,6 +168,10 @@
                 "notation environment"
                 (yas-expand-snippet
                  "\\begin{notation}\n\\label{not:$1}\n$0\n\\end{notation}"))
+    "!beg" (lambda () (interactive)
+                "begin environment"
+                (yas-expand-snippet
+                 "\\begin{$1}\n$0\n\\end{$1}"))
     "!enum" (lambda () (interactive)
                 "enumerate environment"
                 (yas-expand-snippet
@@ -181,31 +188,20 @@
       "RR" "\\R"
       "CC" "\\CC"
 
-      ";0" "\\emptyset"
+      "veps" "\\varepsilon"
 
-      "ell" "\\ell"
-      "eps" "\\varepsilon"
-      ";p" "\\phi"
-      ";P" "\\Phi"
-      ";S" "\\Psi"
-      ";g" "\\gamma"
-      ";w" "\\omega"
-      ";W" "\\Omega"
-      ";l" "\\lambda"
-      ";m" "\\mu"
-      ";d" "\\delta"
-      ";D" "\\Delta"
+      ";0" "\\emptyset"
 
       "->" "\\to"
       "-->" "\\longrightarrow"
       "!>" "\\mapsto"
       "!->" "\\longmapsto"
 
+      ";wh" "\\widehat"
       "vv" "\\wedge"
       "ox" "\\otimes"
-      "o+" "\\oplus"
+      "opp" "\\oplus"
       "OO" "\\infty"
-      "dd" "\\diff"
       ",," "\\,"
       "**" "\\times"
       ";*" "^{*}"

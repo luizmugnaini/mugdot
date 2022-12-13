@@ -1,7 +1,7 @@
 // Luiz Mugnaini configuration for dwm window manager
 // patch dependencies: fullgaps, movestack
 //
-// external dependencies: firefox, kitty, scrot, slock, rofi, nerd fonts (Iosevka)
+// external dependencies: firefox, alacritty, scrot, slock, rofi, nerd fonts (Iosevka)
 
 #include <X11/XF86keysym.h>
 
@@ -17,7 +17,7 @@ static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_purple[]      = "#1e1c31"; /* Last: #674ea7*/
+static const char col_purple[]      = "#1e1c31";
 static const char col_border[]      = "#cd00cd";
 static const char *colors[][3]      = {
 	/*               fg         bg          border   */
@@ -77,7 +77,7 @@ static const char *dmenucmd[]   = {
 static const char *roficmd[] = { "rofi", "-show", "run", NULL };
 
 /* terminal */
-static const char *termcmd[] = { "kitty", NULL };
+static const char *termcmd[] = { "alacritty", NULL };
 
 /* browser */
 static const char *browsercmd[] = { "firefox", NULL };
@@ -85,22 +85,9 @@ static const char *browsercmd[] = { "firefox", NULL };
 /* emacs */
 static const char *emacscmd[] = { "emacs", NULL };
 
-/* screenshot
- * static const char *printcmd[] = {
- *   "scrot -s ~/Pictures/screenshots/screenshot.png", NULL
- * }; */
-
 // System locking and suspend
 static const char *lockcmd[]    = { "slock", NULL };
 static const char *suspendcmd[] = { "systemctl", "suspend", NULL };
-
-// Keyboard
-// "-option caps:swapescape" is not needed since we are using xmodmap
-static const char *kbdus[]     = { "setxkbmap us -option caps:swapescape", NULL };
-static const char *kbdbr[]     = { "setxkbmap br -option caps:swapescape", NULL };
-static const char *kbdbrdead[] = {
-  "setxkbmap br -variant nodeadkeys  -option caps:swapescape", NULL
-};
 
 // Audio
 static const char *mutecmd[]    = { "pamixer", "-t", NULL};
@@ -125,18 +112,10 @@ static Key keys[] = {
   /* browser */
   { MODKEY,              XK_bracketright, spawn,     {.v = browsercmd } },
 
-  /* screenshot */
-  /* { 0,                   XK_Print,        spawn,     {.v = printcmd } }, */
-
   /* audio */
   { 0,                   XF86XK_AudioMute,        spawn, {.v = mutecmd } },
   { 0,                   XF86XK_AudioLowerVolume, spawn, {.v = downvolcmd } },
   { 0,                   XF86XK_AudioRaiseVolume, spawn, {.v = upvolcmd } },
-
-  /* keyboard */
-  { MODKEY|ShiftMask,  XK_u,     spawn,          {.v = kbdus} },
-  { MODKEY|ShiftMask,  XK_i,     spawn,          {.v = kbdbr} },
-  { MODKEY|ShiftMask,  XK_o,     spawn,          {.v = kbdbrdead} },
 
   /* Screen locker and suspension */
   { MODKEY|ShiftMask,    XK_z,            spawn,          {.v = lockcmd } },
@@ -156,8 +135,8 @@ static Key keys[] = {
   { MODKEY,              XK_Tab,    view,           {0} },
   { MODKEY|ShiftMask,    XK_c,      killclient,     {0} },
   { MODKEY,              XK_t,      setlayout,      {.v = &layouts[0]} },
-  { MODKEY,              XK_f,      setlayout,      {.v = &layouts[1]} },
-  { MODKEY,              XK_m,      setlayout,      {.v = &layouts[2]} },
+  { MODKEY,              XK_m,      setlayout,      {.v = &layouts[1]} },
+  { MODKEY,              XK_f,      setlayout,      {.v = &layouts[2]} },
   { MODKEY,              XK_space,  setlayout,      {0} },
   { MODKEY|ShiftMask,    XK_space,  togglefloating, {0} },
   { MODKEY,              XK_0,      view,           {.ui = ~0 } },
@@ -186,7 +165,7 @@ static Key keys[] = {
 static Button buttons[] = {
 	/* click         event mask  button    function        argument */
 	{ ClkLtSymbol,   0,          Button1,  setlayout,      {0} },
-	{ ClkLtSymbol,   0,          Button3,  setlayout,      {.v = &layouts[2]} },
+	{ ClkLtSymbol,   0,          Button3,  setlayout,      {.v = &layouts[1]} },
 	{ ClkWinTitle,   0,          Button2,  zoom,           {0} },
 	{ ClkStatusText, 0,          Button2,  spawn,          {.v = termcmd } },
 	{ ClkClientWin,  MODKEY,     Button1,  movemouse,      {0} },

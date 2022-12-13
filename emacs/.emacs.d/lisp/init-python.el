@@ -4,10 +4,10 @@
 
 (use-package python
   :straight t
+  :hook (python-mode . lsp-deferred)
   :config
   ;; Remove guess indent python message
   (setq python-indent-guess-indent-offset-verbose nil)
-  ;; Use IPython when available or fall back to regular Python
   (setq
     python-shell-interpreter "/home/luiz/.local/bin/ipython"
     python-shell-interpreter-args "--profile=mugipy -i --simple-prompt"

@@ -45,9 +45,11 @@
 ;; YaSnippets configuration
 (use-package yasnippet
   :straight t
-  :hook ((LaTeX-hook . yas-minor-mode))
+  :hook ((LaTeX-hook . yas-minor-mode)
+         (prog-mode . yas-minor-mode))
   :config
-  (setq yas-snippet-dirs '("~/.mugdot/emacs/.emacs.d/snippets/")))
+  (setq yas-snippet-dirs '("~/.mugdot/emacs/.emacs.d/snippets/"))
+  (yas-global-mode 1))
 
 (defun final-nl ()
   "Disable addition of newline to final of snippet.
@@ -61,7 +63,8 @@ following lines and they will solve the problem --- I can only hope so
 
 (use-package aas
   :hook ((org-mode . aas-activate-for-major-mode)
-         (text-mod . aas-activate-for-major-mode)
+         (text-mode . aas-activate-for-major-mode)
+         (LaTeX-mode . aas-activate-for-major-mode)
          (markdown-mode . aas-activate-for-major-mode))
   :config
   (aas-set-snippets 'text-mode
