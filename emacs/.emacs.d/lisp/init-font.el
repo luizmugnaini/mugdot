@@ -4,15 +4,10 @@
 
 (defvar mug/default-font-size 140)
 (defvar mug/default-variable-font-size 140)
-(set-face-attribute 'default nil :font "Iosevka Nerd Font" :height mug/default-font-size)
-(set-face-attribute 'fixed-pitch nil :font "Iosevka Nerd Font" :height mug/default-variable-font-size)
-
-;; Font ligatures!
-;; (use-package fira-code-mode
-;;   :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x"))
-;;   :config (global-fira-code-mode)
-;;   ;; Enables fira-code-mode automatically for programming major modes
-  ;; :hook prog-mode)
+(defvar mug/small-screen-font-size 180)
+(defvar mug/small-screen-variable-font-size 180)
+(set-face-attribute 'default nil :font "Iosevka Nerd Font" :height mug/small-screen-font-size)
+(set-face-attribute 'fixed-pitch nil :font "Iosevka Nerd Font" :height mug/small-screen-font-size)
 
 (provide 'init-font)
 ;;; init-font.el ends here
