@@ -28,9 +28,6 @@
       ("pg" "girl - Game Boy emulator" entry
        (file+olp "~/Org/Agenda/Projects.org" "girl")
        "* TODO %?\n %U\n %a\n" :empty-lines 1)
-      ("pc" "chirp - CHIP-8 emulator" entry
-       (file+olp "~/Org/Agenda/Projects.org" "chirp")
-       "* TODO %?\n %U\n %a\n" :empty-lines 1)
       ("ph" "htpy - Homotopy theory library" entry
        (file+olp "~/Org/Agenda/Projects.org" "htpy")
        "* TODO %?\n %U\n %a\n" :empty-lines 1)
