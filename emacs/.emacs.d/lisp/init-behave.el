@@ -3,6 +3,9 @@
 ;;; Code:
 
 ;;; Buffer management ----------------------------------------------------------
+;; Split windows vertically by default (maybe I'll regret this)
+(split-window-right)
+
 (use-package popwin
   :init
   (popwin-mode 1)
@@ -51,7 +54,8 @@
 
 (use-package visual-fill-column
   :hook ((prog-mode  . mug/prog-mode-visual-fill)
-         (LaTeX-mode . mug/latex-mode-visual-fill)))
+         (LaTeX-mode . mug/latex-mode-visual-fill)
+         (markdown-mode . mug/prog-mode-visual-fill)))
 
 ;; Wrapping lines with > 80 chars
 (setq-default fill-column 80)

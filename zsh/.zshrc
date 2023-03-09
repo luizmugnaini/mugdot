@@ -142,6 +142,7 @@ alias ghc="ghc -dynamic"
 
 # Python
 alias ipy="ipython --profile=mugipy"
+export NLTK_DATA="~/.cache/nltk_data"
 
 # One-drive
 alias oneup="onedrive --synchronize --no-remote-delete --upload-only"

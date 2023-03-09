@@ -24,9 +24,10 @@
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
   (setq dashboard-startup-banner "~/.emacs.d/assets/doom.png")
+  (setq dashboard-banner-logo-title "Howdy mate! 🤠")
   (dashboard-setup-startup-hook))
 
-;; A better mode ooline from Doom
+;; A better mode line from Doom
 (use-package doom-modeline
   :straight t
   :hook (after-init . doom-modeline-mode)
