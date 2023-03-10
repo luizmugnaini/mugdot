@@ -3,8 +3,6 @@
 ;;; Code:
 
 ;;; Buffer management ----------------------------------------------------------
-;; Split windows vertically by default (maybe I'll regret this)
-(split-window-right)
 
 (use-package popwin
   :init

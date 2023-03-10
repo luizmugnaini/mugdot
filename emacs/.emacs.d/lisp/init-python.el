@@ -25,15 +25,6 @@
   (setq lsp-pyright-venv-path "/home/mug/.cache/pypoetry/virtualenvs")
   (setq lsp-pyright-multi-root nil))
 
-;; (use-package py-autopep8
-;;   :straight t
-;;   :hook (python-mode . py-autopep8-enable-on-save))
-
-;; (use-package anaconda-mode
-;;   :straight t
-;;   :hook ((python-mode . anaconda-mode)
-;;          (python-mode . anaconda-eldoc-mode)))
-
 (use-package python-black
   :straight t
   :after python
