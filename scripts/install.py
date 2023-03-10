@@ -67,6 +67,7 @@ optional_packages = {
         "python-pydantic",
         "ipython",
         "jupyterlab",
+        "mypy"
         "tk",
     ],
     "programming tools": ["tree-sitter"],
@@ -258,6 +259,7 @@ def setup_dwm():
     sp.run("make", cwd=common_path + "dwmblocks")
     sp.run(["sudo", "make", "install"], cwd=common_path + "dwmblocks")
     sp.run(["stow", "dunst", "rofi"])
+    # TODO: create desktop entry for dwm
 
 
 def setup_shell():
