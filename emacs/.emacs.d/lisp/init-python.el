@@ -28,7 +28,9 @@
 (use-package python-black
   :straight t
   :after python
-  :hook (python-mode . python-black-on-save-mode-enable-dwim))
+  :hook (python-mode . python-black-on-save-mode-enable-dwim)
+  :config
+  (setq python-black-on-save-mode t))
 
 (use-package poetry
   :straight t)

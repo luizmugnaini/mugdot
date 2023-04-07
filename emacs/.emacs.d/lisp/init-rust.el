@@ -10,6 +10,7 @@
   (define-key rust-mode-map (kbd "C-c C-c") 'rust-run)
   (define-key rust-mode-map (kbd "C-c t") 'rust-test)
   (define-key rust-mode-map (kbd "C-c k") 'rust-check)
+  (define-key rust-mode-map (kbd "C-c c") 'rust-compile)
   :custom
   (rust-format-on-save t))
 

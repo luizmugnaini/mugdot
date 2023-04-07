@@ -21,6 +21,8 @@
   :config
   (define-key lsp-ui-mode-map (kbd "C-l d") 'lsp-ui-doc-toggle)
   (define-key lsp-ui-mode-map (kbd "C-l f") 'lsp-ui-doc-focus-frame)
+  (define-key lsp-ui-mode-map (kbd "C-l m") 'lsp-ui-imenu)
+  (define-key lsp-ui-mode-map (kbd "C-l k") 'lsp-ui-imenu--kill)
 
   (setq lsp-ui-doc-max-height 15)
   (setq lsp-ui-doc-show-with-cursor nil)

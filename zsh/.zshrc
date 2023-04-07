@@ -108,7 +108,7 @@ eval "$(zoxide init zsh)"
 # ** aliases **
 
 # Editor
-alias vim="nvim"
+alias v="nvim"
 
 # Terminal utilities
 alias ls="exa --long --header --icons --git"
@@ -170,3 +170,5 @@ export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"
 eval "$(starship init zsh)"
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+
+source /home/mug/.config/broot/launcher/bash/br

@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(use-package pomodoro)
+(pomodoro-add-to-mode-line)
+
 (use-package rg)
 
 (use-package fzf
