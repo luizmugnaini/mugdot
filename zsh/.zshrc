@@ -124,9 +124,9 @@ alias red="redshift -P -O"
 alias bright="xrandr --output eDP-1 --brightness"
 
 # Keyboard stuff
-alias kbd="setxkbmap us -option ctrl:nocaps"
-alias kbdbr="setxkbmap br -option ctrl:nocaps"
-alias brdead="setxkbmap br -variant nodeadkeys -option ctrl:nocaps"
+alias kbd="setxkbmap us -option ctrl:nocaps && xset r rate 500 60"
+alias kbdbr="setxkbmap br -option ctrl:nocaps && xset r rate 500 60"
+alias brdead="setxkbmap br -variant nodeadkeys -option ctrl:nocaps && xset r rate 500 60"
 alias kbdset="xset r rate 500 60"
 
 # Bluetooth

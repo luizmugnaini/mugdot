@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(use-package typst-mode
+  :straight (:type git :host github :repo "Ziqi-Yang/typst-mode.el"))
+
 ;;; PDF handling within Emacs:
 
 (use-package pdf-tools
@@ -20,6 +23,7 @@
   :mode ("\\.tex\\'" . LaTeX-mode)
   :straight auctex
   :hook ((LaTeX-mode . yas-minor-mode)
+         (LaTeX-mode . prettify-symbols-mode)
          ;; Make AUCTeX aware of multifile doc structure
          (LaTeX-mode . TeX-source-correlate-mode)
          (LaTeX-mode . flyspell-mode))
@@ -132,6 +136,10 @@
             (yas-expand-snippet "\\begin{equation}\\label{eq:$1}\n$0\n\\end{equation}"))
 
     ;; Text environments
+    "!!t" (lambda () (interactive)
+               "todo environment"
+               (yas-expand-snippet
+                "\\todo[inline]{$0}"))
     "!p" (lambda () (interactive)
                "proposition environment"
                (yas-expand-snippet
@@ -189,6 +197,9 @@
       "CC" "\\CC"
 
       "veps" "\\varepsilon"
+      ";l" "\\lambda"
+      ";L" "\\Lambda"
+      ";g" "\\gamma"
 
       ";0" "\\emptyset"
 

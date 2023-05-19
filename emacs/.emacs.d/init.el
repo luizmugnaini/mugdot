@@ -57,7 +57,7 @@
 
 (require 'init-rust)
 (require 'init-python)
-;; (require 'init-julia)
+(require 'init-julia)
 
 (provide 'init)
 ;;; Local Variables:

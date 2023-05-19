@@ -1,6 +1,8 @@
 # ncspot
 ncspot/.config/ncspot/userstate.cbor
 
+*\#
+
 # dwm stuff
 *.o
 *.diff
