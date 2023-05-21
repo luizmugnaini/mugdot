@@ -31,7 +31,7 @@ target_path = "~/.local/bin"
 target_path = "~/.config/ncspot"
 
 [nvim]
-targe_path = "~/.config/nvim"
+target_path = "~/.config/nvim"
 is_recursive = true
 
 [rofi]
