@@ -3,5 +3,5 @@ check="false"
 if [ "$muted" = "$check" ]; then
     printf "   $(pamixer --get-volume)%% "
 else
-    printf "  $(pamixer --get-volume) "
+    printf " 󰖁  $(pamixer --get-volume) "
 fi

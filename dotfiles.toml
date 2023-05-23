@@ -8,8 +8,7 @@ target_path = "~/"
 target_path = "~/.config/dunst"
 
 [dwm]
-target_path = "~/.config"
-is_recursive = true
+target_path = "~/.config/dwm-6.2"
 
 [emacs]
 target_path = "~/.emacs.d"

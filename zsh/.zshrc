@@ -108,7 +108,7 @@ eval "$(zoxide init zsh)"
 # ** aliases **
 
 # Editor
-alias v="nvim"
+alias vim="nvim"
 
 # Terminal utilities
 alias ls="exa --long --header --icons --git"
@@ -155,6 +155,7 @@ alias lc="latexmk -c"
 # ** tmux sessionizer binding **
 bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
 
+# Makes my Ctrl-k output an Esc
 bindkey -s ^k "^["
 
 # ** ipython **
