@@ -4,12 +4,14 @@ return require('packer').startup(function(use)
   -- Packer itself
   use("wbthomason/packer.nvim")
 
+  -- File browsing
+  use("theprimeagen/harpoon")
   use({
     'nvim-telescope/telescope.nvim', tag = '0.1.1',
     requires = { {'nvim-lua/plenary.nvim'} }
   })
 
-
+  -- Theme
   use({
     "sainnhe/gruvbox-material",
     as = "gruvbox-material",
@@ -18,11 +20,33 @@ return require('packer').startup(function(use)
     end
   })
 
+  -- Linemode
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+  }
+
+  -- Transparency
+  use("xiyaowong/transparent.nvim")
+
+  -- Treesitter
   use("nvim-treesitter/nvim-treesitter", { run = ":TSUpdate" })
-  use("theprimeagen/harpoon")
+
+  -- Undo history
   use("mbbill/undotree")
+
+  -- Git integration
   use("tpope/vim-fugitive")
 
+  -- Commenting
+  use {
+    'numToStr/Comment.nvim',
+    config = function()
+      require('Comment').setup()
+    end
+  }
+
+  -- LSP integration 
   use {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v2.x',
