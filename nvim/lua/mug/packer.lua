@@ -12,45 +12,12 @@ return require("packer").startup(function(use)
         requires = { { "nvim-lua/plenary.nvim" } }
     }
 
-    -- Theme
-    --[[
-    use {
-        "sainnhe/gruvbox-material",
-        as = "gruvbox-material"
-        -- config = function()
-        --     vim.cmd("colorscheme gruvbox-material")
-        -- end
-    }
-    ]]
-    use {
-        "folke/tokyonight.nvim",
-        config = function()
-            vim.cmd("colorscheme tokyonight")
-        end
-    }
+    use { "folke/tokyonight.nvim" }
 
     -- Linemode
     use {
         "nvim-lualine/lualine.nvim",
         requires = { "kyazdani42/nvim-web-devicons", opt = true },
-        config = function()
-            require("lualine").setup {
-                options = {
-                    icons_enabled = true,
-                    theme = "onedark",
-                    component_separators = { left = "", right = "|" },
-                    section_separators = { left = "", right = "" }
-                },
-                sections = {
-                    lualine_a = { "mode" },
-                    lualine_b = { "branch", "diagnostics" },
-                    lualine_c = { "filename" },
-                    lualine_x = { "fileformat", "filetype" },
-                    lualine_y = { "progress" },
-                    lualine_z = { "location" }
-                }
-            }
-        end
     }
 
     -- Transparency
@@ -65,20 +32,26 @@ return require("packer").startup(function(use)
     -- Commenting
     use {
         "numToStr/Comment.nvim",
-        config = function() require("Comment").setup() end
+        config = function()
+            require("Comment").setup()
+        end
     }
 
     -- Trimming whitespaces
     use {
         "cappyzawa/trim.nvim",
-        config = function() require("trim").setup({}) end
+        config = function()
+            require("trim").setup({})
+        end
     }
 
     -- Dealing with todos
     use {
         "folke/todo-comments.nvim",
         requires = { "nvim-lua/plenary.nvim", opt = true },
-        config = function() require("todo-comments").setup() end
+        config = function()
+            require("todo-comments").setup()
+        end
     }
 
     -- Diagnostics list
@@ -95,19 +68,20 @@ return require("packer").startup(function(use)
         "VonHeikemen/lsp-zero.nvim",
         branch = "v2.x",
         requires = {
-            -- LSP Support
-            { "neovim/nvim-lspconfig" }, -- Required
+            { "neovim/nvim-lspconfig" },
             {
-                -- Optional
                 "williamboman/mason.nvim",
-                run = function() pcall(vim.cmd, "MasonUpdate") end
-            }, { "williamboman/mason-lspconfig.nvim" }, -- Optional
-            -- Autocompletion
-            { "hrsh7th/nvim-cmp" },                     -- Required
-            { "hrsh7th/cmp-nvim-lsp" },                 -- Required
-            { "L3MON4D3/LuaSnip" }                      -- Required
+                run = function()
+                    pcall(vim.cmd, "MasonUpdate")
+                end
+            },
+            { "williamboman/mason-lspconfig.nvim" },
+            { "hrsh7th/nvim-cmp" },
+            { "hrsh7th/cmp-nvim-lsp" },
+            { "L3MON4D3/LuaSnip" }
         }
     }
 
+    -- Latex stuff
     use("lervag/vimtex")
 end)
