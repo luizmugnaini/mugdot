@@ -143,6 +143,13 @@ alias ghc="ghc -dynamic"
 # Python
 alias ipy="ipython --profile=mugipy"
 export NLTK_DATA="~/.cache/nltk_data"
+alias pip="python3 -m pip"
+alias py="python3"
+alias python="python3"
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 # One-drive
 alias oneup="onedrive --synchronize --no-remote-delete --upload-only"

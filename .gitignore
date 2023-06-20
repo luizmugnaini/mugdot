@@ -1,8 +1,12 @@
 # ncspot
 ncspot/userstate.cbor
 
-*\#
+
+# Ruff linter
 /.ruff_cache
+
+# Packer pre compilation data
+nvim/plugin/packer_compiled.lua
 
 # dwm stuff
 *.o
@@ -25,3 +29,4 @@ emacs/transient/
 emacs/var/
 emacs/.last-package-update-day
 .yas-compiled-snippets.el
+*\#

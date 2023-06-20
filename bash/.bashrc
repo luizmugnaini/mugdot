@@ -13,3 +13,5 @@ export VISUAL="nvim"
 export TERMINAL="alacritty"
 export BROWSER="firefox"
 . "$HOME/.cargo/env"
+
+source /home/mug/.config/broot/launcher/bash/br

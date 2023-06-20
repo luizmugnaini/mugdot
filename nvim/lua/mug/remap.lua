@@ -1,13 +1,21 @@
-vim.keymap.set("n", "<leader>b", vim.cmd.Ex, { desc = "[B]rowse files" })
+vim.keymap.set("n", "<leader>b", vim.cmd.Ex, {desc = "[B]rowse files"})
 
 -- Escaping
-vim.keymap.set("n", "<C-k>", "<Esc>")
-vim.keymap.set("i", "<C-k>", "<Esc>")
-vim.keymap.set("x", "<C-k>", "<Esc>")
-vim.keymap.set("v", "<C-k>", "<Esc>")
+local modes = {"n", "i", "x", "v", "s", "c", "o", "l", "t"}
+for i = 1, #modes do
+    vim.keymap.set(modes[i], "<C-k>", "<Esc>", {desc = "Escape to normal mode"})
+end
 
 -- Saving files
-vim.keymap.set("n", "<leader>w", ":w<CR>")
+vim.keymap.set("n", "<leader>w", ":w<CR>", {desc = "[W]rite file"})
 
 -- Copying to external clipboard
-vim.keymap.set("v", "<C-y>", '"+y')
+vim.keymap.set("v", "<C-y>", "\"+y")
+
+-- Moving between split panes
+local directions = {"h", "j", "k", "l"}
+for i = 1, #directions do
+    local key = "<leader>p" .. directions[i]
+    local command = ":wincmd " .. directions[i] .. "<CR>"
+    vim.keymap.set("n", key, command)
+end
