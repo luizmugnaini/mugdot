@@ -17,6 +17,10 @@ is_recursive = true
 [git]
 target_path = "~/"
 
+[gitui]
+config_path = "git/gitui"
+target_path = "~/.config/gitui"
+
 [kitty]
 target_path = "~/.config/kitty"
 
@@ -37,6 +41,7 @@ is_recursive = true
 target_path = "~/.config/rofi"
 
 [rustfmt]
+config_path = "rust/rustfmt"
 target_path = "~/.config/rustfmt"
 
 [sage]

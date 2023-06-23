@@ -1,5 +1,3 @@
-vim.cmd [[packadd packer.nvim]]
-
 return require("packer").startup(function(use)
     -- Packer itself
     use("wbthomason/packer.nvim")
@@ -9,10 +7,11 @@ return require("packer").startup(function(use)
     use {
         "nvim-telescope/telescope.nvim",
         tag = "0.1.1",
-        requires = { { "nvim-lua/plenary.nvim" } }
+        requires = { { "nvim-lua/plenary.nvim" } },
     }
 
-    use { "folke/tokyonight.nvim" }
+    -- Theme
+    use("folke/tokyonight.nvim")
 
     -- Linemode
     use {
@@ -78,8 +77,13 @@ return require("packer").startup(function(use)
             { "williamboman/mason-lspconfig.nvim" },
             { "hrsh7th/nvim-cmp" },
             { "hrsh7th/cmp-nvim-lsp" },
-            { "L3MON4D3/LuaSnip" }
+            { "L3MON4D3/LuaSnip" },
         }
+    }
+
+    use {
+        "jose-elias-alvarez/null-ls.nvim",
+        requires = { "nvim-lua/plenary.nvim" },
     }
 
     -- Latex stuff

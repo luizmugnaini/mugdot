@@ -126,7 +126,7 @@ alias bright="xrandr --output eDP-1 --brightness"
 # Keyboard stuff
 alias kbd="setxkbmap us -option ctrl:nocaps && xset r rate 500 60"
 alias kbdbr="setxkbmap br -option ctrl:nocaps && xset r rate 500 60"
-alias brdead="setxkbmap br -variant nodeadkeys -option ctrl:nocaps && xset r rate 500 60"
+alias kbdbr2="setxkbmap br -variant nodeadkeys -option ctrl:nocaps && xset r rate 500 60"
 alias kbdset="xset r rate 500 60"
 
 # Bluetooth
@@ -136,9 +136,6 @@ alias wallbg="feh --bg-fill --no-fehbg"
 # Git
 alias glog="git log --decorate --graph"
 alias gst="git status"
-
-# Haskell
-alias ghc="ghc -dynamic"
 
 # Python
 alias ipy="ipython --profile=mugipy"
@@ -151,18 +148,10 @@ export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-# One-drive
-alias oneup="onedrive --synchronize --no-remote-delete --upload-only"
-
-# Latex
-alias lmk="latexmk -pvc -auxdir=aux -pdf"
-alias lc="latexmk -c"
-
-
 # ** tmux sessionizer binding **
-bindkey -s ^f "~/.config/tmux/tmux-sessionizer\n"
+bindkey -s ^f "tmux-sessionizer\n"
 
-# Makes my Ctrl-k output an Esc
+# Makes my Ctrl-k output an Esc so that I can use vim mode smoothly
 bindkey -s ^k "^["
 
 # ** ipython **
@@ -171,8 +160,6 @@ export IPYTHONDIR="~/.config/ipython"
 
 # ** nnn integration **
 export NNN_OPENER="xdg-open"
-export NNN_PLUG="p:preview-tui;f:fzcd;i:imgview"
-
 
 # Prompt stuff
 eval "$(starship init zsh)"

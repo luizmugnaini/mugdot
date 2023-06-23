@@ -1,11 +1,11 @@
 require("Comment").setup {
     toggler = {
-        line = "cl",
-        block = "cb",
+        line = "<Space>lc",
+        block = "<Space>bc",
     },
     -- LHS of operator-pending mappings in NORMAL and VISUAL mode
     opleader = {
-        line = "cl",
-        block = "cb",
+        line = "<Space>lc",
+        block = "<Space>bc",
     },
 }

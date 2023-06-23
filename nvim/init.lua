@@ -18,5 +18,6 @@ require("lualine").setup {
         lualine_c = { "filename" },
         lualine_x = { "fileformat", "filetype" },
         lualine_z = { "location" }
-    }
+    },
+    tabline = {},
 }

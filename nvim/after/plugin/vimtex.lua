@@ -1,5 +1,5 @@
 vim.g.vimtex_view_method = "zathura"
-vim.g.vimtex_compiler_method = "latexmk -pvc"
+vim.g.vimtex_compiler_method = "tectonic"
 vim.g.vimtex_quickfix_mode = 0 -- The quickfix window is never opened/closed automatically.
 vim.g.vimtex_syntax_conceal = {
     ["fancy"] = 1,             -- items
