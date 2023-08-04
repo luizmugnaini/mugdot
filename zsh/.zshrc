@@ -143,10 +143,18 @@ export NLTK_DATA="~/.cache/nltk_data"
 alias pip="python3 -m pip"
 alias py="python3"
 alias python="python3"
-
+alias pypy="pypy3"
+export JUPYTERLAB_DIR=$HOME/.local/share/jupyter/lab
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+export IPYTHONDIR="~/.config/ipython"
+
+#
+export npm_config_prefix="$HOME/.local"
+
+# golang
+export GOPATH="$HOME/.go"
 
 # ** tmux sessionizer binding **
 bindkey -s ^f "tmux-sessionizer\n"
@@ -154,9 +162,10 @@ bindkey -s ^f "tmux-sessionizer\n"
 # Makes my Ctrl-k output an Esc so that I can use vim mode smoothly
 bindkey -s ^k "^["
 
-# ** ipython **
-export IPYTHONDIR="~/.config/ipython"
-
+# Monitor stuff
+alias monitor="xrandr --output HDMI-1 --auto && xrandr --output eDP-1 --auto --right-of HDMI-1"
+alias monitor-auto="xrandr --output HDMI-1 --auto"
+alias monitor-right="xrandr --output eDP-1 --auto --right-of HDMI-1"
 
 # ** nnn integration **
 export NNN_OPENER="xdg-open"

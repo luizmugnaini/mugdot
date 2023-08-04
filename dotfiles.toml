@@ -53,6 +53,10 @@ target_path = "~/.config"
 [tmux]
 target_path = "~/.config/tmux"
 
+[tmux_scripts]
+config_path = "tmux/scripts"
+target_path = "~/.local/bin"
+
 [x]
 target_path = "~/"
 

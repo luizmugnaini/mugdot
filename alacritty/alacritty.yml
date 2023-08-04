@@ -2,12 +2,12 @@ env:
   TERM: xterm-256color
 
 window:
-  opacity: 0.97
+  opacity: 0.83
   # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
   padding:
     x: 3
-    y: 3
+    y: 0
 
   # Window decorations
   decorations: none
@@ -37,8 +37,7 @@ font:
     style: Regular
 
   # Point size
-  #size: 10
-  size: 13
+  size: 13 # 10
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
@@ -78,7 +77,7 @@ colors:
 
   indexed_colors:
     - { index: 16, color: '0xff9e64' }
-    - { index: 17, color: '0xdb4b4b' } 
+    - { index: 17, color: '0xdb4b4b' }
 
 draw_bold_text_with_bright_colors: false
 

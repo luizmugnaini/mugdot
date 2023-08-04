@@ -2,20 +2,19 @@
 picom -b &
 
 # HDMI support
-#xrandr --output HDMI-1 --auto &
 xrandr --output eDP-1 --auto --right-of HDMI-1 &
 
 # dwm bar
 dwmblocks &
 
 # Wallpaper
-feh --bg-fill --no-fehbg ~/Pictures/kittyboard.png &
+feh --bg-fill --no-fehbg ~/Pictures/waves-lines-abstract.jpg &
 
 # Keyboard layout
-setxkbmap us -option ctrl:nocaps
+setxkbmap us -option ctrl:nocaps &
 
 # Keyboard rate and frequency
-xset r rate 500 60
+xset r rate 500 60 &
 
 # screen filter
 redshift -P -O 2800 &

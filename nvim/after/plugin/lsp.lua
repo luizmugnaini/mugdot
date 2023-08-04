@@ -1,11 +1,16 @@
-local lsp = require("lsp-zero")
+local lsp = require("lsp-zero").preset({
+	name = "recommended",
+})
 
-lsp.preset("recommended")
+lsp.ensure_installed({ "tsserver", "rust_analyzer", "pyright", "lua_ls", "clangd" })
 
-lsp.ensure_installed({ "rust_analyzer", "pyright", "lua_ls" })
-
--- Fix Undefined global 'vim'
+-- Fix Undefined global 'vim' in Lua server.
 lsp.configure("lua_ls", { settings = { Lua = { diagnostics = { globals = { "vim" } } } } })
+
+-- Rust server.
+lsp.format_on_save({
+	["rust_analyzer"] = { "rust" },
+})
 
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
@@ -61,10 +66,6 @@ lsp.on_attach(function(client, bufnr)
 	end, opts)
 end)
 
-lsp.format_on_save({
-	["rust_analyzer"] = { "rust" },
-})
-
 lsp.setup()
 
-vim.diagnostic.config({ virtual_text = true })
+vim.diagnostic.config({ virtual_text = false })
