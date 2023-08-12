@@ -106,6 +106,14 @@ return require("packer").startup(function(use)
 	-- Rust
 	use("rust-lang/rust.vim")
 
+	-- Go
+	use({
+		"ray-x/go.nvim",
+		requires = {
+			{ "ray-x/guihua.lua" },
+		},
+	})
+
 	-- Graphics
 	use("DingDean/wgsl.vim")
 	use("tikhomirov/vim-glsl")

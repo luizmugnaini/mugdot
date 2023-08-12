@@ -12,7 +12,6 @@ window:
   # Window decorations
   decorations: none
 
-
   # Window class (Linux/BSD only):
   class:
     # Application instance name
@@ -37,47 +36,47 @@ font:
     style: Regular
 
   # Point size
-  size: 13 # 10
+  size: 10 # 13
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
   # spacing.
   offset:
-     x: 0
-     y: 0
+    x: 0
+    y: 0
 
 # TokyoNight Alacritty Colors
 colors:
   # Default colors
   primary:
-    background: '0x1a1b26'
-    foreground: '0xc0caf5'
+    background: "0x1a1b26"
+    foreground: "0xc0caf5"
 
   # Normal colors
   normal:
-    black:   '0x15161e'
-    red:     '0xf7768e'
-    green:   '0x9ece6a'
-    yellow:  '0xe0af68'
-    blue:    '0x7aa2f7'
-    magenta: '0xbb9af7'
-    cyan:    '0x7dcfff'
-    white:   '0xa9b1d6'
+    black: "0x15161e"
+    red: "0xf7768e"
+    green: "0x9ece6a"
+    yellow: "0xe0af68"
+    blue: "0x7aa2f7"
+    magenta: "0xbb9af7"
+    cyan: "0x7dcfff"
+    white: "0xa9b1d6"
 
   # Bright colors
   bright:
-    black:   '0x414868'
-    red:     '0xf7768e'
-    green:   '0x9ece6a'
-    yellow:  '0xe0af68'
-    blue:    '0x7aa2f7'
-    magenta: '0xbb9af7'
-    cyan:    '0x7dcfff'
-    white:   '0xc0caf5'
+    black: "0x414868"
+    red: "0xf7768e"
+    green: "0x9ece6a"
+    yellow: "0xe0af68"
+    blue: "0x7aa2f7"
+    magenta: "0xbb9af7"
+    cyan: "0x7dcfff"
+    white: "0xc0caf5"
 
   indexed_colors:
-    - { index: 16, color: '0xff9e64' }
-    - { index: 17, color: '0xdb4b4b' }
+    - { index: 16, color: "0xff9e64" }
+    - { index: 17, color: "0xdb4b4b" }
 
 draw_bold_text_with_bright_colors: false
 
@@ -112,26 +111,26 @@ mouse:
 hints:
   alphabet: "hutenosadigpc.r,l'"
   enabled:
-   - regex: "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\
-             [^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
-     command: firefox
-     post_processing: true
-     mouse:
-       enabled: true
-     binding:
-       key: U
-       mods: Control|Shift
-   - regex: "[a-f0-9]{40}|[a-f0-9]{7,8}"
-     action: Copy
-     binding:
-       key: H
-       mods: Control|Shift
+    - regex: "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\
+        [^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
+      command: firefox
+      post_processing: true
+      mouse:
+        enabled: true
+      binding:
+        key: U
+        mods: Control|Shift
+    - regex: "[a-f0-9]{40}|[a-f0-9]{7,8}"
+      action: Copy
+      binding:
+        key: H
+        mods: Control|Shift
 
 key_bindings:
-  - { key: V,        mods: Control|Shift, mode: ~Vi, action: Paste            }
-  - { key: C,        mods: Control|Shift,            action: Copy             }
-  - { key: Insert,   mods: Shift,                    action: PasteSelection   }
-  - { key: Key0,     mods: Control,                  action: ResetFontSize    }
-  - { key: Equals,   mods: Control,                  action: IncreaseFontSize }
-  - { key: Plus,     mods: Control,                  action: IncreaseFontSize }
-  - { key: Minus,    mods: Control,                  action: DecreaseFontSize }
+  - { key: V, mods: Control|Shift, mode: ~Vi, action: Paste }
+  - { key: C, mods: Control|Shift, action: Copy }
+  - { key: Insert, mods: Shift, action: PasteSelection }
+  - { key: Key0, mods: Control, action: ResetFontSize }
+  - { key: Equals, mods: Control, action: IncreaseFontSize }
+  - { key: Plus, mods: Control, action: IncreaseFontSize }
+  - { key: Minus, mods: Control, action: DecreaseFontSize }

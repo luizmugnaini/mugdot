@@ -1,13 +1,13 @@
 local lsp = require("lsp-zero").preset({
 	name = "recommended",
 })
+local lspconfig = require("lspconfig")
 
-lsp.ensure_installed({ "tsserver", "rust_analyzer", "pyright", "lua_ls", "clangd" })
+lsp.ensure_installed({ "gopls", "tsserver", "rust_analyzer", "pyright", "pyre", "lua_ls", "clangd" })
 
 -- Fix Undefined global 'vim' in Lua server.
-lsp.configure("lua_ls", { settings = { Lua = { diagnostics = { globals = { "vim" } } } } })
+lspconfig.lua_ls.setup({ settings = { Lua = { diagnostics = { globals = { "vim" } } } } })
 
--- Rust server.
 lsp.format_on_save({
 	["rust_analyzer"] = { "rust" },
 })
@@ -19,10 +19,9 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 	["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
 	["<C-y>"] = cmp.mapping.confirm({ select = true }),
 	["<C-Space>"] = cmp.mapping.complete(),
+	["<Tab>"] = nil,
+	["<S-Tab>"] = nil,
 })
-
-cmp_mappings["<Tab>"] = nil
-cmp_mappings["<S-Tab>"] = nil
 
 lsp.setup_nvim_cmp({ mapping = cmp_mappings })
 
@@ -68,4 +67,18 @@ end)
 
 lsp.setup()
 
+local lsp_configurations = require("lspconfig.configs")
+
+if not lsp_configurations.pyre then
+	lsp_configurations.pyre = {
+		default_config = {
+			name = "pyre",
+			cmd = { "pyre", "persistent" },
+			filetypes = { "python" },
+			root_dir = require("lspconfig.util").root_pattern(".pyre_configuration"),
+		},
+	}
+end
+
+-- Whether or not to display text messages on the screen.
 vim.diagnostic.config({ virtual_text = false })

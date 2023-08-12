@@ -11,12 +11,13 @@ require("nvim-treesitter.configs").setup({
 		"python",
 		"latex",
 		"markdown",
-		"wgsl",
+		"javascript",
+		"typescript",
 	},
 
-	indent = {
-		enable = true,
-	},
+	-- indent = {
+	-- 	enable = true,
+	-- },
 
 	-- Install parsers synchronously (only applied to `ensure_installed`)
 	sync_install = false,

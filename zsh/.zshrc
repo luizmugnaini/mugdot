@@ -155,6 +155,7 @@ export npm_config_prefix="$HOME/.local"
 
 # golang
 export GOPATH="$HOME/.go"
+export PATH=$PATH:/usr/local/go/bin
 
 # ** tmux sessionizer binding **
 bindkey -s ^f "tmux-sessionizer\n"
