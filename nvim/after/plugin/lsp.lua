@@ -3,13 +3,18 @@ local lsp = require("lsp-zero").preset({
 })
 local lspconfig = require("lspconfig")
 
-lsp.ensure_installed({ "gopls", "tsserver", "rust_analyzer", "pyright", "pyre", "lua_ls", "clangd" })
+lsp.ensure_installed({ "gopls", "tsserver", "rust_analyzer", "pyright", "lua_ls", "clangd" })
 
 -- Fix Undefined global 'vim' in Lua server.
 lspconfig.lua_ls.setup({ settings = { Lua = { diagnostics = { globals = { "vim" } } } } })
 
+lspconfig.clangd.setup({
+	cmd = { "clangd", "--log=verbose", "--compile-commands-dir=./build" },
+})
+
 lsp.format_on_save({
 	["rust_analyzer"] = { "rust" },
+	["clangd"] = { "c", "cpp" },
 })
 
 local cmp = require("cmp")
@@ -68,17 +73,6 @@ end)
 lsp.setup()
 
 local lsp_configurations = require("lspconfig.configs")
-
-if not lsp_configurations.pyre then
-	lsp_configurations.pyre = {
-		default_config = {
-			name = "pyre",
-			cmd = { "pyre", "persistent" },
-			filetypes = { "python" },
-			root_dir = require("lspconfig.util").root_pattern(".pyre_configuration"),
-		},
-	}
-end
 
 -- Whether or not to display text messages on the screen.
 vim.diagnostic.config({ virtual_text = false })

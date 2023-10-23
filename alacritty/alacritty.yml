@@ -1,8 +1,9 @@
 env:
   TERM: xterm-256color
+  WINIT_X11_SCALE_FACTOR: "1.0"
 
 window:
-  opacity: 0.83
+  opacity: 0.95
   # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
   padding:
@@ -36,7 +37,7 @@ font:
     style: Regular
 
   # Point size
-  size: 10 # 13
+  size: 13 # 10
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter

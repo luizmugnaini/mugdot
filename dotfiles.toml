@@ -47,15 +47,15 @@ target_path = "~/.config/rustfmt"
 [sage]
 target_path = "~/.sage"
 
-[starfish]
-target_path = "~/.config"
-
 [tmux]
 target_path = "~/.config/tmux"
 
 [tmux_scripts]
 config_path = "tmux/scripts"
 target_path = "~/.local/bin"
+
+[starship]
+target_path = "~/.config/starship"
 
 [x]
 target_path = "~/"

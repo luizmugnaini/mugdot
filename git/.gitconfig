@@ -7,17 +7,34 @@
 #	email = luiz@luizmug.localdomain
 [core]
 	editor = nvim
-[credential "https://github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
 [init]
-	defaultBranch = master
-[credential "https://gist.github.com"]
-	helper = 
+	defaultBranch = main
+[pull]
+    rebase = true
+[format]
+    signOff = true
+[alias]
+    s = switch
+
+    a = add -p
+
+    st = status
+
+    l = log --one-line --graph
+    lg = log --decorate --graph
+
+    c = commit
+    cf = commit --fixup
+    csq = commit --squash
+
+    ra = rebase --abort
+    rc = rebase --continue
+    ret = rebase --edit-todo
+    ri = rebase -i
+[credential "https://github.com"]
 	helper = !/usr/bin/gh auth git-credential
-[safe]
-	directory = /srv/papermc
-	directory = /srv/papermc
+[credential "https://gist.github.com"]
+	helper = !/usr/bin/gh auth git-credential
 [credential]
 	helper = cache --timeout=3600
 [filter "lfs"]

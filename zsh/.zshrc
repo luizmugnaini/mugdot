@@ -89,8 +89,9 @@ PROMPT=$PROMPT'%{$(vterm_prompt_end)%}'
 # ** env variables **
 export EDITOR="nvim"
 export VISUAL="nvim"
-export TERMINAL="kitty"
-export BROWSER="firefox"
+export TERMINAL="alacritty"
+export BROWSER="chromium"
+
 
 # ** path exports **
 # Local binaries
@@ -109,6 +110,7 @@ eval "$(zoxide init zsh)"
 
 # Editor
 alias vim="nvim"
+alias vi="vim"
 
 # Terminal utilities
 alias ls="exa --long --header --icons --git"
@@ -125,8 +127,8 @@ alias bright="xrandr --output eDP-1 --brightness"
 
 # Keyboard stuff
 alias kbd="setxkbmap us -option ctrl:nocaps && xset r rate 500 60"
-alias kbdbr="setxkbmap br -option ctrl:nocaps && xset r rate 500 60"
-alias kbdbr2="setxkbmap br -variant nodeadkeys -option ctrl:nocaps && xset r rate 500 60"
+alias kbdbr="setxkbmap br -variant nodeadkeys -option ctrl:nocaps && xset r rate 500 60"
+alias kbdbr2="setxkbmap br -option ctrl:nocaps && xset r rate 500 60"
 alias kbdset="xset r rate 500 60"
 
 # Bluetooth
@@ -138,7 +140,7 @@ alias glog="git log --decorate --graph"
 alias gst="git status"
 
 # Python
-alias ipy="ipython --profile=mugipy"
+alias ipy="ipython3 --colors=Linux"
 export NLTK_DATA="~/.cache/nltk_data"
 alias pip="python3 -m pip"
 alias py="python3"
@@ -150,12 +152,13 @@ command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 export IPYTHONDIR="~/.config/ipython"
 
-#
+# js
 export npm_config_prefix="$HOME/.local"
 
 # golang
 export GOPATH="$HOME/.go"
-export PATH=$PATH:/usr/local/go/bin
+export GOBIN="$HOME/.go/bin"
+export PATH="$PATH:$GOBIN"
 
 # ** tmux sessionizer binding **
 bindkey -s ^f "tmux-sessionizer\n"
@@ -172,8 +175,9 @@ alias monitor-right="xrandr --output eDP-1 --auto --right-of HDMI-1"
 export NNN_OPENER="xdg-open"
 
 # Prompt stuff
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 eval "$(starship init zsh)"
 
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+source <(jj util completion --zsh)
 
-source /home/mug/.config/broot/launcher/bash/br
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null

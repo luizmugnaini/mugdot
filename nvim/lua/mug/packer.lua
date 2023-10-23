@@ -2,16 +2,6 @@ return require("packer").startup(function(use)
 	-- Packer itself
 	use("wbthomason/packer.nvim")
 
-	-- Keybinding lookup
-	use({
-		"folke/which-key.nvim",
-		config = function()
-			vim.o.timeout = true
-			vim.o.timeoutlen = 300
-			require("which-key").setup()
-		end,
-	})
-
 	-- File browsing
 	use("theprimeagen/harpoon")
 	use({
@@ -109,15 +99,26 @@ return require("packer").startup(function(use)
 	-- Go
 	use({
 		"ray-x/go.nvim",
+		ft = "go",
+		config = function()
+			local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				pattern = "*.go",
+				callback = function()
+					require("go.format").gofmt()
+				end,
+				group = format_sync_grp,
+			})
+		end,
 		requires = {
 			{ "ray-x/guihua.lua" },
 		},
 	})
 
 	-- Graphics
-	use("DingDean/wgsl.vim")
-	use("tikhomirov/vim-glsl")
+	use({ "DingDean/wgsl.vim", ft = "wgsl" })
+	use({ "tikhomirov/vim-glsl", ft = "glsl" })
 
 	-- Latex stuff
-	use("lervag/vimtex")
+	use({ "lervag/vimtex", ft = "tex" })
 end)
