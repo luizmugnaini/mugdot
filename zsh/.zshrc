@@ -14,7 +14,8 @@ zmodload zsh/complist
 compinit
 _comp_options+=(globdots)
 
-# ** vi mode **
+# Vim mode ----------------------------------------------------------------------------------------
+
 bindkey -v
 export KEYTIMEOUT=1
 
@@ -56,7 +57,7 @@ echo -ne $vim_insert # Use beam shape cursor on startup.
 
 preexec() { echo -ne $vim_insert ;} # Use cursor shape for each new prompt.
 
-# ** vterm config **
+# Emacs vterm -------------------------------------------------------------------------------------
 
 vterm_printf(){
     if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
@@ -86,14 +87,8 @@ vterm_prompt_end() {
 setopt PROMPT_SUBST
 PROMPT=$PROMPT'%{$(vterm_prompt_end)%}'
 
-# ** env variables **
-export EDITOR="nvim"
-export VISUAL="nvim"
-export TERMINAL="alacritty"
-export BROWSER="chromium"
+# Path --------------------------------------------------------------------------------------------
 
-
-# ** path exports **
 # Local binaries
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -103,81 +98,103 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # Emacs
 export PATH="$HOME/.emacs.d/bin:$PATH"
 
-# zoxide
-eval "$(zoxide init zsh)"
+# Terminal utilities and env variables -----------------------------------------------------------
 
-# ** aliases **
+export EDITOR="nvim"
+export VISUAL="nvim"
+export TERMINAL="alacritty"
+export BROWSER="chromium"
 
-# Editor
 alias vim="nvim"
 alias vi="vim"
 
-# Terminal utilities
-alias ls="exa --long --header --icons --git"
-alias bat="bat --theme=OneHalfDark"
-alias cd="z"
-alias ..="z .."
-
-# nnn file explorer
-alias n="nnn -Hde"
-
-# Screen control
-alias red="redshift -P -O"
-alias bright="xrandr --output eDP-1 --brightness"
-
-# Keyboard stuff
-alias kbd="setxkbmap us -option ctrl:nocaps && xset r rate 500 60"
-alias kbdbr="setxkbmap br -variant nodeadkeys -option ctrl:nocaps && xset r rate 500 60"
-alias kbdbr2="setxkbmap br -option ctrl:nocaps && xset r rate 500 60"
-alias kbdset="xset r rate 500 60"
-
-# Bluetooth
-alias blue="bluetoothctl"
-alias wallbg="feh --bg-fill --no-fehbg"
-
-# Git
-alias glog="git log --decorate --graph"
-alias gst="git status"
-
-# Python
-alias ipy="ipython3 --colors=Linux"
-export NLTK_DATA="~/.cache/nltk_data"
-alias pip="python3 -m pip"
-alias py="python3"
-alias python="python3"
-alias pypy="pypy3"
-export JUPYTERLAB_DIR=$HOME/.local/share/jupyter/lab
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-export IPYTHONDIR="~/.config/ipython"
-
-# js
-export npm_config_prefix="$HOME/.local"
-
-# golang
-export GOPATH="$HOME/.go"
-export GOBIN="$HOME/.go/bin"
-export PATH="$PATH:$GOBIN"
-
-# ** tmux sessionizer binding **
-bindkey -s ^f "tmux-sessionizer\n"
-
-# Makes my Ctrl-k output an Esc so that I can use vim mode smoothly
+# Makes my Ctrl-k output an Esc so that I can use zsh vim mode smoothly
 bindkey -s ^k "^["
 
-# Monitor stuff
-alias monitor="xrandr --output HDMI-1 --auto && xrandr --output eDP-1 --auto --right-of HDMI-1"
-alias monitor-auto="xrandr --output HDMI-1 --auto"
-alias monitor-right="xrandr --output eDP-1 --auto --right-of HDMI-1"
+alias ls="exa --long --header --icons --git"
+alias bat="bat --theme=OneHalfDark"
 
-# ** nnn integration **
+# File explorer
+alias n="nnn -Hde"
 export NNN_OPENER="xdg-open"
+
+# zoxide
+alias cd="z"
+alias ..="z .."
+eval "$(zoxide init zsh)"
 
 # Prompt stuff
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 eval "$(starship init zsh)"
 
+# Version control ---------------------------------------------------------------------------------
+
 source <(jj util completion --zsh)
 
+# Screen control ----------------------------------------------------------------------------------
+
+alias red="redshift -P -O"
+alias bright="xrandr --output eDP-1 --brightness"
+
+# Keyboard control --------------------------------------------------------------------------------
+
+alias kbd="setxkbmap us -option ctrl:nocaps && xset r rate 500 60"
+alias kbdbr="setxkbmap br -variant nodeadkeys -option ctrl:nocaps && xset r rate 500 60"
+alias kbdbr2="setxkbmap br -option ctrl:nocaps && xset r rate 500 60"
+alias kbdset="xset r rate 500 60"
+
+# Bluetooth ---------------------------------------------------------------------------------------
+
+alias blue="bluetoothctl"
+alias wallbg="feh --bg-fill --no-fehbg"
+
+# -------------------------------------------------------------------------------------------------
+
+# Git
+alias glog="git log --decorate --graph"
+alias gst="git status"
+
+# Python ------------------------------------------------------------------------------------------
+
+alias ipy="ipython3 --colors=Linux"
+export IPYTHONDIR="~/.config/ipython"
+export NLTK_DATA="~/.cache/nltk_data"
+export JUPYTERLAB_DIR=$HOME/.local/share/jupyter/lab
+
+alias pip="python3 -m pip"
+
+alias py="python3"
+alias python="python3"
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# JavaScript --------------------------------------------------------------------------------------
+
+export npm_config_prefix="$HOME/.local"
+
+# Golang ------------------------------------------------------------------------------------------
+
+export GOPATH="$HOME/.go"
+export GOBIN="$HOME/.go/bin"
+export PATH="$PATH:$GOBIN"
+
+# Tmux --------------------------------------------------------------------------------------------
+
+bindkey -s ^f "tmux-sessionizer\n"
+
+# Monitor control ---------------------------------------------------------------------------------
+
+alias monitor="xrandr --output HDMI-1 --auto && xrandr --output eDP-1 --auto --right-of HDMI-1"
+alias monitor-auto="xrandr --output HDMI-1 --auto"
+alias monitor-right="xrandr --output eDP-1 --auto --right-of HDMI-1"
+
+# Wacom control -----------------------------------------------------------------------------------
+
+alias wacom-hdmi="xsetwacom set 'Wacom One by Wacom S Pen stylus' MapToOutput HDMI-1"
+
+# -------------------------------------------------------------------------------------------------
+
+# Syntax highlighting for zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
