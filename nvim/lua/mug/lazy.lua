@@ -1,4 +1,5 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
@@ -12,7 +13,55 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+	-- UI components
+	"folke/tokyonight.nvim",
+	"sainnhe/gruvbox-material",
+	"rebelot/kanagawa.nvim",
+
 	{
+		-- Icons for other plugins
+		"nvim-tree/nvim-web-devicons",
+	},
+
+	{
+		-- Transparency management
+		"xiyaowong/transparent.nvim",
+	},
+
+	{
+		-- UI line for nvim
+		"nvim-lualine/lualine.nvim",
+		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
+	},
+
+	{
+		-- Tree structure for navigating files
+		"nvim-neo-tree/neo-tree.nvim",
+
+		branch = "v3.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+			"MunifTanjim/nui.nvim",
+		},
+		keys = {
+			{
+				"<leader>fe",
+				function()
+					require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
+				end,
+				desc = "Explorer NeoTree (cwd)",
+			},
+		},
+	},
+
+	{
+		-- Utility for undoing actions and navigating file history
+		"mbbill/undotree",
+	},
+
+	{
+		-- Better navigation
 		"nvim-telescope/telescope.nvim",
 		version = "0.1.4",
 		dependencies = {
@@ -20,16 +69,14 @@ require("lazy").setup({
 		},
 	},
 
-	{ "theprimeagen/harpoon", dependencies = { "nvim-telescope/telescope.nvim" } },
-
-	"nvim-tree/nvim-web-devicons",
-	"folke/tokyonight.nvim",
-	{ "nvim-lualine/lualine.nvim", dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } } },
-	"xiyaowong/transparent.nvim",
-
-	"mbbill/undotree",
+	{
+		-- Better navigation
+		"theprimeagen/harpoon",
+		dependencies = { "nvim-telescope/telescope.nvim" },
+	},
 
 	{
+		-- Utility for line and block comments
 		"numToStr/Comment.nvim",
 		config = function()
 			require("Comment").setup()
@@ -37,6 +84,7 @@ require("lazy").setup({
 	},
 
 	{
+		-- Highlighting for TODO/NOTE/HACK/BUG comments
 		"folke/todo-comments.nvim",
 		dependencies = { { "nvim-lua/plenary.nvim", optional = true } },
 		config = function()
@@ -45,22 +93,22 @@ require("lazy").setup({
 	},
 
 	{
-		"folke/trouble.nvim",
-		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
-		config = function()
-			require("trouble").setup({
-				height = 5,
-				auto_close = true,
-			})
-		end,
+		-- Snippets
+		"L3MON4D3/LuaSnip",
+		dependencies = {
+			"hrsh7th/nvim-cmp",
+			"saadparwaiz1/cmp_luasnip",
+		},
 	},
 
 	{
+		-- Code parsing
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 	},
 
 	{
+		-- LSP support
 		"VonHeikemen/lsp-zero.nvim",
 		branch = "v2.x",
 		dependencies = {
@@ -74,15 +122,35 @@ require("lazy").setup({
 			"williamboman/mason-lspconfig.nvim",
 			"hrsh7th/nvim-cmp",
 			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-path",
 			"L3MON4D3/LuaSnip",
 		},
 	},
 
 	{
-		"jose-elias-alvarez/null-ls.nvim",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		-- Code linting
+		"mfussenegger/nvim-lint",
 	},
 
+	{
+		-- Code formatting
+		"stevearc/conform.nvim",
+		opts = {},
+	},
+
+	{
+		-- View errors and warnings from the LSP
+		"folke/trouble.nvim",
+		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
+		config = function()
+			require("trouble").setup({
+				height = 5,
+				auto_close = true,
+			})
+		end,
+	},
+
+	-- Language specific plugins
 	{ "rust-lang/rust.vim", ft = "rust" },
 	{ "tikhomirov/vim-glsl", ft = "glsl" },
 	{ "lervag/vimtex", ft = "tex" },

@@ -10,11 +10,14 @@ lspconfig.lua_ls.setup({ settings = { Lua = { diagnostics = { globals = { "vim" 
 
 lspconfig.clangd.setup({
 	cmd = { "clangd", "--log=verbose", "--compile-commands-dir=./build" },
+	filetypes = { "c", "cpp" },
+	root_dir = function()
+		lsp.dir.find_first({ ".git", ".clang-format", ".clangd", ".clang-tidy" })
+	end,
 })
 
 lsp.format_on_save({
 	["rust_analyzer"] = { "rust" },
-	["clangd"] = { "c", "cpp" },
 })
 
 local cmp = require("cmp")
