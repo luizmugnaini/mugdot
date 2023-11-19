@@ -23,7 +23,7 @@
     l = log --oneline --graph
     lg = log --decorate --graph
 
-    c = commit
+    c = commit --signoff
     cf = commit --fixup
     csq = commit --squash
 
