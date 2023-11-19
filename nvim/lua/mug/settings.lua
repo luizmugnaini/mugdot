@@ -1,3 +1,4 @@
+vim.g.python3_host_prog = "~/.pyenv/versions/3.11.5/bin/python3"
 vim.g.mapleader = " "
 
 vim.opt.guicursor = ""
