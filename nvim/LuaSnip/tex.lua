@@ -33,34 +33,29 @@ end
 
 return {
 	-- Portuguese accents
-	s(".a", t("ã")),
-	s(";a", t("á")),
-	s("/a", t("â")),
-	s(",a", t("à")),
-	s(".A", t("Ã")),
-	s(";A", t("Á")),
-	s("/A", t("Â")),
-	s(",A", t("À")),
-
-	s(".o", t("õ")),
-	s(";o", t("ó")),
-	s("/o", t("ô")),
-	s(".O", t("Õ")),
-	s(";O", t("Ó")),
-	s("/O", t("Ô")),
-
-	s(";e", t("é")),
-	s("/e", t("ê")),
-	s(";E", t("É")),
-	s("/E", t("Ê")),
-
-	s(";i", t("í")),
-	s(";I", t("Í")),
-
-	s(";u", t("ú")),
-	s(";U", t("Ú")),
-
-	s(";c", t("ç")),
+	s({ trig = ".a", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ã")),
+	s({ trig = ";a", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("á")),
+	s({ trig = "/a", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("â")),
+	s({ trig = ",a", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("à")),
+	s({ trig = ".A", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Ã")),
+	s({ trig = ";A", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Á")),
+	s({ trig = "/A", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Â")),
+	s({ trig = ",A", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("À")),
+	s({ trig = ".o", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("õ")),
+	s({ trig = ";o", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ó")),
+	s({ trig = "/o", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ô")),
+	s({ trig = ".O", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Õ")),
+	s({ trig = ";O", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Ó")),
+	s({ trig = "/O", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Ô")),
+	s({ trig = ";e", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("é")),
+	s({ trig = "/e", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ê")),
+	s({ trig = ";E", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("É")),
+	s({ trig = "/E", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Ê")),
+	s({ trig = ";i", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("í")),
+	s({ trig = ";I", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Í")),
+	s({ trig = ";u", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ú")),
+	s({ trig = ";U", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Ú")),
+	s({ trig = ";c", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ç")),
 
 	-- Math
 	s({
@@ -69,6 +64,12 @@ return {
 		snippetType = "autosnippet",
 		condition = tex_utils.in_text,
 	}, { t("\\("), i(1), t("\\)") }),
+
+	s({
+		trig = "math",
+		desc = "inline math",
+		condition = tex_utils.in_text,
+	}, { t({ "\\[", "\t" }), i(1), t({ "", "\\]" }) }),
 
 	postfix(
 		{
@@ -129,13 +130,13 @@ return {
 
 	-- Environments
 	s({ trig = "enum", condition = tex_utils.in_text, desc = "enumerate env" }, {
-		t({ "\\begin{enumerate}[(a)]\\setlength\\itemsep{0em}", "", "\t", "\\item" }),
+		t({ "\\begin{enumerate}[(a)]\\setlength\\itemsep{0em}", "\t\\item" }),
 		i(1),
 		t({ "", "\\end{enumerate}" }),
 	}),
 
 	s({ trig = "item", condition = tex_utils.in_text, desc = "itemize env" }, {
-		t({ "\\begin{itemize}", "", "\t", "\\item" }),
+		t({ "\\begin{itemize}", "\t\\item" }),
 		i(1),
 		t({ "", "\\end{itemize}" }),
 	}),
@@ -143,7 +144,7 @@ return {
 	s({ trig = "beg", condition = tex_utils.in_text, dev = "generic begin env" }, {
 		t({ "\\begin{" }),
 		i(1),
-		t({ "}", "", "\t" }),
+		t({ "}", "\t" }),
 		i(2),
 		t({ "", "\\end{" }),
 		extras.rep(1),
@@ -151,7 +152,7 @@ return {
 	}),
 
 	s({ trig = "diag", condition = tex_utils.in_mathzone, dev = "tikzcd diagram env" }, {
-		t({ "\\begin{tikzcd}", "", "\t" }),
+		t({ "\\begin{tikzcd}", "\t" }),
 		i(1),
 		t({ "", "\\end{tikzcd}" }),
 	}),
