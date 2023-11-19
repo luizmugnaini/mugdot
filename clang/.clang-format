@@ -1,0 +1,17 @@
+BasedOnStyle: Google
+Standard: Cpp11
+IncludeBlocks: Preserve
+AccessModifierOffset: -4
+IndentWidth: 4
+IndentCaseLabels: false
+NamespaceIndentation: All
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakBeforeMultilineStrings: false
+MaxEmptyLinesToKeep: 1
+ColumnLimit: 90
+AlignAfterOpenBracket: AlwaysBreak
+BreakConstructorInitializers: BeforeComma
+BinPackArguments: false
+BinPackParameters: false
