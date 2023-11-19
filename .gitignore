@@ -5,9 +5,6 @@ ncspot/userstate.cbor
 # Ruff linter
 /.ruff_cache
 
-# Packer pre compilation data
-nvim/plugin/packer_compiled.lua
-
 # dwm stuff
 *.o
 *.diff

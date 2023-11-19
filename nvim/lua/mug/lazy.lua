@@ -6,42 +6,59 @@ if not vim.loop.fs_stat(lazypath) then
 		"clone",
 		"--filter=blob:none",
 		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
+		"--branch=stable",
 		lazypath,
 	})
 end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	-- UI components
-	"folke/tokyonight.nvim",
-	"sainnhe/gruvbox-material",
+	---------------------------------------------------------------------------
+	-- User interface stuff: themes, icons, transparency, and status line.
+	---------------------------------------------------------------------------
+
+	-- Themes
 	"rebelot/kanagawa.nvim",
+	{ "folke/tokyonight.nvim", event = "VeryLazy" },
+	{ "sainnhe/gruvbox-material", event = "VeryLazy" },
 
-	{
-		-- Icons for other plugins
-		"nvim-tree/nvim-web-devicons",
-	},
+	-- NerdFont icons.
+	"nvim-tree/nvim-web-devicons",
 
-	{
-		-- Transparency management
-		"xiyaowong/transparent.nvim",
-	},
+	-- Transparency management.
+	{ "xiyaowong/transparent.nvim", event = "VeryLazy" },
 
+	-- Status line.
 	{
-		-- UI line for nvim
 		"nvim-lualine/lualine.nvim",
 		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
 	},
 
+	---------------------------------------------------------------------------
+	-- Utilities for better development.
+	-- * Focus mode.
+	-- * Tree structure view for directories.
+	-- * View hotkeys as you type them.
+	-- * Undo-redo functionality enhancement.
+	-- * File navigation with telescope and harpoon.
+	-- * Comment utilities.
+	-- * TODO comment highlighting.
+	-- * Writting snippets.
+	---------------------------------------------------------------------------
+
+	-- Focus mode for intensive programming sessions.
+	{ "folke/zen-mode.nvim", event = "VeryLazy" },
+
+	-- Tree structure for navigating files.
+	-- Toggle with "<leader>fe".
 	{
-		-- Tree structure for navigating files
 		"nvim-neo-tree/neo-tree.nvim",
+		event = "VeryLazy",
 
 		branch = "v3.x",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
-			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+			"nvim-tree/nvim-web-devicons",
 			"MunifTanjim/nui.nvim",
 		},
 		keys = {
@@ -55,13 +72,24 @@ require("lazy").setup({
 		},
 	},
 
+	-- Which-key clone (emacs) for viewing hotkey functionalities as you type them.
 	{
-		-- Utility for undoing actions and navigating file history
-		"mbbill/undotree",
+		"folke/which-key.nvim",
+		event = "VeryLazy",
+		init = function()
+			vim.o.timeout = true
+			vim.o.timeoutlen = 300
+		end,
 	},
 
+	-- Utility for undoing actions and navigating file history.
+	-- * Undo: "u" in normal mode.
+	-- * Redo: "r" in normal mode.
+	-- * Open history: "<leader>-u".
+	"mbbill/undotree",
+
+	-- Telescope file navigation with "<leader>ff".
 	{
-		-- Better navigation
 		"nvim-telescope/telescope.nvim",
 		version = "0.1.4",
 		dependencies = {
@@ -69,22 +97,26 @@ require("lazy").setup({
 		},
 	},
 
+	-- File bookmarks for better navigation.
+	-- * Add buffer to harpoon with "<leader>ha".
+	-- * Open harpoon bookmarks with "<leader>ho".
 	{
-		-- Better navigation
 		"theprimeagen/harpoon",
 		dependencies = { "nvim-telescope/telescope.nvim" },
 	},
 
+	-- Utility for line and block comments.
+	-- * Add line comment with "<leader>lc".
+	-- * Add block comment with "<leader>bc".
 	{
-		-- Utility for line and block comments
 		"numToStr/Comment.nvim",
 		config = function()
 			require("Comment").setup()
 		end,
 	},
 
+	-- Highlighting for TODO/NOTE/HACK/BUG comments.
 	{
-		-- Highlighting for TODO/NOTE/HACK/BUG comments
 		"folke/todo-comments.nvim",
 		dependencies = { { "nvim-lua/plenary.nvim", optional = true } },
 		config = function()
@@ -92,23 +124,23 @@ require("lazy").setup({
 		end,
 	},
 
+	-- Snippets.
 	{
-		-- Snippets
 		"L3MON4D3/LuaSnip",
 		dependencies = {
 			"hrsh7th/nvim-cmp",
 			"saadparwaiz1/cmp_luasnip",
 		},
+		event = "VeryLazy",
+		ft = { "tex", "cpp" },
 	},
 
-	{
-		-- Code parsing
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-	},
+	---------------------------------------------------------------------------
+	-- LSP support, code parsing, linting, and formatting
+	---------------------------------------------------------------------------
 
+	-- LSP support.
 	{
-		-- LSP support
 		"VonHeikemen/lsp-zero.nvim",
 		branch = "v2.x",
 		dependencies = {
@@ -127,19 +159,20 @@ require("lazy").setup({
 		},
 	},
 
+	-- Code parser.
 	{
-		-- Code linting
-		"mfussenegger/nvim-lint",
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
 	},
 
-	{
-		-- Code formatting
-		"stevearc/conform.nvim",
-		opts = {},
-	},
+	-- Code linting.
+	"mfussenegger/nvim-lint",
 
+	-- Automatic code formatting.
+	"stevearc/conform.nvim",
+
+	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
 	{
-		-- View errors and warnings from the LSP
 		"folke/trouble.nvim",
 		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
 		config = function()
@@ -150,8 +183,11 @@ require("lazy").setup({
 		end,
 	},
 
+	---------------------------------------------------------------------------
 	-- Language specific plugins
-	{ "rust-lang/rust.vim", ft = "rust" },
-	{ "tikhomirov/vim-glsl", ft = "glsl" },
-	{ "lervag/vimtex", ft = "tex" },
+	---------------------------------------------------------------------------
+
+	{ "rust-lang/rust.vim", event = "VeryLazy", ft = "rust" },
+	{ "tikhomirov/vim-glsl", event = "VeryLazy", ft = "glsl" },
+	{ "lervag/vimtex", event = "VeryLazy", ft = "tex" },
 })
