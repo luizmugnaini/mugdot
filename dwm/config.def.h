@@ -1,8 +1,13 @@
 // Luiz Mugnaini configuration for dwm window manager
 // patch dependencies: fullgaps, movestack
 //
-// external dependencies: firefox, alacritty, scrot, slock, rofi, nerd fonts
-// (Iosevka)
+// external dependencies:
+// - chromium;
+// - alacritty;
+// - slock;
+// - rofi;
+// - iosevka nerd font;
+// - pulse audio;
 
 #include <X11/XF86keysym.h>
 
@@ -12,8 +17,8 @@ static const unsigned int gappx = 5;    /* gaps between windows */
 static const unsigned int snap = 10;    /* snap pixel (original: 32) */
 static const int showbar = 1;           /* 0 means no bar */
 static const int topbar = 1;            /* 0 means bottom bar */
-static const char *fonts[] = {"Iosevka Nerd Font:size=10"};
-static const char dmenufont[] = "Iosevka Nerd Font:size=10";
+static const char *fonts[] = {"Iosevka NF:size=10"};
+static const char dmenufont[] = "Iosevka NF:size=10";
 static const char col_gray1[] = "#222222";
 static const char col_gray2[] = "#444444";
 static const char col_gray3[] = "#bbbbbb";
