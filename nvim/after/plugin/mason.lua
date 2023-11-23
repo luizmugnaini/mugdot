@@ -13,17 +13,11 @@ require("mason").setup({
 		"eslint_d",
 		"tsserver",
 
-		-- Go
-		"gopls",
-
 		-- Rust
 		"rust_analyzer",
 
 		-- Lua
 		"luaformatter",
 		"lua_ls",
-
-		-- WGSL (WebGL)
-		"wgsl_analyzer",
 	},
 })

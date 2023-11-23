@@ -1,34 +1,40 @@
 vim.g.python3_host_prog = "~/.pyenv/versions/3.11.5/bin/python3"
 vim.g.mapleader = " "
 
-vim.opt.guicursor = ""
+local opt = vim.opt
 
-vim.opt.nu = true
-vim.opt.relativenumber = true
+opt.guicursor = ""
 
-vim.opt.textwidth = 100
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+opt.number = true
+opt.relativenumber = true
 
-vim.opt.smartindent = true
+opt.textwidth = 100
+opt.tabstop = 4
+opt.shiftwidth = 4
+opt.expandtab = true
+opt.smartindent = true
 
-vim.opt.wrap = true
+opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.cache/nvim/undodir"
-vim.opt.undofile = true
+opt.wrap = false
 
-vim.opt.hlsearch = false
-vim.opt.incsearch = true
-vim.opt.smartcase = true
+opt.swapfile = false
+opt.backup = false
+opt.undodir = os.getenv("HOME") .. "/.cache/nvim/undodir"
+opt.undofile = true
 
-vim.opt.termguicolors = true
+opt.grepprg = "rg --vimgrep"
+opt.hlsearch = false
+opt.incsearch = true
+opt.ignorecase = true
+opt.smartcase = true
 
-vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
-vim.opt.isfname:append("@-@")
+opt.termguicolors = true
 
-vim.opt.updatetime = 50
+opt.scrolloff = 4 -- Minimal number of lines below cursor line
+opt.signcolumn = "yes"
+opt.isfname:append("@-@")
+
+opt.spelllang = { "en" }
+
+opt.updatetime = 50

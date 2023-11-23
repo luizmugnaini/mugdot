@@ -53,12 +53,6 @@ lsp.on_attach(function(client, bufnr)
 	vim.keymap.set("n", "<leader>vd", function()
 		vim.diagnostic.open_float()
 	end, opts)
-	vim.keymap.set("n", "[d", function()
-		vim.diagnostic.goto_next()
-	end, opts)
-	vim.keymap.set("n", "]d", function()
-		vim.diagnostic.goto_prev()
-	end, opts)
 	vim.keymap.set("n", "<leader>vca", function()
 		vim.lsp.buf.code_action()
 	end, opts)
@@ -74,8 +68,6 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 lsp.setup()
-
-local lsp_configurations = require("lspconfig.configs")
 
 -- Whether or not to display text messages on the screen.
 vim.diagnostic.config({ virtual_text = false })
