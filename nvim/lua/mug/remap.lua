@@ -1,26 +1,20 @@
--- Native file browsing
-vim.keymap.set("n", "<leader>bf", vim.cmd.Ex, { desc = "[B]rowse {F}iles" })
+vim.keymap.set("n", "<leader>bf", vim.cmd.Ex, { desc = "Native [B]rowse {F}iles" })
 
--- Navigating buffers
 vim.keymap.set("n", "<leader>nn", vim.cmd.bnext, { desc = "[N]ext buffer" })
 vim.keymap.set("n", "<leader>pp", vim.cmd.bprevious, { desc = "[P]revious buffer" })
 
--- Escaping
-local modes = { "n", "i", "x", "v", "s", "c", "o", "l", "t" }
-for i = 1, #modes do
-	vim.keymap.set(modes[i], "<C-k>", "<Esc>", { desc = "Escape to normal mode" })
-end
+vim.keymap.set(
+	{ "n", "i", "x", "v", "s", "c", "o", "l", "t" },
+	"<C-k>",
+	"<Esc>",
+	{ desc = "Escape to normal mode", silent = true }
+)
 
--- Saving files
-vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "[W]rite file" })
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "[W]rite file" })
 
--- Copying to external clipboard
-vim.keymap.set("v", "<C-y>", '"+y')
+vim.keymap.set("v", "<C-y>", '"+y', { desc = "Copy to external clipboard" })
 
--- Moving between split panes
-local directions = { "h", "j", "k", "l" }
-for i = 1, #directions do
-	local key = "<C-" .. directions[i] .. ">"
-	local command = ":wincmd " .. directions[i] .. "<CR>"
-	vim.keymap.set("n", key, command)
-end
+vim.keymap.set("n", "<leader>h", "<cmd>wincmd h<CR>", { silent = true, desc = "Move to left split pane" })
+vim.keymap.set("n", "<leader>j", "<cmd>wincmd j<CR>", { silent = true, desc = "Move to down split pane" })
+vim.keymap.set("n", "<leader>k", "<cmd>wincmd k<CR>", { silent = true, desc = "Move to up split pane" })
+vim.keymap.set("n", "<leader>l", "<cmd>wincmd l<CR>", { silent = true, desc = "Move to right split pane" })

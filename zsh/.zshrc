@@ -103,7 +103,7 @@ export PATH="$HOME/.emacs.d/bin:$PATH"
 export EDITOR="nvim"
 export VISUAL="nvim"
 export TERMINAL="alacritty"
-export BROWSER="chromium"
+export BROWSER="firefox"
 
 alias vim="nvim"
 alias vi="vim"

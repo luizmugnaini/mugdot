@@ -2,7 +2,7 @@
 // patch dependencies: fullgaps, movestack
 //
 // external dependencies:
-// - chromium;
+// - firefox;
 // - alacritty;
 // - slock;
 // - rofi;
@@ -89,7 +89,7 @@ static const char *roficmd[] = {"rofi", "-show", "run", NULL};
 static const char *termcmd[] = {"alacritty", NULL};
 
 /* browser */
-static const char *browsercmd[] = {"chromium", NULL};
+static const char *browsercmd[] = {"firefox", NULL};
 
 /* emacs */
 static const char *emacscmd[] = {"emacs", NULL};
