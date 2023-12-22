@@ -24,7 +24,6 @@ bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
-bindkey -v '^?' backward-delete-char
 
 # Change cursor shape for different vi modes.
 # Notice that there are two main options:
@@ -98,6 +97,9 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # Emacs
 export PATH="$HOME/.emacs.d/bin:$PATH"
 
+# Haskell
+export PATH="$HOME/.cabal/bin:$PATH"
+
 # Terminal utilities and env variables -----------------------------------------------------------
 
 export EDITOR="nvim"
@@ -106,13 +108,15 @@ export TERMINAL="alacritty"
 export BROWSER="firefox"
 
 alias vim="nvim"
-alias vi="vim"
+alias v="nvim"
 
 # Makes my Ctrl-k output an Esc so that I can use zsh vim mode smoothly
-bindkey -s ^k "^["
+bindkey -s ^k "\x1b"
 
-alias ls="exa --long --header --icons --git"
-alias bat="bat --theme=OneHalfDark"
+alias l="eza --long --icons --git --group-directories-first"
+alias ls="eza --icons --group-directories-first"
+
+alias b="bat --theme=Coldark-Dark"
 
 # File explorer
 alias n="nnn -Hde"
@@ -127,8 +131,7 @@ eval "$(zoxide init zsh)"
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 eval "$(starship init zsh)"
 
-# Version control ---------------------------------------------------------------------------------
-
+# jj version control system
 source <(jj util completion --zsh)
 
 # Screen control ----------------------------------------------------------------------------------
