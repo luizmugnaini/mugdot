@@ -29,10 +29,7 @@ require("lazy").setup({
 	{ "xiyaowong/transparent.nvim", event = "VeryLazy" },
 
 	-- Status line.
-	{
-		"nvim-lualine/lualine.nvim",
-		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
-	},
+	{ "nvim-lualine/lualine.nvim", dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } } },
 
 	---------------------------------------------------------------------------
 	-- Utilities for better development.
@@ -56,11 +53,7 @@ require("lazy").setup({
 		event = "VeryLazy",
 
 		branch = "v3.x",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-tree/nvim-web-devicons",
-			"MunifTanjim/nui.nvim",
-		},
+		dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons", "MunifTanjim/nui.nvim" },
 		keys = {
 			{
 				"<leader>fe",
@@ -92,18 +85,13 @@ require("lazy").setup({
 	{
 		"nvim-telescope/telescope.nvim",
 		version = "0.1.4",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
+		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 
 	-- File bookmarks for better navigation.
 	-- * Add buffer to harpoon with "<leader>ha".
 	-- * Open harpoon bookmarks with "<leader>ho".
-	{
-		"theprimeagen/harpoon",
-		dependencies = { "nvim-telescope/telescope.nvim" },
-	},
+	{ "theprimeagen/harpoon", dependencies = { "nvim-telescope/telescope.nvim" } },
 
 	-- Utility for line and block comments.
 	-- * Add line comment with "<leader>lc".
@@ -127,10 +115,7 @@ require("lazy").setup({
 	-- Snippets.
 	{
 		"L3MON4D3/LuaSnip",
-		dependencies = {
-			"hrsh7th/nvim-cmp",
-			"saadparwaiz1/cmp_luasnip",
-		},
+		dependencies = { "hrsh7th/nvim-cmp", "saadparwaiz1/cmp_luasnip" },
 		event = "VeryLazy",
 		ft = { "tex", "cpp" },
 	},
@@ -160,10 +145,7 @@ require("lazy").setup({
 	},
 
 	-- Code parser.
-	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-	},
+	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 
 	-- Code linting.
 	"mfussenegger/nvim-lint",
@@ -187,7 +169,16 @@ require("lazy").setup({
 	-- Language specific plugins
 	---------------------------------------------------------------------------
 
-	{ "rust-lang/rust.vim", event = "VeryLazy", ft = "rust" },
 	{ "tikhomirov/vim-glsl", event = "VeryLazy", ft = "glsl" },
 	{ "lervag/vimtex", event = "VeryLazy", ft = "tex" },
+	{ "kaarmu/typst.vim", event = "VeryLazy", ft = "typst" },
+	{
+		"iamcco/markdown-preview.nvim",
+		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+		build = function()
+			vim.fn["mkdp#util#install"]()
+		end,
+		event = "VeryLazy",
+		ft = { "markdown" },
+	},
 })

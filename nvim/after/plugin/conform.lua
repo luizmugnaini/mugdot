@@ -2,10 +2,12 @@ require("conform").setup({
 	formatters_by_ft = {
 		lua = { "stylua" },
 		python = { "black" },
-		rust = { "rust_analyzer" },
-		cpp = { "clangd" },
-		c = { "clangd" },
+		rust = { "rustfmt" },
+		cpp = { "clang_format" },
+		c = { "clang_format" },
+		["_"] = { "trim_whitespace" },
 	},
+
 	format_on_save = {
 		timeout_ms = 500,
 		lsp_fallback = true,

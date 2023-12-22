@@ -3,7 +3,7 @@ local lsp = require("lsp-zero").preset({
 })
 local lspconfig = require("lspconfig")
 
-lsp.ensure_installed({ "gopls", "tsserver", "rust_analyzer", "pyright", "lua_ls", "clangd" })
+lsp.ensure_installed({ "tsserver", "rust_analyzer", "pyright", "lua_ls", "clangd", "zls" })
 
 -- Fix Undefined global 'vim' in Lua server.
 lspconfig.lua_ls.setup({ settings = { Lua = { diagnostics = { globals = { "vim" } } } } })
@@ -16,8 +16,10 @@ lspconfig.clangd.setup({
 	end,
 })
 
-lsp.format_on_save({
-	["rust_analyzer"] = { "rust" },
+-- Typst lsp - only experimenting with it for the time being
+vim.filetype.add({ extension = { typst = "typ" } })
+lspconfig.typst_lsp.setup({
+	filetypes = { "typst" },
 })
 
 local cmp = require("cmp")
