@@ -8,6 +8,7 @@ opt.guicursor = ""
 opt.number = true
 opt.relativenumber = true
 
+opt.textwidth = 130
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
