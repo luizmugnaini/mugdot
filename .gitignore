@@ -11,8 +11,8 @@ ncspot/userstate.cbor
 *.orig
 config.h
 blocks.h
-dwm/dwm-6.2/dwm
-dwm/dwm-6.2/dwm.png
+dwm/dwm
+dwm/dwmblocks/dwmblocks
 
 # Emacs stuff
 emacs/.local/
