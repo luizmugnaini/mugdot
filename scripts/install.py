@@ -1,3 +1,4 @@
+from pathlib import Path
 import subprocess as sp
 
 
@@ -12,10 +13,8 @@ compulsory_packages = {
         "man-pages",
         "pacman-contrib",
         "dunst",
-        "stow",
-        "xclip",
     ],
-    "xorg": [
+    "xorg": [  # NOTE: X11 only
         "xorg-server",
         "xorg-xsetroot",
         "xorg-xrandr",
@@ -24,6 +23,7 @@ compulsory_packages = {
         "xorg-setxkbmap",
         "xorg-utils",
         "xorg-xinit",
+        "xclip",
     ],
     "graphics": ["mesa"],
     "display manager": ["lightdm", "lightdm-gtk-greeter"],
@@ -40,12 +40,13 @@ compulsory_packages = {
     ],
     "networking": ["networkmanager", "dhclient", "iwd", "wireless_tools"],
     "bluetooth": ["bluez", "bluez-utils", "bluez-libs"],
-    "compositor": ["picom"],
+    "compositor": ["picom"],  # TODO: This is an X compositor, should change to hyprland
     "fonts": [
         "nerd-fonts-complete",
+        "ttf-nerd-fonts-symbols",
         "ttf-apple-emoji",
         "adobe-source-code-pro-fonts",
-        "ttf-fira-code",
+        "ttf-iosevka-nerd",
     ],
     "package utils": ["automake", "cmake", "make"],
     "rust": ["rustup"],
@@ -60,21 +61,37 @@ optional_packages = {
     "spotify": ["ncspot"],
     "rust": ["rust-analyzer"],
     "rustup components": ["clippy", "rustfmt"],
+    "dotfiles setup": ["stoic-dotfiles"],  # Installed via cargo
     "python": [
         "python-poetry",
         "pyright",
-        "python-pip",
-        "python-pydantic",
         "ipython",
         "jupyterlab",
-        "mypy"
         "tk",
     ],
     "programming tools": ["tree-sitter"],
     "personal website dev": ["zola"],
     "sage math": ["sagemath"],
-    "databases": ["mariadb"],
-    "latex": ["texlive-most", "biber", "latex-mk", "texlive-langjapanese"],
+    "databases": ["postgresql"],  # TODO: setup database
+    "latex": [
+        # Core
+        "texlive-basic",
+        # Binaries
+        "texlive-bin",
+        "texlive-binextra",
+        # Packages
+        "texlive-latex",
+        "texlive-latexrecommended",
+        "texlive-latexextra",
+        # Fonts
+        "texlive-fontsrecommended",
+        "texlive-fontsextra",
+        # Language support
+        "texlive-langportuguese",
+        "texlive-langjapanese",
+        # Bibliography
+        "biber",
+    ],
     "documents": [
         "zathura",
         "zathura-pdf-mupdf",
@@ -86,7 +103,7 @@ optional_packages = {
     "utilities": [
         "ripgrep",
         "zoxide",
-        "exa",
+        "eza",
         "bat",
         "fd",
         "starship",
@@ -107,6 +124,7 @@ optional_packages = {
     "onedrive": ["onedrive-abraunegg-git"],
 }
 
+PACMAN_INSTALL = ["sudo", "pacman", "-S"]
 PARU_INSTALL = ["paru", "-S"]
 
 
@@ -120,94 +138,77 @@ def subaction(subact: str):
     print(f"\n{indicator} {subact}\n")
 
 
-def setup_network():
-    header("Network setup")
-
-    config_path = "/etc/NetworkManager/conf.d"
-    subaction("setup dhcp")
-    content = sp.Popen(["printf", "[main]\ndhcp=dhclient"], stdout=sp.PIPE)
-    sp.run(
-        ["sudo", "tee", "dhcp-client.conf"],
-        stdin=content.stdout,
-        cwd=config_path,
-        stdout=sp.DEVNULL,
-    )
-
-    subaction("setup wifi backend")
-    content = sp.Popen(["printf", "[device]\nwifi.backend=iwd"], stdout=sp.PIPE)
-    sp.run(
-        ["sudo", "tee", "wifi_backend.conf"],
-        stdin=content.stdout,
-        cwd=config_path,
-        stdout=sp.DEVNULL,
-    )
-
-    sp.run(["sudo", "systemctl", "enable", "{NetworkManager,iwd}"])
-    sp.run(["sudo", "systemctl", "start", "{NetworkManager,iwd}"])
-
-
-def setup_paru():
-    header("Paru AUR helper setup")
-
-    subaction("installing paru requirements")
-    sp.run(["sudo", "pacman", "-S", "--needed", "base-devel"])
-
-    subaction("cloning paru")
-    sp.run(["git", "clone", "https://aur.archlinux.org/paru.git"], cwd="/home/mug")
-
-    subaction("making paru")
-    sp.run(["makepkg", "-si"], cwd="/home/mug/paru")
-    sp.run(["rm", "-rf", "paru"], cwd="/home/mug")
-
-    subaction("Updating mirrors")
-    # Uncomment multilib from /etc/pacman.conf
-    # NOTE: uses https://unix.stackexchange.com/a/26289
-    # TODO: what if perl is not installable at this point
-    sp.run(["sudo", "pacman", "-S", "perl"])
-    sp.run(
-        [
-            "perl",
-            "-0777",
-            "-pi",
-            "-e",
-            "s/#\\[multilib\\]\n#Include = \\/etc\\/pacman.d\\/mirrorlist/\\[multilib\\]\nInclude = \\/etc\\/pacman.d\\/mirrorlist/g",
-            "/etc/pacman.conf",
-        ]
-    )
-    sp.run(["paru", "-Syy"])
-
-
-def setup_grub():
-    header("Grub setup")
-    subaction("installing grub via pacman")
-    sp.run(["pacman", "-S", "grub", "efibootmgr"])
-    subaction("installing grub via 'grub-install'")
-    sp.run(
-        [
-            "grub-install",
-            "--target=x86_64-efi",
-            "--efi-directory=/boot/efi",
-            "--bootloader-id=arch_grub",
-            "--recheck",
-        ]
-    )
-    subaction("Making grub configuration with 'grub-mkconfig'")
-    sp.run(["grub-mkconfig", "-o", "/boot/grub/grub.cfg"])
-
-
 def initial_setup():
-    header("Creating a user named 'mug'")
-    sp.run(["useradd", "m", "-g", "users", "-G", "wheel", "mug"])
+    header("User creation")
+
+    subaction("Creating user")
+    name = input("Name of the user: ")
+    sp.run(["useradd", "m", "-g", "users", "-G", "wheel", name])
+
     subaction("Creating a password for the user 'mug'")
     sp.run(["passwd", "mug"])
 
-    header("Installing networking packages")
-    sp.run(["sudo", "pacman", "-S"] + compulsory_packages["networking"])
-    setup_network()
+
+def setup_pacman():
+    header("Setup pacman")
+    subaction("Initialising pacman keys")
+    sp.run(["sudo", "pacman-key", "--init"], cwd=HOME)
+
+    subaction("Populating pacman keys")
+    sp.run(["sudo", "pacman-key" "--populate archlinux"], cwd=HOME)
 
 
+def setup_audio():
+    header("Setup audio")
+
+    subaction("Installing audio packages")
+    sp.run(PACMAN_INSTALL + compulsory_packages["audio"], cwd=HOME)
+
+    subaction("Copying pipewire configuration into /etc/pipewire")
+    sp.run(["sudo", "mkdir", "/etc/pipewire"])
+    sp.run(["sudo", "cp", "/usr/share/pipewire/pipewire*", "/etc/pipewire/"])
+
+    subaction("Enabling/starting pipewire and pipewire-pulse")
+    sp.run(["systemctl", "--user", "enable", "pipewire{,-pulse}"])
+    sp.run(["systemctl", "--user", "start", "pipewire{,-pulse}"])
+
+
+def setup_rust():
+    header("Setup rust")
+
+    subaction("Installing rust")
+    sp.run(PACMAN_INSTALL + compulsory_packages["rust"])
+
+    subaction("Setting up rustup with the stable toolchain")
+    sp.run(["rustup", "default", "stable"])
+
+
+def setup_bluetooth():
+    header("Setup bluetooth")
+
+    subaction("Installing bluetooth packages")
+    sp.run(PACMAN_INSTALL + compulsory_packages["bluetooth"], cwd=HOME)
+
+    subaction("Enabling and starting the bluetooth service")
+    sp.run(["sudo", "systemctl", "enable", "bluetooth"])
+    sp.run(["sudo", "systemctl", "start", "bluetooth"])
+
+
+def setup_display_manager():
+    header("Setup the display manager")
+
+    subaction("Installing the display manager packages")
+    sp.run(PACMAN_INSTALL + compulsory_packages["display manager"], cwd=HOME)
+
+    subaction("Enabling/starting lightdm")
+    sp.run(["sudo", "systemctl", "enable", "lightdm"], cwd=HOME)
+    sp.run(["sudo", "systemctl", "start", "lightdm"], cwd=HOME)
+
+
+# TODO: break this into multiple functions
 def post_initial_setup():
     header("Post-initial setup")
+
     sp.run(
         ["sudo", "pacman", "-Sy"]
         + compulsory_packages["xorg"]
@@ -223,7 +224,7 @@ def post_initial_setup():
 
     # Install and setup paru
     sp.run(["sudo", "pacman", "-S"] + compulsory_packages["rust"])
-    sp.run(["rustup", "default", "nightly"])
+    sp.run(["rustup", "default", "stable"])
     setup_paru()
 
     sp.run(
@@ -235,7 +236,6 @@ def post_initial_setup():
         + compulsory_packages["fonts"]
         + compulsory_packages["package utils"]
         + compulsory_packages["user utils"]
-        + compulsory_packages["rust"]
     )
 
     # Display manager
@@ -247,6 +247,104 @@ def post_initial_setup():
     sp.run(["sudo", "systemctl", "start", "bluetooth"])
 
     sp.run(["stow", "x"])
+
+
+def setup_grub():
+    header("Grub setup")
+
+    subaction("installing grub via pacman")
+    sp.run(["pacman", "-S", "grub", "efibootmgr"])
+
+    subaction("installing grub via 'grub-install'")
+    sp.run(
+        [
+            "grub-install",
+            "--target=x86_64-efi",
+            "--efi-directory=/boot/efi",
+            "--bootloader-id=arch_grub",
+            "--recheck",
+        ]
+    )
+
+    subaction("Making grub configuration with 'grub-mkconfig'")
+    sp.run(["grub-mkconfig", "-o", "/boot/grub/grub.cfg"])
+
+
+def setup_network():
+    header("Network setup")
+
+    header("Installing networking packages")
+    sp.run(["sudo", "pacman", "-S"] + compulsory_packages["networking"], cwd=HOME)
+
+    subaction("Setup dhcp to dhclient")
+    config_path = Path("/etc/NetworkManager/conf.d")
+    content = sp.Popen(["printf", "[main]\ndhcp=dhclient"], stdout=sp.PIPE)
+    sp.run(
+        ["sudo", "tee", "dhcp-client.conf"],
+        stdin=content.stdout,
+        cwd=config_path,
+        stdout=sp.DEVNULL,
+    )
+
+    subaction("Setting wifi backend to iwd")
+    content = sp.Popen(["printf", "[device]\nwifi.backend=iwd"], stdout=sp.PIPE)
+    sp.run(
+        ["sudo", "tee", "wifi_backend.conf"],
+        stdin=content.stdout,
+        cwd=config_path,
+        stdout=sp.DEVNULL,
+    )
+
+    subaction("Enabling both the NetworkManager and iwd")
+    sp.run(["sudo", "systemctl", "enable", "NetworkManager"], cwd=HOME)
+    sp.run(["sudo", "systemctl", "enable", "iwd"], cwd=HOME)
+
+    subaction("Starting both the NetworkManager and iwd")
+    sp.run(["sudo", "systemctl", "start", "NetworkManager"], cwd=HOME)
+    sp.run(["sudo", "systemctl", "start", "iwd"], cwd=HOME)
+
+
+def setup_paru():
+    header("Paru AUR helper setup")
+
+    subaction("Installing base-devel (basic tools to build Arch Linux packages)")
+    sp.run(["sudo", "pacman", "-S", "--needed", "base-devel"], cwd=HOME)
+
+    subaction("Installing rust")
+    sp.run(["sudo", "pacman", "-S"] + compulsory_packages["rust"])
+    sp.run(["rustup", "default", "stable"])
+
+    subaction("Installing git")
+    sp.run(["sudo", "pacman", "-S", "git"], cwd=HOME)
+
+    subaction("Cloning paru")
+    sp.run(["git", "clone", "https://aur.archlinux.org/paru.git"], cwd=HOME)
+
+    subaction("Making paru")
+    sp.run(["makepkg", "-si"], cwd=HOME / "paru")
+
+    subaction("Deleting paru repository")
+    sp.run(["rm", "-rf", "paru"], cwd=HOME)
+
+    subaction("Installing perl")
+    sp.run(["sudo", "pacman", "-S", "perl"])
+
+    # NOTE: uses https://unix.stackexchange.com/a/26289
+    subaction("Uncommenting the multilib mirror from /etc/pacman.conf")
+    sp.run(
+        [
+            "perl",
+            "-0777",
+            "-pi",
+            "-e",
+            "s/#\\[multilib\\]\n#Include = \\/etc\\/pacman.d\\/mirrorlist/\\[multilib\\]\nInclude = \\/etc\\/pacman.d\\/mirrorlist/g",
+            "/etc/pacman.conf",
+        ],
+        cwd=HOME,
+    )
+
+    subaction("Updating paru mirrors")
+    sp.run(["paru", "-Syy"], cwd=HOME)
 
 
 def setup_dwm():
@@ -263,16 +361,20 @@ def setup_dwm():
 
 
 def setup_shell():
-    subaction("installing zhs stuff")
+    header("Setup shell")
+
+    subaction("Installing zhs packages")
     sp.run(PARU_INSTALL + optional_packages["shell"])
 
-    subaction("make zsh default shell")
+    subaction("Make zsh the default shell")
     sp.run(["chsh", "-s", "/bin/zsh"])
-    sp.run(["zsh"])  # Just to make sure the shell is zsh
 
-    subaction("sourcing zsh config file from .mugdot")
-    sp.run(["stow", "zsh", "bash"], cwd="/home/mug/.mugdot")
-    sp.run(["source", ".zshrc"])
+    subaction("Switching to the zsh shell")
+    sp.run(["zsh"])
+
+    subaction("Sourcing zsh config file from .mugdot")
+    sp.run(["stow", "zsh", "bash"], cwd=DOTFILES_DIR)
+    sp.run(["source", ".zshrc"], cwd=HOME)
 
 
 def setup_utils():
@@ -303,6 +405,17 @@ def setup_programming():
         + optional_packages["personal website dev"]
         + optional_packages["latex"]
     )
-    sp.run(["rustup", "add", "component"] + optional_packages["rustup components"])
+    sp.run(
+        ["rustup", "add", "component"] + optional_packages["rustup components"],
+        cwd=HOME,
+    )
 
-    sp.run(["stow", "alacritty", "emacs", "nvim", "git", "latex", "rust"])
+    sp.run(
+        ["stow", "alacritty", "emacs", "nvim", "git", "latex", "rust"],
+        cwd=DOTFILES_DIR,
+    )
+
+
+if __name__ == "__main__":
+    HOME = Path.home()
+    DOTFILES_DIR = HOME / ".mugdot"
