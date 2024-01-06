@@ -69,3 +69,9 @@ recursive = true
 
 [zsh]
 target = "~/"
+
+[zig]
+target = "~/.config"
+
+[clang]
+target = "~/"
