@@ -7,3 +7,6 @@ vimcmd_symbol = "[](bold purple)"
 
 [git_status]
 deleted = "⨯"
+
+[cmake]
+symbol = " "
