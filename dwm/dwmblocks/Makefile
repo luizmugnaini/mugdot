@@ -1,4 +1,4 @@
-DESTDIR := ${HOME}/.local/bin
+DESTDIR := /usr/local/bin
 CC      := cc
 CFLAGS  := -pedantic -Wall -Wno-deprecated-declarations -Os
 LDFLAGS := -lX11
@@ -7,6 +7,7 @@ all: options dwmblocks
 
 options:
 	@echo dwmblocks build options:
+	@echo "DESTDIR = ${DESTDIR}"
 	@echo "CFLAGS  = ${CFLAGS}"
 	@echo "LDFLAGS = ${LDFLAGS}"
 	@echo "CC      = ${CC}"
