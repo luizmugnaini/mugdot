@@ -7,9 +7,6 @@ target = "~/"
 [dunst]
 target = "~/.config/dunst"
 
-[dwm]
-target = "~/.config/dwm-6.2"
-
 [emacs]
 target = "~/.emacs.d"
 recursive = true
@@ -17,9 +14,9 @@ recursive = true
 [git]
 target = "~/"
 
-[gitui]
-src = "git/gitui"
-target = "~/.config/gitui"
+[lazygit]
+src = "git/lazygit"
+target = "~/.config/lazygit"
 
 [kitty]
 target = "~/.config/kitty"
@@ -28,6 +25,7 @@ target = "~/.config/kitty"
 target = "~/"
 
 [minecraft]
+src = "minecraft/scripts"
 target = "~/.local/bin"
 
 [ncspot]

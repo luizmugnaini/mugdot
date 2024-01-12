@@ -1,0 +1,5 @@
+customCommands:
+  - key: "c"
+    context: "global"
+    command: "git commit --signoff"
+    subprocess: true
