@@ -46,10 +46,10 @@ TERM = "xterm-256color"
 WINIT_X11_SCALE_FACTOR = "1.0"
 
 [font]
-size = 15
+size = 12
 
 [font.normal]
-family = "Iosevka NF"
+family = "FiraCode Nerd Font"
 style = "Regular"
 
 [font.offset]
@@ -127,12 +127,12 @@ save_to_clipboard = true
 
 [window]
 decorations = "none"
-opacity = 0.95
+opacity = 1.0
 
 [window.class]
 general = "Alacritty"
 instance = "Alacritty"
 
 [window.padding]
-x = 3
+x = 4
 y = 0

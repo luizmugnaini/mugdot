@@ -1,14 +1,14 @@
 local function set_colorscheme(color)
-	if color == "tokyonight" then
-		require("tokyonight").setup({
-			style = "night",
-			transparent = vim.g.transparent_enable,
-		})
-	elseif color == "kanagawa" then
+	if color == "kanagawa" then
 		require("kanagawa").setup({
 			undercurl = false,
 			transparent = true,
 			theme = "wave",
+		})
+	elseif color == "tokyonight" then
+		require("tokyonight").setup({
+			style = "night",
+			transparent = vim.g.transparent_enable,
 		})
 	elseif color == "gruvbox-material" then
 		vim.g.gruvbox_material_better_performance = 1
@@ -17,4 +17,4 @@ local function set_colorscheme(color)
 	vim.cmd.colorscheme(color)
 end
 
-set_colorscheme("kanagawa")
+set_colorscheme("gruvbox-material")

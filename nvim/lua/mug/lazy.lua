@@ -18,7 +18,7 @@ require("lazy").setup({
 	---------------------------------------------------------------------------
 
 	-- Themes
-	"rebelot/kanagawa.nvim",
+	{ "rebelot/kanagawa.nvim", event = "VeryLazy" },
 	{ "folke/tokyonight.nvim", event = "VeryLazy" },
 	{ "sainnhe/gruvbox-material", event = "VeryLazy" },
 
@@ -33,7 +33,6 @@ require("lazy").setup({
 
 	---------------------------------------------------------------------------
 	-- Utilities for better development.
-	-- * Focus mode.
 	-- * Tree structure view for directories.
 	-- * View hotkeys as you type them.
 	-- * Undo-redo functionality enhancement.
@@ -43,32 +42,9 @@ require("lazy").setup({
 	-- * Writting snippets.
 	---------------------------------------------------------------------------
 
-	-- Focus mode for intensive programming sessions.
-	{ "folke/zen-mode.nvim", event = "VeryLazy" },
-
-	-- Tree structure for navigating files.
-	-- Toggle with "<leader>fe".
-	{
-		"nvim-neo-tree/neo-tree.nvim",
-		event = "VeryLazy",
-
-		branch = "v3.x",
-		dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons", "MunifTanjim/nui.nvim" },
-		keys = {
-			{
-				"<leader>fe",
-				function()
-					require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
-				end,
-				desc = "Explorer NeoTree (cwd)",
-			},
-		},
-	},
-
 	-- Which-key clone (emacs) for viewing hotkey functionalities as you type them.
 	{
 		"folke/which-key.nvim",
-		event = "VeryLazy",
 		init = function()
 			vim.o.timeout = true
 			vim.o.timeoutlen = 300
@@ -117,7 +93,7 @@ require("lazy").setup({
 		"L3MON4D3/LuaSnip",
 		dependencies = { "hrsh7th/nvim-cmp", "saadparwaiz1/cmp_luasnip" },
 		event = "VeryLazy",
-		ft = { "tex", "cpp" },
+		ft = { "tex" },
 	},
 
 	---------------------------------------------------------------------------
@@ -174,7 +150,7 @@ require("lazy").setup({
 	{ "kaarmu/typst.vim", event = "VeryLazy", ft = "typst" },
 	{
 		"iamcco/markdown-preview.nvim",
-		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+		cmd = { "MarkdownPreviewToggle" },
 		build = function()
 			vim.fn["mkdp#util#install"]()
 		end,
