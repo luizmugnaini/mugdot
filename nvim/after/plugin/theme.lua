@@ -17,4 +17,4 @@ local function set_colorscheme(color)
 	vim.cmd.colorscheme(color)
 end
 
-set_colorscheme("gruvbox-material")
+set_colorscheme("duskfox")

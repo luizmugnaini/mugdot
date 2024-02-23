@@ -22,5 +22,3 @@ redshift -P -O 2800 &
 # Locking (for timer, just insert something like `-time 10`)
 xautolock -locker slock &
 xidlehook --not-when-fullscreen --not-when-audio --timer 600 slock '' &
-
-emacs --daemon &

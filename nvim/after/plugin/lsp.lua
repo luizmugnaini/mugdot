@@ -3,10 +3,7 @@ local lsp = require("lsp-zero").preset({
 })
 local lspconfig = require("lspconfig")
 
-lsp.ensure_installed({ "tsserver", "rust_analyzer", "pyright", "lua_ls", "clangd", "zls" })
-
--- Fix Undefined global 'vim' in Lua server.
-lspconfig.lua_ls.setup({ settings = { Lua = { diagnostics = { globals = { "vim" } } } } })
+lsp.ensure_installed({ "rust_analyzer", "clangd", "pyright" })
 
 lspconfig.clangd.setup({
 	cmd = { "clangd", "--log=verbose", "--compile-commands-dir=./build" },
@@ -46,11 +43,11 @@ lsp.on_attach(function(client, bufnr)
 	vim.keymap.set("n", "gd", function()
 		vim.lsp.buf.definition()
 	end, opts)
+	vim.keymap.set("n", "gr", function()
+		vim.lsp.buf.references()
+	end, opts)
 	vim.keymap.set("n", "K", function()
 		vim.lsp.buf.hover()
-	end, opts)
-	vim.keymap.set("n", "<leader>vws", function()
-		vim.lsp.buf.workspace_symbol()
 	end, opts)
 	vim.keymap.set("n", "<leader>vd", function()
 		vim.diagnostic.open_float()
@@ -63,9 +60,6 @@ lsp.on_attach(function(client, bufnr)
 	end, opts)
 	vim.keymap.set("n", "<leader>vrn", function()
 		vim.lsp.buf.rename()
-	end, opts)
-	vim.keymap.set("i", "<C-h>", function()
-		vim.lsp.buf.signature_help()
 	end, opts)
 end)
 

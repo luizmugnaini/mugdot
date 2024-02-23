@@ -9,7 +9,7 @@ require("lualine").setup({
 		lualine_a = { "mode" },
 		lualine_b = { "branch", "diagnostics" },
 		lualine_c = { "filename" },
-		lualine_x = { "fileformat", "filetype" },
+		lualine_x = { "filetype" },
 		lualine_z = { "location" },
 	},
 	tabline = {},

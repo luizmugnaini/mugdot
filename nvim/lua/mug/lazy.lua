@@ -19,8 +19,8 @@ require("lazy").setup({
 
 	-- Themes
 	{ "rebelot/kanagawa.nvim", event = "VeryLazy" },
-	{ "folke/tokyonight.nvim", event = "VeryLazy" },
 	{ "sainnhe/gruvbox-material", event = "VeryLazy" },
+	{ "EdenEast/nightfox.nvim", event = "VeryLazy" },
 
 	-- NerdFont icons.
 	"nvim-tree/nvim-web-devicons",
@@ -33,23 +33,12 @@ require("lazy").setup({
 
 	---------------------------------------------------------------------------
 	-- Utilities for better development.
-	-- * Tree structure view for directories.
-	-- * View hotkeys as you type them.
 	-- * Undo-redo functionality enhancement.
 	-- * File navigation with telescope and harpoon.
 	-- * Comment utilities.
 	-- * TODO comment highlighting.
 	-- * Writting snippets.
 	---------------------------------------------------------------------------
-
-	-- Which-key clone (emacs) for viewing hotkey functionalities as you type them.
-	{
-		"folke/which-key.nvim",
-		init = function()
-			vim.o.timeout = true
-			vim.o.timeoutlen = 300
-		end,
-	},
 
 	-- Utility for undoing actions and navigating file history.
 	-- * Undo: "u" in normal mode.
@@ -135,8 +124,10 @@ require("lazy").setup({
 		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
 		config = function()
 			require("trouble").setup({
-				height = 5,
+				height = 3,
+				auto_open = false,
 				auto_close = true,
+				auto_preview = false,
 			})
 		end,
 	},

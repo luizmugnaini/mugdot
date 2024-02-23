@@ -12,11 +12,7 @@ target = "~/.emacs.d"
 recursive = true
 
 [git]
-target = "~/"
-
-[lazygit]
-src = "git/lazygit"
-target = "~/.config/lazygit"
+target = "~/.config/git"
 
 [kitty]
 target = "~/.config/kitty"
