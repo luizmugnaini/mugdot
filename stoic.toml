@@ -1,71 +1,28 @@
-[alacritty]
-target = "~/.config/alacritty"
+# [emacs]
+# target = "~/.emacs.d"
+# recursive = true
 
-[bash]
-target = "~/"
-
-[dunst]
-target = "~/.config/dunst"
-
-[emacs]
-target = "~/.emacs.d"
-recursive = true
+[clang-format]
+src = "clang\\.clang-format"
+target = "C:\\Users\\luizm"
 
 [git]
-target = "~/.config/git"
-
-[kitty]
-target = "~/.config/kitty"
-
-[latex]
-target = "~/"
-
-[minecraft]
-src = "minecraft/scripts"
-target = "~/.local/bin"
-
-[ncspot]
-target = "~/.config/ncspot"
+target = "C:\\ProgramData\\Git"
 
 [nvim]
-target = "~/.config/nvim"
+target = "C\\Users\\luizm\\AppData\\nvim"
 recursive = true
 
 [vim]
-target = "~/"
-
-[rofi]
-target = "~/.config/rofi"
+target = "C:\\Users\\luizm\\.vim"
 
 [rustfmt]
-src = "rust/rustfmt"
-target = "~/.config/rustfmt"
-
-[sage]
-target = "~/.sage"
-
-[tmux]
-target = "~/.config/tmux"
-
-[tmux_scripts]
-src = "tmux/scripts"
-target = "~/.local/bin"
+src = "rust\\rustfmt"
+target = "C:\\Users\\luizm\\AppData\\rustfmt"
 
 [starship]
-target = "~/.config/starship"
+target = "C:\\Users\\luizm\\AppData\\starship"
 
-[x]
-target = "~/"
-
-[zathura]
-target = "~/.config"
-recursive = true
-
-[zsh]
-target = "~/"
-
-[zig]
-target = "~/.config"
-
-[clang]
-target = "~/"
+[powershell]
+src = "powershell\\profile.ps1"
+target = "C:\\Users\\luizm\\OneDrive\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1"

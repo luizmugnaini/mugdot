@@ -20,7 +20,7 @@ opt.wrap = false
 
 opt.swapfile = false
 opt.backup = false
-opt.undodir = os.getenv("HOME") .. "/.cache/nvim/undodir"
+opt.undodir = "C:\\Users\\luizm\\AppData\\Local\\nvim-data"
 opt.undofile = true
 
 opt.grepprg = "rg --vimgrep"
