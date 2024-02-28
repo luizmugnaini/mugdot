@@ -7,18 +7,26 @@ Import-Module -Name Terminal-Icons
 Set-Alias -Name vim -Value nvim
 Set-Alias -Name v -Value nvim
 
-Function l() {
+function l {
     eza --icons --group-directories-first
 }
 
-Function la() {
+function la {
     eza --icons --group-directories-first -a
 }
 
-Function ll() {
+function ll {
     eza --long --icons --git --group-directories-first
 }
 
-Function lla() {
+function lla {
     eza --long --icons --git --group-directories-first -a
+}
+
+function mklink($name, $val) {
+    New-Item -Name $name -Type SymbolicLink -Value $val
+}
+
+function raddbg {
+    Invoke-Expression $ExecutionContext.InvokeCommand.ExpandString("$HOME\Programs\raddebugger\build\raddbg.exe")
 }
