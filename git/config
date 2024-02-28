@@ -1,12 +1,10 @@
 # This is Git's per-user configuration file.
 [user]
-	name = Luiz Mugnaini
 	email = luizmugnaini@gmail.com
-# Please adapt and uncomment the following lines:
-#	name = Luiz Gustavo Mugnaini
-#	email = luiz@luizmug.localdomain
+	name = Luiz G. Mugnaini A.
 [core]
 	editor = nvim
+	pager = bat
 [init]
 	defaultBranch = main
 [pull]
