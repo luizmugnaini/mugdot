@@ -3,12 +3,8 @@ require("conform").setup({
 		lua = { "stylua" },
 		python = { "black" },
 		rust = { "rustfmt" },
-		cpp = { "clang_format" },
-		c = { "clang_format" },
-		-- TODO: html, htmldjango, and css are temporary, remove this later
-		html = { "djlint" },
-		htmldjango = { "djlint" },
-		["_"] = { "trim_whitespace" },
+		cpp = { "clang-format" },
+		c = { "clang-format" },
 	},
 
 	format_on_save = {

@@ -1,4 +1,12 @@
-vim.g.python3_host_prog = "~/.pyenv/versions/3.11.5/bin/python3"
+local python_path_proc = io.popen('python -c "import sys;print(sys.executable)"')
+if python_path_proc ~= nil then
+	local python_path = python_path_proc:read("l")
+	if python_path ~= nil and python_path ~= "" then
+		vim.g.python3_host_prog = python_path
+	end
+	python_path_proc:close()
+end
+
 vim.g.mapleader = " "
 
 local opt = vim.opt
@@ -20,7 +28,14 @@ opt.wrap = false
 
 opt.swapfile = false
 opt.backup = false
-opt.undodir = "C:\\Users\\luizm\\AppData\\Local\\nvim-data"
+local home_path_proc = io.popen("echo 'C:%homepath%'")
+if home_path_proc ~= nil then
+	local home_path = home_path_proc:read("l")
+	if home_path ~= nil and home_path ~= "" then
+		opt.undodir = home_path .. "\\AppData\\Local\\nvim-data"
+	end
+	home_path_proc:close()
+end
 opt.undofile = true
 
 opt.grepprg = "rg --vimgrep"
