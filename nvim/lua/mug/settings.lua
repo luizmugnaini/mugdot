@@ -28,14 +28,7 @@ opt.wrap = false
 
 opt.swapfile = false
 opt.backup = false
-local home_path_proc = io.popen("echo 'C:%homepath%'")
-if home_path_proc ~= nil then
-	local home_path = home_path_proc:read("l")
-	if home_path ~= nil and home_path ~= "" then
-		opt.undodir = home_path .. "\\AppData\\Local\\nvim-data"
-	end
-	home_path_proc:close()
-end
+opt.undodir = vim.fn.stdpath("data") .. "/undo"
 opt.undofile = true
 
 opt.grepprg = "rg --vimgrep"
