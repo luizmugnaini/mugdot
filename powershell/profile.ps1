@@ -30,3 +30,7 @@ function mklink($name, $val) {
 function raddbg {
     Invoke-Expression $ExecutionContext.InvokeCommand.ExpandString("$HOME\Programs\raddebugger\build\raddbg.exe")
 }
+
+function allenv {
+    gci env:* | sort-object name 
+}
