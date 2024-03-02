@@ -34,3 +34,7 @@ function raddbg {
 function allenv {
     gci env:* | sort-object name 
 }
+
+function remove-env($name) {
+    [Environment]::SetEnvironmentVariable("$name", $null, "Machine")
+}
