@@ -5,6 +5,9 @@ ncspot/userstate.cbor
 # Ruff linter
 /.ruff_cache
 
+# nvim
+nvim/lazy-lock.json
+
 # dwm stuff
 *.o
 *.diff
