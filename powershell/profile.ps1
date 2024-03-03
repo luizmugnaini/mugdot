@@ -7,20 +7,20 @@ Import-Module -Name Terminal-Icons
 Set-Alias -Name vim -Value nvim
 Set-Alias -Name v -Value nvim
 
-function l {
-    eza --icons --group-directories-first
+function l($dir) {
+    eza --icons --group-directories-first $dir
 }
 
-function la {
-    eza --icons --group-directories-first -a
+function la($dir) {
+    eza --icons --group-directories-first -a $dir
 }
 
-function ll {
-    eza --long --icons --git --group-directories-first
+function ll($dir) {
+    eza --long --icons --git --group-directories-first $dir
 }
 
-function lla {
-    eza --long --icons --git --group-directories-first -a
+function lla($dir) {
+    eza --long --icons --git --group-directories-first -a $dir
 }
 
 function mklink($name, $val) {
@@ -32,7 +32,7 @@ function raddbg {
 }
 
 function allenv {
-    gci env:* | sort-object name 
+    gci env:* | sort-object name
 }
 
 function remove-env($name) {
