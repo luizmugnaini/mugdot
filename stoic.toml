@@ -1,4 +1,5 @@
 [alacritty]
+src = "alacritty/alacritty.toml"
 target = "~/.config/alacritty"
 
 [bash]
