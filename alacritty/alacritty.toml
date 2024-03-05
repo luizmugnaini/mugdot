@@ -1,123 +1,31 @@
-# [colors]
-# draw_bold_text_with_bright_colors = true
-#
-# [[colors.indexed_colors]]
-# color = "0xffa066"
-# index = 16
-#
-# [[colors.indexed_colors]]
-# color = "0xff5d62"
-# index = 17
-#
-# [colors.bright]
-# black = "0x727169"
-# blue = "0x7fb4ca"
-# cyan = "0x7aa89f"
-# green = "0x98bb6c"
-# magenta = "0x938aa9"
-# red = "0xe82424"
-# white = "0xdcd7ba"
-# yellow = "0xe6c384"
-#
-# [colors.normal]
-# black = "0x090618"
-# blue = "0x7e9cd8"
-# cyan = "0x6a9589"
-# green = "0x76946a"
-# magenta = "0x957fb8"
-# red = "0xc34043"
-# white = "0xc8c093"
-# yellow = "0xc0a36e"
-#
-# [colors.primary]
-# background = "0x1f1f28"
-# foreground = "0xdcd7ba"
-#
-# [colors.selection]
-# background = "0x2d4f67"
-# foreground = "0xc8c093"
+# Colors (Gruvbox Material Medium Dark)
 
-# Nightfox Alacritty Colors
-## name: duskfox
-## upstream: https://github.com/edeneast/nightfox.nvim/raw/main/extra/duskfox/alacritty.toml
-
+# Default colors
 [colors.primary]
-background = "#232136"
-foreground = "#e0def4"
-dim_foreground = "#cdcbe0"
-bright_foreground = "#eae8ff"
+background = '#282828'
+foreground = '#d4be98'
 
-[colors.cursor]
-text = "#e0def4"
-cursor = "#cdcbe0"
-
-[colors.vi_mode_cursor]
-text = "#e0def4"
-cursor = "#9ccfd8"
-
-[colors.search.matches]
-foreground = "#e0def4"
-background = "#63577d"
-
-[colors.search.focused_match]
-foreground = "#e0def4"
-background = "#a3be8c"
-
-[colors.footer_bar]
-foreground = "#e0def4"
-background = "#373354"
-
-[colors.hints.start]
-foreground = "#e0def4"
-background = "#ea9a97"
-
-[colors.hints.end]
-foreground = "#e0def4"
-background = "#373354"
-
-[colors.selection]
-text = "#e0def4"
-background = "#433c59"
-
+# Normal colors
 [colors.normal]
-black = "#393552"
-red = "#eb6f92"
-green = "#a3be8c"
-yellow = "#f6c177"
-blue = "#569fba"
-magenta = "#c4a7e7"
-cyan = "#9ccfd8"
-white = "#e0def4"
+black   = '#3c3836'
+red     = '#ea6962'
+green   = '#a9b665'
+yellow  = '#d8a657'
+blue    = '#7daea3'
+magenta = '#d3869b'
+cyan    = '#89b482'
+white   = '#d4be98'
 
+# Bright colors (same as normal colors)
 [colors.bright]
-black = "#47407d"
-red = "#f083a2"
-green = "#b1d196"
-yellow = "#f9cb8c"
-blue = "#65b1cd"
-magenta = "#ccb1ed"
-cyan = "#a6dae3"
-white = "#e2e0f7"
-
-[colors.dim]
-black = "#322e42"
-red = "#d84f76"
-green = "#8aa872"
-yellow = "#e6a852"
-blue = "#4a869c"
-magenta = "#a580d2"
-cyan = "#7bb8c1"
-white = "#b1acde"
-
-[[colors.indexed_colors]]
-index = 16
-color = "#ea9a97"
-
-[[colors.indexed_colors]]
-index = 17
-color = "#eb98c3"
-
-#######################################################
+black   = '#3c3836'
+red     = '#ea6962'
+green   = '#a9b665'
+yellow  = '#d8a657'
+blue    = '#7daea3'
+magenta = '#d3869b'
+cyan    = '#89b482'
+white   = '#d4be98'
 
 [cursor.style]
 blinking = "Never"
