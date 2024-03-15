@@ -5,8 +5,8 @@ local opt = vim.opt
 
 opt.guicursor = ""
 
-opt.number = true
-opt.relativenumber = true
+-- opt.number = true
+-- opt.relativenumber = true
 
 -- opt.textwidth = 100
 opt.tabstop = 4
