@@ -7,6 +7,7 @@
 #	email = luiz@luizmug.localdomain
 [core]
 	editor = nvim
+	autocrlf = input
 [init]
 	defaultBranch = main
 [pull]
