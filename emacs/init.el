@@ -18,12 +18,12 @@
 
 (add-hook 'emacs-startup-hook #'mug/display-startup-time)
 
-;; Init code is contained in `lisp/'
-;; (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-(add-to-list 'load-path "~/.emacs.d/lisp/")
+(setq default-directory "d:/")
+(add-to-list 'load-path "c:/Users/luizm/.config/mugdot/emacs")
+(require 'paths)
 
-;; Maps the location of the custom stuff to a better place
-(setq custom-file "~/.emacs.d/custom.el")
+;; Init code is contained in `lisp/'
+(add-to-list 'load-path (concat emacs-directory "/lisp"))
 
 (require 'init-package)
 
@@ -45,11 +45,9 @@
 ;;; Writing:
 
 (require 'init-latex)
-(require 'init-org)
 
 ;;; Programming:
 
-(require 'init-vterm)
 (require 'init-git)
 
 (require 'init-completion)
@@ -57,7 +55,6 @@
 
 (require 'init-rust)
 (require 'init-python)
-(require 'init-julia)
 
 (provide 'init)
 ;;; Local Variables:

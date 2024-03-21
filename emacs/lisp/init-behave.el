@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+
 ;;; Buffer management ----------------------------------------------------------
 
 (use-package popwin
@@ -36,30 +37,6 @@
 
 (use-package transpose-frame)
 
-;;; Text position on the screen ------------------------------------------------
-
-(defun mug/prog-mode-visual-fill ()
-  "Side columns filling."
-  (setq visual-fill-column-width 101
-    visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
-
-(defun mug/latex-mode-visual-fill ()
-  "Side columns filling."
-  (setq visual-fill-column-width 90
-    visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
-
-(use-package visual-fill-column
-  :hook ((prog-mode  . mug/prog-mode-visual-fill)
-         (LaTeX-mode . mug/latex-mode-visual-fill)
-         (markdown-mode . mug/prog-mode-visual-fill)))
-
-;; Wrapping lines with > 80 chars
-(setq-default fill-column 80)
-(add-hook 'text-mode-hook #'auto-fill-mode)
-;; (add-hook 'prog-mode-hook #'auto-fill-mode)
-
 ;;; Line numbers and stuff -----------------------------------------------------
 ;; The current behaviour is to not display line numbers, since I find them more
 ;; annoying than helpful on a daily basis.
@@ -67,23 +44,8 @@
 ;; Shows the column number in the modeline
 (column-number-mode)
 
-;; Configurations for programming modes
-(dolist (mode '(text-mode-hook
-                prog-mode-hook
-                LaTeX-mode-hook
-                conf-mode-hook))
-  (add-hook mode (lambda ()
-                   (display-line-numbers-mode 0))))
-
-;; Other modes
-(dolist (mode '(org-mode-hook
-	      	term-mode-hook
-		shell-mode-hook
-                dired-mode-hook
-		eshell-mode-hook
-		vterm-mode-hook))
-  (add-hook mode (lambda ()
-                   (display-line-numbers-mode 0))))
+;; Don't show line numbers please
+(display-line-numbers-mode 0)
 
 ;;; Filesystem backups ---------------------------------------------------------
 
@@ -93,13 +55,6 @@
 ;; Use no-littering to automatically set common paths to the new
 ;; user-emacs-directory
 (use-package no-littering)
-
-;;; .emacs.d dir ---------------------------------------------------------------
-
-;; Change the user-emacs-directory to keep unwanted things out of ~/.emacs.d
-(setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
-      url-history-file (expand-file-name "url/history" user-emacs-directory))
-
 
 ;;; Emacs behaviour: -----------------------------------------------------------
 
@@ -126,10 +81,6 @@
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
 (setq auto-window-vscroll nil)
-
-;; Copy and paste from anywhere
-(use-package xclip)
-(xclip-mode 1)
 
 ;; Window sizing
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)

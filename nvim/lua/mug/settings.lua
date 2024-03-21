@@ -13,10 +13,10 @@ local opt = vim.opt
 
 opt.guicursor = ""
 
-opt.number = true
-opt.relativenumber = true
+opt.number = false
+opt.relativenumber = false
 
-opt.textwidth = 100
+-- opt.textwidth = 100
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true

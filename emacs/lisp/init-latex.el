@@ -2,19 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package typst-mode
-  :straight (:type git :host github :repo "Ziqi-Yang/typst-mode.el"))
-
-;;; PDF handling within Emacs:
-
-(use-package pdf-tools
-  :config
-  (pdf-loader-install)
-  (setq-default pdf-view-display-size 'fit-page)
-  (add-hook 'pdf-view-mode-hook 'visible-cursor)
-  (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer))
-
 ;;; AuCTeX configuration
 
 ;; Currently the support for autocompilation is a mess:
@@ -55,15 +42,6 @@
   (define-key LaTeX-mode-map (kbd "C-c C-c") 'tex-compile)
   (define-key LaTeX-mode-map (kbd "C-g C-q") 'LaTeX-fill-paragraph)
   (define-key LaTeX-mode-map (kbd "C-f C-r") 'reftex-cleveref-cref))
-
-;;; Visual editing
-
-;; Visualization with buffer preview --- use C-c C-p
-(add-hook 'LaTeX-mode-hook
-          (defun preview-larger-previews ()
-            (setq preview-scale-function
-                  (lambda () (* 1.5 ;; Change this scale if need be
-                           (funcall (preview-scale-from-face)))))))
 
 
 ;;; Latex text input configuration:
@@ -208,7 +186,6 @@
       "!>" "\\mapsto"
       "!->" "\\longmapsto"
 
-      ";wh" "\\widehat"
       "vv" "\\wedge"
       "ox" "\\otimes"
       "opp" "\\oplus"

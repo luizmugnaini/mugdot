@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+
 (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode)
@@ -12,8 +13,8 @@
   ;; Every projectile command starts with C-c p
   ("C-c p" . projectile-command-map)
   :init
-  (when (file-directory-p "~/Projects")
-    (setq projectile-project-search-path '("~/Projects")))
+  (when (file-directory-p projects-directory)
+    (setq projectile-project-search-path '(projects-directory)))
   (setq projectile-switch-project-action #'projectile-dired))
 
 (provide 'init-projectile)

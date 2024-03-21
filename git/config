@@ -5,7 +5,7 @@
 [core]
 	editor = nvim
 	pager = bat
-	autocrlf = false
+	autocrlf = true
 	eol = lf
 [init]
 	defaultBranch = main
@@ -36,3 +36,7 @@
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
+[credential "helperselector"]
+	selected = manager
+[credential "https://git.rfleury.com"]
+	provider = generic

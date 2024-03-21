@@ -69,13 +69,7 @@ require("lazy").setup({
 	},
 
 	-- Highlighting for TODO/NOTE/HACK/BUG comments.
-	{
-		"folke/todo-comments.nvim",
-		dependencies = { { "nvim-lua/plenary.nvim", optional = true } },
-		config = function()
-			require("todo-comments").setup()
-		end,
-	},
+	{ "folke/todo-comments.nvim", dependencies = { { "nvim-lua/plenary.nvim", optional = true } } },
 
 	-- Snippets.
 	{
@@ -112,9 +106,6 @@ require("lazy").setup({
 	-- Code parser.
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 
-	-- Code linting.
-	"mfussenegger/nvim-lint",
-
 	-- Automatic code formatting.
 	"stevearc/conform.nvim",
 
@@ -136,9 +127,8 @@ require("lazy").setup({
 	-- Language specific plugins
 	---------------------------------------------------------------------------
 
-	{ "tikhomirov/vim-glsl", event = "VeryLazy", ft = "glsl" },
 	{ "lervag/vimtex", event = "VeryLazy", ft = "tex" },
-	{ "kaarmu/typst.vim", event = "VeryLazy", ft = "typst" },
+	{ "tikhomirov/vim-glsl", event = "VeryLazy", ft = "glsl" },
 	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle" },

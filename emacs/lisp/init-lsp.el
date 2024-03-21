@@ -2,12 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-;; (use-package posframe)
-;; (straight-use-package
-;;  '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"))
-;; (add-to-list 'load-path "/home/mug/.emacs.d/straight/repos/lsp-bridge")
-;; (global-lsp-bridge-mode)
-
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :hook (lsp-mode . lsp-enable-which-key-integration)

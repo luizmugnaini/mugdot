@@ -16,4 +16,5 @@ l=eza --icons --group-directories-first
 la=eza --icons --group-directories-first -a
 ll=eza --long --icons --git --group-directories-first
 lla=eza --long --icons --git --group-directories-first -a
-raddbg=%HOME%\Programs\raddebugger\build\raddbg.exe
+raddbg=D:\app\raddebugger\build\raddbg.exe
+remedy=D:\app\remedybg\remedybg.exe

@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+
 ;; Install icons for the themes
 ;; On first time run: M-x all-the-icons-install-fonts
 (use-package all-the-icons
@@ -23,20 +24,12 @@
   :config
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
-  (setq dashboard-startup-banner "~/.emacs.d/assets/doom.png")
+  (setq dashboard-startup-banner (concat emacs-directory "/assets/doom.png"))
   (setq dashboard-banner-logo-title "Howdy mate! 🤠")
   (dashboard-setup-startup-hook))
 
-;; A better mode line from Doom
-(use-package doom-modeline
-  :straight t
-  :hook (after-init . doom-modeline-mode)
-  :config
-  (setq doom-modeline-buffer-encoding nil))
-
 ;; Please Emacs just stop asking if the theme is safe...
 (setq custom-safe-themes t)
-(use-package challenger-deep-theme)
 (use-package base16-theme
   :init (load-theme 'base16-gruvbox-material-dark-hard))
 

@@ -2,25 +2,19 @@
 ;;; Commentary:
 ;;; Code:
 
+
 (use-package ivy
   :diminish
-  :bind (("C-s" . swiper)
-         :map ivy-minibuffer-map
+  :bind (:map ivy-minibuffer-map
          ("TAB" . ivy-alt-done)
-         ("C-l" . ivy-alt-done)
          ("C-n" . ivy-next-line)
          ("C-p" . ivy-previous-line)
          :map ivy-switch-buffer-map
+         ("C-n" . ivy-next-line)
          ("C-p" . ivy-previous-line)
-         ("C-l" . ivy-done)
          ("C-d" . ivy-switch-buffer-kill))
   :config
   (ivy-mode 1))
-
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(use-package savehist
-  :init
-  (savehist-mode))
 
 ;; Automatic bracket pairing
 (electric-pair-mode 1)
@@ -43,13 +37,12 @@
   :hook (company-mode . company-box-mode))
 
 ;; YaSnippets configuration
-(use-package yasnippet
-  :straight t
-  :hook ((LaTeX-hook . yas-minor-mode)
-         (prog-mode . yas-minor-mode))
-  :config
-  (setq yas-snippet-dirs '("~/.mugdot/emacs/.emacs.d/snippets/"))
-  (yas-global-mode 1))
+;; (use-package yasnippet
+;;   :straight t
+;;   :hook (LaTeX-hook . yas-minor-mode)
+;;   :config
+;;   (setq yas-snippet-dirs '(concat emacs-directory "/snippets"))
+;;   (yas-global-mode 1))
 
 (defun final-nl ()
   "Disable addition of newline to final of snippet.
