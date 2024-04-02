@@ -30,3 +30,6 @@ emacs/var/
 emacs/.last-package-update-day
 .yas-compiled-snippets.el
 *\#
+*~
+
+nushell/history.txt
