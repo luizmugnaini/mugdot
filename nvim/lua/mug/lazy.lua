@@ -18,13 +18,26 @@ require("lazy").setup({
 	-- -------------------------------------------------------------------------
 
 	-- Themes
-	{ "sainnhe/gruvbox-material", event = "VeryLazy" },
+	{
+		"sainnhe/gruvbox-material",
+		config = function()
+			vim.g.gruvbox_material_better_performance = 1
+			vim.g.gruvbox_material_foreground = "material" -- choices are "material", "mix", "original"
+			vim.g.gruvbox_material_background = "hard"
+			vim.g.gruvbox_material_disable_italic_comment = 1
+			vim.cmd.colorscheme("gruvbox-material")
+		end,
+	},
 
 	-- NerdFont icons.
 	"nvim-tree/nvim-web-devicons",
 
 	-- Status line.
-	{ "nvim-lualine/lualine.nvim", dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } } },
+	{
+		"nvim-lualine/lualine.nvim",
+		event = "VeryLazy",
+		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
+	},
 
 	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
@@ -39,7 +52,7 @@ require("lazy").setup({
 	-- * Undo: "u" in normal mode.
 	-- * Redo: "r" in normal mode.
 	-- * Open history: "<leader>-u".
-	"mbbill/undotree",
+	{ "mbbill/undotree", event = "VeryLazy" },
 
 	-- Telescope file navigation with "<leader>ff".
 	{
@@ -59,7 +72,7 @@ require("lazy").setup({
 	},
 
 	-- Highlighting for TODO/NOTE/HACK/BUG comments.
-	{ "folke/todo-comments.nvim", dependencies = { { "nvim-lua/plenary.nvim", optional = true } } },
+	{ "folke/todo-comments.nvim", event = "VeryLazy", dependencies = { { "nvim-lua/plenary.nvim", optional = true } } },
 
 	-- -------------------------------------------------------------------------
 	-- LSP support, code parsing, linting, and formatting
@@ -83,13 +96,18 @@ require("lazy").setup({
 			"hrsh7th/cmp-path",
 			"L3MON4D3/LuaSnip",
 		},
+		event = "VeryLazy",
 	},
 
 	-- Code parser.
-	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	{
+		"nvim-treesitter/nvim-treesitter",
+		event = "VeryLazy",
+		build = ":TSUpdate",
+	},
 
 	-- Automatic code formatting.
-	"stevearc/conform.nvim",
+	{ "stevearc/conform.nvim", event = "VeryLazy" },
 
 	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
 	{
@@ -119,13 +137,4 @@ require("lazy").setup({
 		event = "VeryLazy",
 		ft = { "markdown" },
 	},
-
-	-- Latex stuff
-	-- { "lervag/vimtex", event = "VeryLazy", ft = "tex" },
-	-- {
-	-- 	"L3MON4D3/LuaSnip",
-	-- 	dependencies = { "hrsh7th/nvim-cmp", "saadparwaiz1/cmp_luasnip" },
-	-- 	event = "VeryLazy",
-	-- 	ft = { "tex" },
-	-- },
 })

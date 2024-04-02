@@ -1,84 +1,29 @@
-# Nightfox Alacritty Colors
-## name: duskfox
-## upstream: https://github.com/edeneast/nightfox.nvim/raw/main/extra/duskfox/alacritty.toml
-
 [colors.primary]
-background = "#232136"
-foreground = "#e0def4"
-dim_foreground = "#cdcbe0"
-bright_foreground = "#eae8ff"
-
-[colors.cursor]
-text = "#e0def4"
-cursor = "#cdcbe0"
-
-[colors.vi_mode_cursor]
-text = "#e0def4"
-cursor = "#9ccfd8"
-
-[colors.search.matches]
-foreground = "#e0def4"
-background = "#63577d"
-
-[colors.search.focused_match]
-foreground = "#e0def4"
-background = "#a3be8c"
-
-[colors.footer_bar]
-foreground = "#e0def4"
-background = "#373354"
-
-[colors.hints.start]
-foreground = "#e0def4"
-background = "#ea9a97"
-
-[colors.hints.end]
-foreground = "#e0def4"
-background = "#373354"
-
-[colors.selection]
-text = "#e0def4"
-background = "#433c59"
+background = "0x1d2021" 
+foreground = "0xd4be98" 
 
 [colors.normal]
-black = "#393552"
-red = "#eb6f92"
-green = "#a3be8c"
-yellow = "#f6c177"
-blue = "#569fba"
-magenta = "#c4a7e7"
-cyan = "#9ccfd8"
-white = "#e0def4"
+black   = "0x32302f" 
+red     = "0xea6962" 
+green   = "0xa9b665" 
+yellow  = "0xd8a657" 
+blue    = "0x7daea3" 
+magenta = "0xd3869b" 
+cyan    = "0x89b482" 
+white   = "0xd4be98" 
 
 [colors.bright]
-black = "#47407d"
-red = "#f083a2"
-green = "#b1d196"
-yellow = "#f9cb8c"
-blue = "#65b1cd"
-magenta = "#ccb1ed"
-cyan = "#a6dae3"
-white = "#e2e0f7"
+black   = "0x32302f" 
+red     = "0xea6962" 
+green   = "0xa9b665" 
+yellow  = "0xd8a657" 
+blue    = "0x7daea3" 
+magenta = "0xd3869b" 
+cyan    = "0x89b482" 
+white   = "0xd4be98" 
 
-[colors.dim]
-black = "#322e42"
-red = "#d84f76"
-green = "#8aa872"
-yellow = "#e6a852"
-blue = "#4a869c"
-magenta = "#a580d2"
-cyan = "#7bb8c1"
-white = "#b1acde"
-
-[[colors.indexed_colors]]
-index = 16
-color = "#ea9a97"
-
-[[colors.indexed_colors]]
-index = 17
-color = "#eb98c3"
-
-#######################################################
+[shell]
+program = "nu.exe"
 
 [cursor.style]
 blinking = "Never"
@@ -97,29 +42,6 @@ style = "Regular"
 [font.offset]
 x = 0
 y = 0
-
-[hints]
-alphabet = "hutenosadigpc.r,l'"
-
-[[hints.enabled]]
-command = "firefox"
-post_processing = true
-regex = "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-<>\"\\s{-}\\^⟨⟩`]+"
-
-[hints.enabled.binding]
-key = "U"
-mods = "Control|Shift"
-
-[hints.enabled.mouse]
-enabled = true
-
-[[hints.enabled]]
-action = "Copy"
-regex = "[a-f0-9]{40}|[a-f0-9]{7,8}"
-
-[hints.enabled.binding]
-key = "H"
-mods = "Control|Shift"
 
 [[keyboard.bindings]]
 action = "Paste"
@@ -168,13 +90,10 @@ multiplier = 3
 save_to_clipboard = true
 
 [window]
-decorations = "none"
+decorations = "Full"
+startup_mode = "Maximized"
+decorations_theme_variant = "Dark"
+dynamic_title = false
+resize_increments = true
+padding = { x = 4, y = 0 }
 opacity = 1.0
-
-[window.class]
-general = "Alacritty"
-instance = "Alacritty"
-
-[window.padding]
-x = 4
-y = 0
