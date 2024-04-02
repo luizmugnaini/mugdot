@@ -1,5 +1,10 @@
 local function set_colorscheme(color)
-	if color == "kanagawa" then
+	if color == "gruvbox-material" then
+		vim.g.gruvbox_material_better_performance = 1
+		vim.g.gruvbox_material_foreground = "material" -- choices are "material", "mix", "original"
+		vim.g.gruvbox_material_background = "hard"
+		vim.g.gruvbox_material_disable_italic_comment = 1
+	elseif color == "kanagawa" then
 		require("kanagawa").setup({
 			undercurl = false,
 			transparent = true,
@@ -10,11 +15,6 @@ local function set_colorscheme(color)
 			style = "night",
 			transparent = vim.g.transparent_enable,
 		})
-	elseif color == "gruvbox-material" then
-		vim.g.gruvbox_material_better_performance = 1
-		vim.g.gruvbox_material_foreground = "material" -- choices are "material", "mix", "original"
-		vim.g.gruvbox_material_background = "hard"
-		vim.g.gruvbox_material_disable_italic_comment = 1
 	end
 
 	vim.cmd.colorscheme(color)

@@ -13,32 +13,27 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 	-- User interface stuff: themes, icons, transparency, and status line.
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 
 	-- Themes
-	{ "rebelot/kanagawa.nvim", event = "VeryLazy" },
 	{ "sainnhe/gruvbox-material", event = "VeryLazy" },
-	{ "EdenEast/nightfox.nvim", event = "VeryLazy" },
 
 	-- NerdFont icons.
 	"nvim-tree/nvim-web-devicons",
 
-	-- Transparency management.
-	{ "xiyaowong/transparent.nvim", event = "VeryLazy" },
-
 	-- Status line.
 	{ "nvim-lualine/lualine.nvim", dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } } },
 
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
 	-- * Undo-redo functionality enhancement.
 	-- * File navigation with telescope and harpoon.
 	-- * Comment utilities.
 	-- * TODO comment highlighting.
 	-- * Writting snippets.
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 
 	-- Utility for undoing actions and navigating file history.
 	-- * Undo: "u" in normal mode.
@@ -53,11 +48,6 @@ require("lazy").setup({
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 
-	-- File bookmarks for better navigation.
-	-- * Add buffer to harpoon with "<leader>ha".
-	-- * Open harpoon bookmarks with "<leader>ho".
-	{ "theprimeagen/harpoon", dependencies = { "nvim-telescope/telescope.nvim" } },
-
 	-- Utility for line and block comments.
 	-- * Add line comment with "<leader>lc".
 	-- * Add block comment with "<leader>bc".
@@ -71,17 +61,9 @@ require("lazy").setup({
 	-- Highlighting for TODO/NOTE/HACK/BUG comments.
 	{ "folke/todo-comments.nvim", dependencies = { { "nvim-lua/plenary.nvim", optional = true } } },
 
-	-- Snippets.
-	{
-		"L3MON4D3/LuaSnip",
-		dependencies = { "hrsh7th/nvim-cmp", "saadparwaiz1/cmp_luasnip" },
-		event = "VeryLazy",
-		ft = { "tex" },
-	},
-
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 	-- LSP support, code parsing, linting, and formatting
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 
 	-- LSP support.
 	{
@@ -123,11 +105,10 @@ require("lazy").setup({
 		end,
 	},
 
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 	-- Language specific plugins
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 
-	{ "lervag/vimtex", event = "VeryLazy", ft = "tex" },
 	{ "tikhomirov/vim-glsl", event = "VeryLazy", ft = "glsl" },
 	{
 		"iamcco/markdown-preview.nvim",
@@ -138,4 +119,13 @@ require("lazy").setup({
 		event = "VeryLazy",
 		ft = { "markdown" },
 	},
+
+	-- Latex stuff
+	-- { "lervag/vimtex", event = "VeryLazy", ft = "tex" },
+	-- {
+	-- 	"L3MON4D3/LuaSnip",
+	-- 	dependencies = { "hrsh7th/nvim-cmp", "saadparwaiz1/cmp_luasnip" },
+	-- 	event = "VeryLazy",
+	-- 	ft = { "tex" },
+	-- },
 })

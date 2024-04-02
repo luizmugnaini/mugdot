@@ -1,11 +1,9 @@
 require("Comment").setup({
+	-- Use <leader>lc for line commenting in both visual and normal mode.
 	toggler = {
 		line = "<leader>lc",
-		block = "<leader>bc",
 	},
-	-- LHS of operator-pending mappings in NORMAL and VISUAL mode
 	opleader = {
 		line = "<leader>lc",
-		block = "<leader>bc",
 	},
 })
