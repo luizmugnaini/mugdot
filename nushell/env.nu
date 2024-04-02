@@ -105,4 +105,3 @@ zoxide init nushell | save -f ~/.zoxide.nu
 # Starthip prompt
 mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
-$env.STARSHIP_CONFIG = ~/.config/mugdot/starship/starship.toml

@@ -9,7 +9,7 @@ vimcmd_symbol = "[](bold purple)"
 deleted = "⨯"
 
 [cmake]
-symbol = " "
+symbol = " "
 
 [gcloud]
 disabled = true
