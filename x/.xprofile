@@ -17,7 +17,7 @@ setxkbmap us -option ctrl:nocaps &
 xset r rate 500 60 &
 
 # screen filter
-redshift -P -O 2800 &
+redshift -P -O 4500 &
 
 # Locking (for timer, just insert something like `-time 10`)
 xautolock -locker slock &
