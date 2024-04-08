@@ -13,56 +13,64 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 	-- User interface stuff: themes, icons, transparency, and status line.
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 
 	-- Themes
-	{ "rebelot/kanagawa.nvim", event = "VeryLazy" },
-	{ "sainnhe/gruvbox-material", event = "VeryLazy" },
-	{ "EdenEast/nightfox.nvim", event = "VeryLazy" },
+	{
+		"sainnhe/gruvbox-material",
+		config = function()
+			vim.g.gruvbox_material_better_performance = 1
+			vim.g.gruvbox_material_foreground = "material" -- choices are "material", "mix", "original"
+			vim.g.gruvbox_material_background = "hard"
+			vim.g.gruvbox_material_disable_italic_comment = 1
+			vim.cmd.colorscheme("gruvbox-material")
+		end,
+	},
 
 	-- NerdFont icons.
-	"nvim-tree/nvim-web-devicons",
-
-	-- Transparency management.
-	{ "xiyaowong/transparent.nvim", event = "VeryLazy" },
+	{ "nvim-tree/nvim-web-devicons", event = "VeryLazy" },
 
 	-- Status line.
-	{ "nvim-lualine/lualine.nvim", dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } } },
+	{
+		"nvim-lualine/lualine.nvim",
+		event = "VeryLazy",
+		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
+	},
 
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
+	-- * Terminal mode enhancement.
 	-- * Undo-redo functionality enhancement.
-	-- * File navigation with telescope and harpoon.
+	-- * File navigation with telescope.
 	-- * Comment utilities.
 	-- * TODO comment highlighting.
 	-- * Writting snippets.
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
+
+	{ "akinsho/toggleterm.nvim", event = "VeryLazy", version = "*", opts = { open_mapping = [[<c-t>]] } },
 
 	-- Utility for undoing actions and navigating file history.
 	-- * Undo: "u" in normal mode.
 	-- * Redo: "r" in normal mode.
 	-- * Open history: "<leader>-u".
-	"mbbill/undotree",
+	{ "mbbill/undotree", event = "VeryLazy" },
 
 	-- Telescope file navigation with "<leader>ff".
 	{
 		"nvim-telescope/telescope.nvim",
+		event = "VeryLazy",
 		version = "0.1.4",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-
-	-- File bookmarks for better navigation.
-	-- * Add buffer to harpoon with "<leader>ha".
-	-- * Open harpoon bookmarks with "<leader>ho".
-	{ "theprimeagen/harpoon", dependencies = { "nvim-telescope/telescope.nvim" } },
 
 	-- Utility for line and block comments.
 	-- * Add line comment with "<leader>lc".
 	-- * Add block comment with "<leader>bc".
 	{
 		"numToStr/Comment.nvim",
+		event = "VeryLazy",
 		config = function()
 			require("Comment").setup()
 		end,
@@ -71,23 +79,13 @@ require("lazy").setup({
 	-- Highlighting for TODO/NOTE/HACK/BUG comments.
 	{
 		"folke/todo-comments.nvim",
-		dependencies = { { "nvim-lua/plenary.nvim", optional = true } },
-		config = function()
-			require("todo-comments").setup()
-		end,
-	},
-
-	-- Snippets.
-	{
-		"L3MON4D3/LuaSnip",
-		dependencies = { "hrsh7th/nvim-cmp", "saadparwaiz1/cmp_luasnip" },
 		event = "VeryLazy",
-		ft = { "tex" },
+		dependencies = { { "nvim-lua/plenary.nvim", optional = true } },
 	},
 
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 	-- LSP support, code parsing, linting, and formatting
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 
 	-- LSP support.
 	{
@@ -107,20 +105,23 @@ require("lazy").setup({
 			"hrsh7th/cmp-path",
 			"L3MON4D3/LuaSnip",
 		},
+		event = "VeryLazy",
 	},
 
 	-- Code parser.
-	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
-
-	-- Code linting.
-	"mfussenegger/nvim-lint",
+	{
+		"nvim-treesitter/nvim-treesitter",
+		event = "VeryLazy",
+		build = ":TSUpdate",
+	},
 
 	-- Automatic code formatting.
-	"stevearc/conform.nvim",
+	{ "stevearc/conform.nvim", event = "VeryLazy" },
 
 	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
 	{
 		"folke/trouble.nvim",
+		event = "VeryLazy",
 		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
 		config = function()
 			require("trouble").setup({
@@ -132,20 +133,9 @@ require("lazy").setup({
 		end,
 	},
 
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 	-- Language specific plugins
-	---------------------------------------------------------------------------
+	-- -------------------------------------------------------------------------
 
 	{ "tikhomirov/vim-glsl", event = "VeryLazy", ft = "glsl" },
-	{ "lervag/vimtex", event = "VeryLazy", ft = "tex" },
-	{ "kaarmu/typst.vim", event = "VeryLazy", ft = "typst" },
-	{
-		"iamcco/markdown-preview.nvim",
-		cmd = { "MarkdownPreviewToggle" },
-		build = function()
-			vim.fn["mkdp#util#install"]()
-		end,
-		event = "VeryLazy",
-		ft = { "markdown" },
-	},
 })

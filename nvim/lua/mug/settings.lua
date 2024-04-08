@@ -1,14 +1,14 @@
 vim.g.python3_host_prog = "~/.pyenv/versions/3.11.5/bin/python3"
 vim.g.mapleader = " "
 
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+
 local opt = vim.opt
 
 opt.guicursor = ""
 
--- opt.number = true
--- opt.relativenumber = true
-
--- opt.textwidth = 100
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
