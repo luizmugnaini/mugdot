@@ -13,12 +13,6 @@ lspconfig.clangd.setup({
 	end,
 })
 
--- Typst lsp - only experimenting with it for the time being
-vim.filetype.add({ extension = { typst = "typ" } })
-lspconfig.typst_lsp.setup({
-	filetypes = { "typst" },
-})
-
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = lsp.defaults.cmp_mappings({
@@ -67,3 +61,27 @@ lsp.setup()
 
 -- Whether or not to display text messages on the screen.
 vim.diagnostic.config({ virtual_text = false })
+
+require("mason").setup({
+	ensure_installed = {
+		-- Python
+		"pyright",
+		"black",
+		"ruff",
+
+		-- C/C++
+		"clang-format",
+		"clangd",
+
+		-- TS/JS
+		"eslint_d",
+		"tsserver",
+
+		-- Rust
+		"rust_analyzer",
+
+		-- Lua
+		"luaformatter",
+		"lua_ls",
+	},
+})
