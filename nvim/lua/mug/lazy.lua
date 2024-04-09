@@ -25,6 +25,10 @@ require("lazy").setup({
 	-- * Writting snippets.
 	-- -------------------------------------------------------------------------
 
+	-- * Forward search: "s"
+	-- * Backwards search: "S"
+	{ "ggandor/leap.nvim", dependencies = { "tpope/vim-repeat" } },
+
 	{ "akinsho/toggleterm.nvim", version = "*", event = "VeryLazy" },
 
 	-- Utility for undoing actions and navigating file history.
