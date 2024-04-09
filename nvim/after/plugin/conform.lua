@@ -5,9 +5,6 @@ require("conform").setup({
 		rust = { "rustfmt" },
 		cpp = { "clang_format" },
 		c = { "clang_format" },
-		-- TODO: html, htmldjango, and css are temporary, remove this later
-		html = { "djlint" },
-		htmldjango = { "djlint" },
 		["_"] = { "trim_whitespace" },
 	},
 

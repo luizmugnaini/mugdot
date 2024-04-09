@@ -1,3 +1,7 @@
+-- ----------------------------------------------------------------------------
+-- LSP config.
+-- ----------------------------------------------------------------------------
+
 local lsp = require("lsp-zero").preset({
 	name = "recommended",
 })
@@ -13,12 +17,7 @@ lspconfig.clangd.setup({
 	end,
 })
 
--- Typst lsp - only experimenting with it for the time being
-vim.filetype.add({ extension = { typst = "typ" } })
-lspconfig.typst_lsp.setup({
-	filetypes = { "typst" },
-})
-
+-- Completion mappings
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = lsp.defaults.cmp_mappings({
@@ -29,7 +28,6 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 	["<Tab>"] = nil,
 	["<S-Tab>"] = nil,
 })
-
 lsp.setup_nvim_cmp({ mapping = cmp_mappings })
 
 lsp.set_preferences({
@@ -65,5 +63,41 @@ end)
 
 lsp.setup()
 
--- Whether or not to display text messages on the screen.
+-- DON'T display text messages on the screen.
 vim.diagnostic.config({ virtual_text = false })
+
+-- ----------------------------------------------------------------------------
+-- Mason
+-- ----------------------------------------------------------------------------
+
+require("mason").setup({
+	ensure_installed = {
+		-- Python
+		"pyright",
+		"black",
+		"ruff",
+
+		-- C/C++
+		"clang-format",
+		"clangd",
+
+		-- TS/JS
+		"eslint_d",
+		"tsserver",
+
+		-- Rust
+		"rust_analyzer",
+
+		-- Lua
+		"lua_ls",
+		"luaformatter",
+	},
+})
+
+-- ----------------------------------------------------------------------------
+-- Trouble
+-- ----------------------------------------------------------------------------
+
+vim.keymap.set("n", "<leader>tt", function()
+	require("trouble").open()
+end, { desc = "[T]trouble [T]oggle" })

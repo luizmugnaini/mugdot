@@ -13,49 +13,20 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	-- -------------------------------------------------------------------------
-	-- User interface stuff: themes, icons, transparency, and status line.
-	-- -------------------------------------------------------------------------
-
-	-- Themes
-	{
-		"sainnhe/gruvbox-material",
-		config = function()
-			vim.g.gruvbox_material_better_performance = 1
-			vim.g.gruvbox_material_foreground = "material" -- choices are "material", "mix", "original"
-			vim.g.gruvbox_material_background = "hard"
-			vim.g.gruvbox_material_disable_italic_comment = 1
-			vim.cmd.colorscheme("gruvbox-material")
-		end,
-	},
-
-	-- NerdFont icons.
-	{ "nvim-tree/nvim-web-devicons", event = "VeryLazy" },
-
-	-- Status line.
-	{
-		"nvim-lualine/lualine.nvim",
-		event = "VeryLazy",
-		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
-	},
+	-- Theme
+	{ "sainnhe/gruvbox-material" },
 
 	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
 	-- * Terminal mode enhancement.
-	-- * Undo-redo functionality enhancement.
 	-- * File navigation with telescope.
 	-- * Comment utilities.
-	-- * TODO comment highlighting.
-	-- * Writting snippets.
+	-- * Snippets + completions.
 	-- -------------------------------------------------------------------------
 
-	{ "akinsho/toggleterm.nvim", event = "VeryLazy", version = "*", opts = { open_mapping = [[<c-t>]] } },
+	{ "ggandor/leap.nvim", dependencies = { "tpope/vim-repeat" } },
 
-	-- Utility for undoing actions and navigating file history.
-	-- * Undo: "u" in normal mode.
-	-- * Redo: "r" in normal mode.
-	-- * Open history: "<leader>-u".
-	{ "mbbill/undotree", event = "VeryLazy" },
+	{ "akinsho/toggleterm.nvim", event = "VeryLazy", version = "*", opts = { open_mapping = [[<c-t>]] } },
 
 	-- Telescope file navigation with "<leader>ff".
 	{
@@ -76,11 +47,13 @@ require("lazy").setup({
 		end,
 	},
 
-	-- Highlighting for TODO/NOTE/HACK/BUG comments.
+	{ "L3MON4D3/LuaSnip", run = "make install_jsregexp" },
 	{
-		"folke/todo-comments.nvim",
+		"hrsh7th/nvim-cmp",
 		event = "VeryLazy",
-		dependencies = { { "nvim-lua/plenary.nvim", optional = true } },
+		dependencies = {
+			"hrsh7th/cmp-path",
+		},
 	},
 
 	-- -------------------------------------------------------------------------
@@ -122,7 +95,6 @@ require("lazy").setup({
 	{
 		"folke/trouble.nvim",
 		event = "VeryLazy",
-		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
 		config = function()
 			require("trouble").setup({
 				height = 3,
@@ -138,4 +110,5 @@ require("lazy").setup({
 	-- -------------------------------------------------------------------------
 
 	{ "tikhomirov/vim-glsl", event = "VeryLazy", ft = "glsl" },
+	{ "lervag/vimtex", event = "VeryLazy" },
 })
