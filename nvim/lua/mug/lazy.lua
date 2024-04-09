@@ -30,7 +30,7 @@ require("lazy").setup({
 	},
 
 	-- NerdFont icons.
-	"nvim-tree/nvim-web-devicons",
+	{ "nvim-tree/nvim-web-devicons", event = "VeryLazy" },
 
 	-- Status line.
 	{
@@ -41,12 +41,15 @@ require("lazy").setup({
 
 	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
+	-- * Terminal mode enhancement
 	-- * Undo-redo functionality enhancement.
 	-- * File navigation with telescope and harpoon.
 	-- * Comment utilities.
 	-- * TODO comment highlighting.
 	-- * Writting snippets.
 	-- -------------------------------------------------------------------------
+
+	{ "akinsho/toggleterm.nvim", version = "*", event = "VeryLazy" },
 
 	-- Utility for undoing actions and navigating file history.
 	-- * Undo: "u" in normal mode.
@@ -59,6 +62,7 @@ require("lazy").setup({
 		"nvim-telescope/telescope.nvim",
 		version = "0.1.4",
 		dependencies = { "nvim-lua/plenary.nvim" },
+		event = "VeryLazy",
 	},
 
 	-- Utility for line and block comments.
@@ -69,6 +73,7 @@ require("lazy").setup({
 		config = function()
 			require("Comment").setup()
 		end,
+		event = "VeryLazy",
 	},
 
 	-- Highlighting for TODO/NOTE/HACK/BUG comments.
@@ -77,6 +82,10 @@ require("lazy").setup({
 	-- -------------------------------------------------------------------------
 	-- LSP support, code parsing, linting, and formatting
 	-- -------------------------------------------------------------------------
+	{
+		"L3MON4D3/LuaSnip",
+		run = "make install_jsregexp",
+	},
 
 	-- LSP support.
 	{
@@ -91,10 +100,10 @@ require("lazy").setup({
 				end,
 			},
 			"williamboman/mason-lspconfig.nvim",
+			"L3MON4D3/LuaSnip",
 			"hrsh7th/nvim-cmp",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
-			"L3MON4D3/LuaSnip",
 		},
 		event = "VeryLazy",
 	},
