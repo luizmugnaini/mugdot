@@ -856,4 +856,3 @@ alias p = python
 # -----------------------------------------------------------------------------
 
 source ~/.zoxide.nu
-use ~/.cache/starship/init.nu

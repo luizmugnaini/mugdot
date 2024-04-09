@@ -101,7 +101,3 @@ $env.NU_PLUGIN_DIRS = [
 
 # Zoxide integration
 zoxide init nushell | save -f ~/.zoxide.nu
-
-# Starthip prompt
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
