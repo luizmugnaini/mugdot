@@ -13,37 +13,13 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	-- -------------------------------------------------------------------------
-	-- User interface stuff: themes, icons, transparency, and status line.
-	-- -------------------------------------------------------------------------
-
 	-- Themes
-	{
-		"sainnhe/gruvbox-material",
-		config = function()
-			vim.g.gruvbox_material_better_performance = 1
-			vim.g.gruvbox_material_foreground = "material" -- choices are "material", "mix", "original"
-			vim.g.gruvbox_material_background = "hard"
-			vim.g.gruvbox_material_disable_italic_comment = 1
-			vim.cmd.colorscheme("gruvbox-material")
-		end,
-	},
-
-	-- NerdFont icons.
-	{ "nvim-tree/nvim-web-devicons", event = "VeryLazy" },
-
-	-- Status line.
-	{
-		"nvim-lualine/lualine.nvim",
-		event = "VeryLazy",
-		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
-	},
+	{ "sainnhe/gruvbox-material" },
 
 	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
-	-- * Terminal mode enhancement
-	-- * Undo-redo functionality enhancement.
-	-- * File navigation with telescope and harpoon.
+	-- * Terminal mode enhancement.
+	-- * File navigation with telescope.
 	-- * Comment utilities.
 	-- * TODO comment highlighting.
 	-- * Writting snippets.
@@ -121,7 +97,6 @@ require("lazy").setup({
 	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
 	{
 		"folke/trouble.nvim",
-		dependencies = { { "nvim-tree/nvim-web-devicons", optional = true } },
 		config = function()
 			require("trouble").setup({
 				height = 3,
