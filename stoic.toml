@@ -1,6 +1,8 @@
 [alacritty]
-src = "alacritty/alacritty.toml"
 target = "~/.config/alacritty"
+
+[zsh]
+target = "~/"
 
 [bash]
 target = "~/"
@@ -14,9 +16,6 @@ recursive = true
 
 [git]
 target = "~/.config/git"
-
-[kitty]
-target = "~/.config/kitty"
 
 [latex]
 target = "~/"
@@ -38,13 +37,6 @@ target = "~/"
 [rofi]
 target = "~/.config/rofi"
 
-[rustfmt]
-src = "rust/rustfmt"
-target = "~/.config/rustfmt"
-
-[sage]
-target = "~/.sage"
-
 [tmux]
 target = "~/.config/tmux"
 
@@ -61,12 +53,3 @@ target = "~/"
 [zathura]
 target = "~/.config"
 recursive = true
-
-[zsh]
-target = "~/"
-
-[zig]
-target = "~/.config"
-
-[clang]
-target = "~/"
