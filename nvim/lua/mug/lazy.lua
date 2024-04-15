@@ -52,45 +52,30 @@ require("lazy").setup({
 
 	-- Snippets and completion
 	{ "L3MON4D3/LuaSnip", build = "make install_jsregexp", event = "VeryLazy" },
-	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			"hrsh7th/cmp-path",
-		},
-		event = "VeryLazy",
-	},
+	{ "hrsh7th/nvim-cmp", event = "VeryLazy" },
+	{ "hrsh7th/cmp-path", event = "VeryLazy" },
 
 	-- -------------------------------------------------------------------------
 	-- LSP support, code parsing, linting, and formatting
 	-- -------------------------------------------------------------------------
 
-	-- LSP support.
+	-- LSP management within Neovim.
 	{
-		"VonHeikemen/lsp-zero.nvim",
-		branch = "v2.x",
-		dependencies = {
-			"neovim/nvim-lspconfig",
-			{
-				"williamboman/mason.nvim",
-				build = function()
-					pcall(vim.cmd, "MasonUpdate")
-				end,
-			},
-			"williamboman/mason-lspconfig.nvim",
-			"L3MON4D3/LuaSnip",
-			"hrsh7th/nvim-cmp",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
-		},
+		"williamboman/mason.nvim",
+		build = function()
+			pcall(vim.cmd, "MasonUpdate")
+		end,
 		event = "VeryLazy",
 	},
+	{ "williamboman/mason-lspconfig.nvim", event = "VeryLazy" },
+
+	-- LSP support.
+	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x", event = "VeryLazy" },
+	{ "neovim/nvim-lspconfig" },
+	{ "hrsh7th/cmp-nvim-lsp" },
 
 	-- Code parser.
-	{
-		"nvim-treesitter/nvim-treesitter",
-		event = "VeryLazy",
-		build = ":TSUpdate",
-	},
+	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate", event = "VeryLazy" },
 
 	-- Automatic code formatting.
 	{ "stevearc/conform.nvim", event = "VeryLazy" },
@@ -102,6 +87,6 @@ require("lazy").setup({
 	-- Language specific plugins
 	-- -------------------------------------------------------------------------
 
-	{ "lervag/vimtex", event = "VeryLazy", ft = "tex" },
-	{ "tikhomirov/vim-glsl", event = "VeryLazy", ft = "glsl" },
+	{ "lervag/vimtex", ft = "tex", event = "VeryLazy" },
+	{ "tikhomirov/vim-glsl", ft = "glsl", event = "VeryLazy" },
 })
