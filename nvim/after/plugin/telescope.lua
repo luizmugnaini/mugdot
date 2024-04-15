@@ -1,4 +1,3 @@
--- require("telescope").setup()
 local builtin = require("telescope.builtin")
 
 vim.keymap.set("n", "<leader>ff", function()
@@ -7,7 +6,6 @@ vim.keymap.set("n", "<leader>ff", function()
 		file_ignore_patterns = { "node_modules", ".git", "target", "__pycache__", ".cache", "assets" },
 	})
 end, { desc = "[F]ind [F]ile" })
-vim.keymap.set("n", "<leader>fg", builtin.git_files, { desc = "[F]ind in [G]it repo" })
 vim.keymap.set("n", "<leader>fz", function()
 	builtin.grep_string({ search = vim.fn.input("grep > ") })
 end, { desc = "Fuzzy finder" })

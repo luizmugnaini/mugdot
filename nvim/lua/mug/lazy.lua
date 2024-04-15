@@ -25,17 +25,11 @@ require("lazy").setup({
 	-- * Writting snippets.
 	-- -------------------------------------------------------------------------
 
-	-- * Forward search: "s"
-	-- * Backwards search: "S"
+	-- * Forward search: "<leader>l"
+	-- * Backwards search: "<leader>L"
 	{ "ggandor/leap.nvim", dependencies = { "tpope/vim-repeat" } },
 
 	{ "akinsho/toggleterm.nvim", version = "*", event = "VeryLazy" },
-
-	-- Utility for undoing actions and navigating file history.
-	-- * Undo: "u" in normal mode.
-	-- * Redo: "r" in normal mode.
-	-- * Open history: "<leader>-u".
-	{ "mbbill/undotree", event = "VeryLazy" },
 
 	-- Telescope file navigation with "<leader>ff".
 	{
@@ -56,16 +50,19 @@ require("lazy").setup({
 		event = "VeryLazy",
 	},
 
-	-- Highlighting for TODO/NOTE/HACK/BUG comments.
-	{ "folke/todo-comments.nvim", event = "VeryLazy", dependencies = { { "nvim-lua/plenary.nvim", optional = true } } },
+	-- Snippets and completion
+	{ "L3MON4D3/LuaSnip", build = "make install_jsregexp", event = "VeryLazy" },
+	{
+		"hrsh7th/nvim-cmp",
+		dependencies = {
+			"hrsh7th/cmp-path",
+		},
+		event = "VeryLazy",
+	},
 
 	-- -------------------------------------------------------------------------
 	-- LSP support, code parsing, linting, and formatting
 	-- -------------------------------------------------------------------------
-	{
-		"L3MON4D3/LuaSnip",
-		run = "make install_jsregexp",
-	},
 
 	-- LSP support.
 	{
@@ -99,17 +96,7 @@ require("lazy").setup({
 	{ "stevearc/conform.nvim", event = "VeryLazy" },
 
 	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
-	{
-		"folke/trouble.nvim",
-		config = function()
-			require("trouble").setup({
-				height = 3,
-				auto_open = false,
-				auto_close = true,
-				auto_preview = false,
-			})
-		end,
-	},
+	{ "folke/trouble.nvim", event = "VeryLazy" },
 
 	-- -------------------------------------------------------------------------
 	-- Language specific plugins
