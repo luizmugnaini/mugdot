@@ -1,4 +1,3 @@
-
 -- ----------------------------------------------------------------------------
 -- Mason
 -- ----------------------------------------------------------------------------
@@ -41,6 +40,7 @@ lspconfig.clangd.setup({
 })
 
 -- Completions
+require("lsp-zero").extend_cmp()
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = lsp.defaults.cmp_mappings({
@@ -49,9 +49,12 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 	["<C-y>"] = cmp.mapping.confirm({ select = true }),
 	["<Tab>"] = nil,
 	["<S-Tab>"] = nil,
+	snippet = {
+		expand = function(args)
+			require("luasnip").lsp_expand(args.body)
+		end,
+	},
 })
-
-lsp.setup_nvim_cmp({ mapping = cmp_mappings })
 
 lsp.set_preferences({
 	suggest_lsp_servers = false,
