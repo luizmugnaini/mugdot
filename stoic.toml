@@ -1,14 +1,12 @@
 [alacritty]
+src = "alacritty/alacritty.toml"
 target = "~/.config/alacritty"
+
+[nushell]
+target = "~/.config/nushell"
 
 [zsh]
 target = "~/"
-
-[bash]
-target = "~/"
-
-[dunst]
-target = "~/.config/dunst"
 
 [emacs]
 target = "~/.emacs.d"
@@ -16,9 +14,6 @@ recursive = true
 
 [git]
 target = "~/.config/git"
-
-[latex]
-target = "~/"
 
 [minecraft]
 src = "minecraft/scripts"
@@ -33,9 +28,6 @@ recursive = true
 
 [vim]
 target = "~/"
-
-[rofi]
-target = "~/.config/rofi"
 
 [tmux]
 target = "~/.config/tmux"
