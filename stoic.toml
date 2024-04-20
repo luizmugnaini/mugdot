@@ -1,6 +1,6 @@
 [alacritty]
 src = "alacritty/alacritty.toml"
-target = "~/.config/alacritty"
+target = "~/.config/alacritty/alacritty.toml"
 
 [nushell]
 target = "~/.config/nushell"
