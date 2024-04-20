@@ -13,27 +13,35 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	-- Theme
+	-- -------------------------------------------------------------------------
+	-- Visuals.
+	-- -------------------------------------------------------------------------
+
+	-- Themes
 	{ "sainnhe/gruvbox-material" },
+	{ "rebelot/kanagawa.nvim" },
 
 	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
 	-- * Terminal mode enhancement.
 	-- * File navigation with telescope.
 	-- * Comment utilities.
-	-- * Snippets + completions.
+	-- * TODO comment highlighting.
+	-- * Writting snippets.
 	-- -------------------------------------------------------------------------
 
+	-- * Forward search: "<leader>l"
+	-- * Backwards search: "<leader>L"
 	{ "ggandor/leap.nvim", dependencies = { "tpope/vim-repeat" } },
 
-	{ "akinsho/toggleterm.nvim", event = "VeryLazy", version = "*", opts = { open_mapping = [[<c-t>]] } },
+	{ "akinsho/toggleterm.nvim", version = "*", event = "VeryLazy" },
 
 	-- Telescope file navigation with "<leader>ff".
 	{
 		"nvim-telescope/telescope.nvim",
-		event = "VeryLazy",
 		version = "0.1.4",
 		dependencies = { "nvim-lua/plenary.nvim" },
+		event = "VeryLazy",
 	},
 
 	-- Utility for line and block comments.
@@ -41,74 +49,49 @@ require("lazy").setup({
 	-- * Add block comment with "<leader>bc".
 	{
 		"numToStr/Comment.nvim",
-		event = "VeryLazy",
 		config = function()
 			require("Comment").setup()
 		end,
+		event = "VeryLazy",
 	},
 
-	{ "L3MON4D3/LuaSnip", run = "make install_jsregexp" },
-	{
-		"hrsh7th/nvim-cmp",
-		event = "VeryLazy",
-		dependencies = {
-			"hrsh7th/cmp-path",
-		},
-	},
+	-- Snippets and completion
+	{ "L3MON4D3/LuaSnip", build = "make install_jsregexp", event = "VeryLazy" },
+	{ "hrsh7th/nvim-cmp", event = "VeryLazy" },
+	{ "hrsh7th/cmp-path", event = "VeryLazy" },
 
 	-- -------------------------------------------------------------------------
 	-- LSP support, code parsing, linting, and formatting
 	-- -------------------------------------------------------------------------
 
-	-- LSP support.
+	-- LSP management within Neovim.
 	{
-		"VonHeikemen/lsp-zero.nvim",
-		branch = "v2.x",
-		dependencies = {
-			"neovim/nvim-lspconfig",
-			{
-				"williamboman/mason.nvim",
-				build = function()
-					pcall(vim.cmd, "MasonUpdate")
-				end,
-			},
-			"williamboman/mason-lspconfig.nvim",
-			"hrsh7th/nvim-cmp",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
-			"L3MON4D3/LuaSnip",
-		},
+		"williamboman/mason.nvim",
+		build = function()
+			pcall(vim.cmd, "MasonUpdate")
+		end,
 		event = "VeryLazy",
 	},
+	{ "williamboman/mason-lspconfig.nvim", event = "VeryLazy" },
+
+	-- LSP support.
+	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x", event = "VeryLazy" },
+	{ "neovim/nvim-lspconfig" },
+	{ "hrsh7th/cmp-nvim-lsp" },
 
 	-- Code parser.
-	{
-		"nvim-treesitter/nvim-treesitter",
-		event = "VeryLazy",
-		build = ":TSUpdate",
-	},
+	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate", event = "VeryLazy" },
 
 	-- Automatic code formatting.
 	{ "stevearc/conform.nvim", event = "VeryLazy" },
 
 	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
-	{
-		"folke/trouble.nvim",
-		event = "VeryLazy",
-		config = function()
-			require("trouble").setup({
-				height = 3,
-				auto_open = false,
-				auto_close = true,
-				auto_preview = false,
-			})
-		end,
-	},
+	{ "folke/trouble.nvim", event = "VeryLazy" },
 
 	-- -------------------------------------------------------------------------
 	-- Language specific plugins
 	-- -------------------------------------------------------------------------
 
-	{ "tikhomirov/vim-glsl", event = "VeryLazy", ft = "glsl" },
-	{ "lervag/vimtex", event = "VeryLazy" },
+	{ "lervag/vimtex", ft = "tex", event = "VeryLazy" },
+	{ "tikhomirov/vim-glsl", ft = "glsl", event = "VeryLazy" },
 })

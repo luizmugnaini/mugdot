@@ -11,6 +11,10 @@ ls.config.setup({
 	enable_autosnippets = true,
 })
 
+vim.keymap.set({ "i" }, "<C-e>", function()
+	ls.expand()
+end, { silent = true, desc = "Expand snippet" })
+
 -- ----------------------------------------------------------------------------
 -- nvim-cmp
 -- ----------------------------------------------------------------------------

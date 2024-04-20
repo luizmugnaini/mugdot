@@ -3,9 +3,8 @@ require("conform").setup({
 		lua = { "stylua" },
 		python = { "black" },
 		rust = { "rustfmt" },
-		cpp = { "clang_format" },
-		c = { "clang_format" },
-		["_"] = { "trim_whitespace" },
+		cpp = { "clang-format" },
+		c = { "clang-format" },
 	},
 
 	format_on_save = {

@@ -1,20 +1,28 @@
-vim.keymap.set("n", "<leader>bf", vim.cmd.Ex, { desc = "Native [B]rowse {F}iles" })
+local all_modes = { "n", "i", "x", "v", "s", "c", "o", "l", "t" }
 
-vim.keymap.set("n", "<leader>nn", vim.cmd.bnext, { desc = "[N]ext buffer" })
-vim.keymap.set("n", "<leader>pp", vim.cmd.bprevious, { desc = "[P]revious buffer" })
+vim.keymap.set(all_modes, "<C-k>", "<Esc>", { desc = "Escape to normal mode", silent = true })
 
-vim.keymap.set(
-	{ "n", "i", "x", "v", "s", "c", "o", "l", "t" },
-	"<C-k>",
-	"<Esc>",
-	{ desc = "Escape to normal mode", silent = true }
-)
+local non_insert_modes = { "n", "x", "o" }
 
-vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "[W]rite file" })
+vim.keymap.set(non_insert_modes, "<leader>w", vim.cmd.write, { desc = "[W]rite file" })
+
+vim.keymap.set(non_insert_modes, "<leader>qq", vim.cmd.quit, { desc = "Kill current instance" })
 
 vim.keymap.set("v", "<C-y>", '"+y', { desc = "Copy to external clipboard" })
 
-vim.keymap.set("n", "<leader>hh", "<cmd>wincmd h<CR>", { silent = true, desc = "Move to left split pane" })
-vim.keymap.set("n", "<leader>jj", "<cmd>wincmd j<CR>", { silent = true, desc = "Move to down split pane" })
-vim.keymap.set("n", "<leader>kk", "<cmd>wincmd k<CR>", { silent = true, desc = "Move to up split pane" })
-vim.keymap.set("n", "<leader>ll", "<cmd>wincmd l<CR>", { silent = true, desc = "Move to right split pane" })
+vim.keymap.set(non_insert_modes, "<leader>bf", vim.cmd.Ex, { desc = "Native [B]rowse {F}iles" })
+
+-- Splits
+vim.keymap.set(non_insert_modes, "<leader>sv", vim.cmd.vsplit, { silent = true, desc = "[S]plit [V]ertically" })
+vim.keymap.set(non_insert_modes, "<leader>sh", vim.cmd.split, { silent = true, desc = "[S]plit [H]orizontally" })
+
+-- Move between splits
+vim.keymap.set(non_insert_modes, "<leader>vh", "<cmd>wincmd h<CR>", { silent = true, desc = "Move to left split" })
+vim.keymap.set(non_insert_modes, "<leader>vj", "<cmd>wincmd j<CR>", { silent = true, desc = "Move to down split" })
+vim.keymap.set(non_insert_modes, "<leader>vk", "<cmd>wincmd k<CR>", { silent = true, desc = "Move to up split" })
+vim.keymap.set(non_insert_modes, "<leader>vl", "<cmd>wincmd l<CR>", { silent = true, desc = "Move to right split" })
+
+-- ctags
+vim.keymap.set({ "n", "x", "o" }, "<leader>gt", "<C-]>", { desc = "Go to definition using ctags" })
+vim.keymap.set({ "n", "x", "o" }, "<leader>pt", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
+vim.keymap.set({ "n", "x", "o" }, "<leader>ut", "<cmd>!ctags -R<CR>", { desc = "Update the tag cache" })

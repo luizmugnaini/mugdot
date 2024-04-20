@@ -7,16 +7,20 @@ if python_path_proc ~= nil then
 	python_path_proc:close()
 end
 
-vim.g.mapleader = " "
-
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
+
+vim.g.mapleader = " "
 
 local opt = vim.opt
 
 opt.guicursor = ""
 
+opt.number = false
+opt.relativenumber = false
+
+-- opt.textwidth = 100
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
