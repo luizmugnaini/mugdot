@@ -22,6 +22,9 @@ magenta = "0xd3869b"
 cyan    = "0x89b482"
 white   = "0xd4be98"
 
+[shell]
+program = "nu"
+
 [cursor.style]
 blinking = "Never"
 shape = "Block"
