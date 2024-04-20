@@ -162,10 +162,11 @@ alias gst="git status"
 alias ipy="ipython3 --colors=Linux"
 export IPYTHONDIR="~/.config/ipython"
 export NLTK_DATA="~/.cache/nltk_data"
-export JUPYTERLAB_DIR=$HOME/.local/share/jupyter/lab
+export JUPYTERLAB_DIR="$HOME/.local/share/jupyter/lab"
 
 alias pip="python3 -m pip"
 
+alias p="python3"
 alias py="python3"
 alias python="python3"
 
