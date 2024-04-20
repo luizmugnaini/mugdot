@@ -13,8 +13,13 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+	-- -------------------------------------------------------------------------
+	-- Visuals.
+	-- -------------------------------------------------------------------------
+
 	-- Themes
 	{ "sainnhe/gruvbox-material" },
+	{ "rebelot/kanagawa.nvim" },
 
 	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
