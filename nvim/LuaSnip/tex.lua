@@ -7,74 +7,69 @@ local extras = require("luasnip.extras")
 local postfix = require("luasnip.extras.postfix").postfix
 
 local tex_utils = {}
-tex_utils.in_mathzone = function() -- math context detection
-	return vim.fn["vimtex#syntax#in_mathzone"]() == 1
-end
-tex_utils.in_text = function()
-	return not tex_utils.in_mathzone()
-end
-tex_utils.in_comment = function() -- comment detection
-	return vim.fn["vimtex#syntax#in_comment"]() == 1
-end
-tex_utils.in_env = function(name) -- generic environment detection
-	local is_inside = vim.fn["vimtex#env#is_inside"](name)
-	return (is_inside[1] > 0 and is_inside[2] > 0)
-end
--- A few concrete environments---adapt as needed
-tex_utils.in_equation = function() -- equation environment detection
-	return tex_utils.in_env("equation")
-end
-tex_utils.in_itemize = function() -- itemize environment detection
-	return tex_utils.in_env("itemize")
-end
-tex_utils.in_tikz = function() -- TikZ picture environment detection
-	return tex_utils.in_env("tikzpicture")
-end
 
 return {
 	-- Portuguese accents
-	s({ trig = ".a", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ã")),
-	s({ trig = ";a", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("á")),
-	s({ trig = "/a", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("â")),
-	s({ trig = ",a", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("à")),
-	s({ trig = ".A", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Ã")),
-	s({ trig = ";A", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Á")),
-	s({ trig = "/A", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Â")),
-	s({ trig = ",A", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("À")),
-	s({ trig = ".o", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("õ")),
-	s({ trig = ";o", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ó")),
-	s({ trig = "/o", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ô")),
-	s({ trig = ".O", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Õ")),
-	s({ trig = ";O", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Ó")),
-	s({ trig = "/O", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Ô")),
-	s({ trig = ";e", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("é")),
-	s({ trig = "/e", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ê")),
-	s({ trig = ";E", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("É")),
-	s({ trig = "/E", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Ê")),
-	s({ trig = ";i", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("í")),
-	s({ trig = ";I", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Í")),
-	s({ trig = ";u", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ú")),
-	s({ trig = ";U", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("Ú")),
-	s({ trig = ";c", condition = tex_utils.in_text, snippetType = "autosnippet" }, t("ç")),
+	s({ trig = ".a", snippetType = "autosnippet" }, t("ã")),
+	s({ trig = ";a", snippetType = "autosnippet" }, t("á")),
+	s({ trig = "/a", snippetType = "autosnippet" }, t("â")),
+	s({ trig = ",a", snippetType = "autosnippet" }, t("à")),
+	s({ trig = ".A", snippetType = "autosnippet" }, t("Ã")),
+	s({ trig = ";A", snippetType = "autosnippet" }, t("Á")),
+	s({ trig = "/A", snippetType = "autosnippet" }, t("Â")),
+	s({ trig = ",A", snippetType = "autosnippet" }, t("À")),
+	s({ trig = ".o", snippetType = "autosnippet" }, t("õ")),
+	s({ trig = ";o", snippetType = "autosnippet" }, t("ó")),
+	s({ trig = "/o", snippetType = "autosnippet" }, t("ô")),
+	s({ trig = ".O", snippetType = "autosnippet" }, t("Õ")),
+	s({ trig = ";O", snippetType = "autosnippet" }, t("Ó")),
+	s({ trig = "/O", snippetType = "autosnippet" }, t("Ô")),
+	s({ trig = ";e", snippetType = "autosnippet" }, t("é")),
+	s({ trig = "/e", snippetType = "autosnippet" }, t("ê")),
+	s({ trig = ";E", snippetType = "autosnippet" }, t("É")),
+	s({ trig = "/E", snippetType = "autosnippet" }, t("Ê")),
+	s({ trig = ";i", snippetType = "autosnippet" }, t("í")),
+	s({ trig = ";I", snippetType = "autosnippet" }, t("Í")),
+	s({ trig = ";u", snippetType = "autosnippet" }, t("ú")),
+	s({ trig = ";U", snippetType = "autosnippet" }, t("Ú")),
+	s({ trig = ";c", snippetType = "autosnippet" }, t("ç")),
 
 	-- Math
 	s({
 		trig = "mk",
 		desc = "inline math",
 		snippetType = "autosnippet",
-		condition = tex_utils.in_text,
 	}, { t("\\("), i(1), t("\\)") }),
-
 	s({
-		trig = "math",
+		trig = ";mk",
 		desc = "inline math",
-		condition = tex_utils.in_text,
+		snippetType = "autosnippet",
 	}, { t({ "\\[", "\t" }), i(1), t({ "", "\\]" }) }),
+
+	-- Symbols
+	s({
+		trig = "->",
+		snippetType = "autosnippet",
+		desc = "arrow",
+	}, t("\\to"), {}),
+	s({
+		trig = "-->",
+		snippetType = "autosnippet",
+		desc = "long arrow",
+	}, t("\\longrightarrow"), {}),
+	s({ trig = "<=", snippetType = "autosnippet" }, t("\\leq"), {}),
+	s({ trig = ">=", snippetType = "autosnippet" }, t("\\geq"), {}),
+	s({ trig = ":=", snippetType = "autosnippet" }, t("\\coloneq"), {}),
+	s({ trig = "**" }, t("\\times"), {}),
+	s({
+		trig = "//",
+		snippetType = "autosnippet",
+		desc = "fraction",
+	}, { t("\\frac{"), i(1), t("}{"), i(2), t("}") }, {}),
 
 	postfix(
 		{
 			trig = ".inv",
-			condition = tex_utils.in_mathzone,
 			snippetType = "autosnippet",
 			desc = "inverse",
 		},
@@ -84,64 +79,27 @@ return {
 	),
 
 	s({
-		trig = "set",
-		condition = tex_utils.in_mathzone,
+		trig = ".set",
 		snippetType = "autosnippet",
 	}, { t("\\{"), i(1), t("\\}") }, {}),
 
 	s({
-		trig = "tt",
-		condition = tex_utils.in_mathzone,
+		trig = ".tt",
 		desc = "in-math text",
 	}, { t("\\text{"), i(1), t("}") }, {}),
 
-	s({
-		trig = "->",
-		condition = tex_utils.in_mathzone,
-		snippetType = "autosnippet",
-		desc = "arrow",
-	}, t("\\to"), {}),
-
-	s({
-		trig = "-->",
-		condition = tex_utils.in_mathzone,
-		snippetType = "autosnippet",
-		desc = "long arrow",
-	}, t("\\longrightarrow"), {}),
-
-	s({ trig = "<=", condition = tex_utils.in_mathzone, snippetType = "autosnippet" }, t("\\leq"), {}),
-
-	s({ trig = ">=", condition = tex_utils.in_mathzone, snippetType = "autosnippet" }, t("\\geq"), {}),
-
-	s({ trig = ":=", condition = tex_utils.in_mathzone, snippetType = "autosnippet" }, t("\\coloneq"), {}),
-
-	s({ trig = "**", condition = tex_utils.in_mathzone }, t("\\times"), {}),
-
-	s(
-		{ trig = "//", condition = tex_utils.in_mathzone, snippetType = "autosnippet", desc = "fraction" },
-		{ t("\\frac{"), i(1), t("}{"), i(2), t("}") },
-		{}
-	),
-	s({ trig = "cases", condition = tex_utils.in_mathzone }, {
+	s({ trig = "cases" }, {
 		t({ "\\begin{cases}", "\t" }),
 		i(1),
 		t("\\end{cases}"),
 	}, {}),
 
 	-- Environments
-	s({ trig = "enum", condition = tex_utils.in_text, desc = "enumerate env" }, {
-		t({ "\\begin{enumerate}[(a)]\\setlength\\itemsep{0em}", "\t\\item" }),
-		i(1),
-		t({ "", "\\end{enumerate}" }),
-	}),
-
-	s({ trig = "item", condition = tex_utils.in_text, desc = "itemize env" }, {
-		t({ "\\begin{itemize}", "\t\\item" }),
-		i(1),
-		t({ "", "\\end{itemize}" }),
-	}),
-
-	s({ trig = "beg", condition = tex_utils.in_text, dev = "generic begin env" }, {
+	s({
+		trig = ".beg",
+		desc = "generic begin env",
+		snippetType = "autosnippet",
+	}, {
 		t({ "\\begin{" }),
 		i(1),
 		t({ "}", "\t" }),
@@ -150,8 +108,38 @@ return {
 		extras.rep(1),
 		t("}"),
 	}),
-
-	s({ trig = "diag", condition = tex_utils.in_mathzone, dev = "tikzcd diagram env" }, {
+	s({
+		trig = ".ali",
+		desc = "enumerate env",
+		snippetType = "autosnippet",
+	}, {
+		t({ "\\begin{enumerate}[(a)]\\setlength\\itemsep{0em}", "\t\\item" }),
+		i(1),
+		t({ "", "\\end{enumerate}" }),
+	}),
+	s({
+		trig = ".enum",
+		desc = "enumerate env",
+		snippetType = "autosnippet",
+	}, {
+		t({ "\\begin{enumerate}[(a)]\\setlength\\itemsep{0em}", "\t\\item" }),
+		i(1),
+		t({ "", "\\end{enumerate}" }),
+	}),
+	s({
+		trig = ".item",
+		desc = "itemize env",
+		snippetType = "autosnippet",
+	}, {
+		t({ "\\begin{itemize}", "\t\\item" }),
+		i(1),
+		t({ "", "\\end{itemize}" }),
+	}),
+	s({
+		trig = ".diag",
+		dev = "tikzcd diagram env",
+		snippetType = "autosnippet",
+	}, {
 		t({ "\\begin{tikzcd}", "\t" }),
 		i(1),
 		t({ "", "\\end{tikzcd}" }),

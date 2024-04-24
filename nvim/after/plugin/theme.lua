@@ -12,7 +12,6 @@ local function set_colorscheme(color)
 				light = "lotus",
 			},
 		})
-		vim.cmd.highlight("clear SignColumn")
 	elseif color == "gruvbox-material" then
 		vim.g.gruvbox_material_better_performance = 1
 		vim.g.gruvbox_material_foreground = "material"
@@ -23,3 +22,4 @@ local function set_colorscheme(color)
 end
 
 set_colorscheme("kanagawa")
+vim.cmd.highlight("clear SignColumn")
