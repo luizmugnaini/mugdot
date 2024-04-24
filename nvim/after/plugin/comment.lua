@@ -1,9 +1,9 @@
 require("Comment").setup({
-	-- Use <leader>lc for line commenting in both visual and normal mode.
+	-- Use <leader>cc for line commenting in both visual and normal mode.
 	toggler = {
-		line = "<leader>lc",
+		line = "<leader>cc",
 	},
 	opleader = {
-		line = "<leader>lc",
+		line = "<leader>cc",
 	},
 })
