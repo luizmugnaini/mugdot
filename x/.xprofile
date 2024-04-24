@@ -11,7 +11,7 @@ dwmblocks &
 feh --bg-fill --no-fehbg ~/Pictures/rayn.png &
 
 # Keyboard layout
-setxkbmap us -option ctrl:nocaps &
+setxkbmap br -variant nodeadkeys -option ctrl:nocaps &
 
 # Keyboard rate and frequency
 xset r rate 500 60 &
