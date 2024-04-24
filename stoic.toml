@@ -2,9 +2,6 @@
 src = "alacritty/alacritty.toml"
 target = "~/.config/alacritty/alacritty.toml"
 
-[nushell]
-target = "~/.config/nushell"
-
 [zsh]
 target = "~/"
 

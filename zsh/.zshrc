@@ -131,9 +131,6 @@ eval "$(zoxide init zsh)"
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 eval "$(starship init zsh)"
 
-# jj version control system
-source <(jj util completion --zsh)
-
 # Screen control ----------------------------------------------------------------------------------
 
 alias red="redshift -P -O"
