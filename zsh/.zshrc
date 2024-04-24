@@ -56,49 +56,11 @@ echo -ne $vim_insert # Use beam shape cursor on startup.
 
 preexec() { echo -ne $vim_insert ;} # Use cursor shape for each new prompt.
 
-# Emacs vterm -------------------------------------------------------------------------------------
-
-vterm_printf(){
-    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
-        # Tell tmux to pass the escape sequences through
-        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
-    elif [ "${TERM%%-*}" = "screen" ]; then
-        # GNU screen (screen, screen-256color, screen-256color-bce)
-        printf "\eP\e]%s\007\e\\" "$1"
-    else
-        printf "\e]%s\e\\" "$1"
-    fi
-}
-
-# Clear vterm history with C-c C-l
-if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
-    alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
-fi
-
-# update name string of the current buffer for the current working directory
-autoload -U add-zsh-hook
-add-zsh-hook -Uz chpwd (){ print -Pn "\e]2;%m:%2~\a" }
-
-# Directory and prompt tracking
-vterm_prompt_end() {
-    vterm_printf "51;A$(whoami)@$(hostname):$(pwd)";
-}
-setopt PROMPT_SUBST
-PROMPT=$PROMPT'%{$(vterm_prompt_end)%}'
-
 # Path --------------------------------------------------------------------------------------------
 
-# Local binaries
 export PATH="$HOME/.local/bin:$PATH"
-
-# Rust
 export PATH="$HOME/.cargo/bin:$PATH"
-
-# Emacs
 export PATH="$HOME/.emacs.d/bin:$PATH"
-
-# Haskell
-export PATH="$HOME/.cabal/bin:$PATH"
 
 # Terminal utilities and env variables -----------------------------------------------------------
 
@@ -127,9 +89,11 @@ alias cd="z"
 alias ..="z .."
 eval "$(zoxide init zsh)"
 
-# Prompt stuff
-export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
-eval "$(starship init zsh)"
+# Prompt styling with "oh my zsh"
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="refined"
+plugins=(git)
+source $ZSH/oh-my-zsh.sh
 
 # Screen control ----------------------------------------------------------------------------------
 
@@ -156,15 +120,13 @@ alias gst="git status"
 
 # Python ------------------------------------------------------------------------------------------
 
-alias ipy="ipython3 --colors=Linux"
 export IPYTHONDIR="~/.config/ipython"
 export NLTK_DATA="~/.cache/nltk_data"
 export JUPYTERLAB_DIR="$HOME/.local/share/jupyter/lab"
 
+alias ipy="ipython3 --colors=Linux"
 alias pip="python3 -m pip"
-
 alias p="python3"
-alias py="python3"
 alias python="python3"
 
 export PYENV_ROOT="$HOME/.pyenv"
