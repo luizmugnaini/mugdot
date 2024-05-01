@@ -11,6 +11,12 @@ local function set_colorscheme(color)
 				dark = "dragon",
 				light = "lotus",
 			},
+			-- Disable italic for `self`, `this`, etc.
+			overrides = function()
+				return {
+					["@variable.builtin"] = { italic = false },
+				}
+			end,
 		})
 	elseif color == "gruvbox-material" then
 		vim.g.gruvbox_material_better_performance = 1

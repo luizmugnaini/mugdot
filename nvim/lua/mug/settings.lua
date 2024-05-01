@@ -15,12 +15,11 @@ vim.g.mapleader = " "
 
 local opt = vim.opt
 
-opt.guicursor = ""
+opt.guicursor = "" -- Use a block as the cursor.
+opt.showmode = false -- Don't show the current mode in the minibuffer.
 
-opt.number = false
-opt.relativenumber = false
+opt.number = false -- Don't show line numbers
 
--- opt.textwidth = 100
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
@@ -38,13 +37,15 @@ opt.undofile = true
 opt.grepprg = "rg --vimgrep"
 opt.hlsearch = false
 opt.incsearch = true
-opt.ignorecase = true
 opt.smartcase = true
+opt.ignorecase = true
 
 opt.termguicolors = true
 
 opt.scrolloff = 4 -- Minimal number of lines below cursor line
-opt.signcolumn = "yes"
+
+opt.signcolumn = "yes" -- Always have space for the sign column (used by LSP)
+
 opt.isfname:append("@-@")
 
 opt.spelllang = { "en" }
