@@ -99,5 +99,7 @@ $env.NU_PLUGIN_DIRS = [
 # To load from a custom file you can use:
 # source ($nu.default-config-dir | path join 'custom.nu')
 
+$env.Path = ($env.Path | split row (char esep) | prepend "~/AppData/Local/Programs/MiKTeX/miktex/bin/x64")
+
 # Zoxide integration
 zoxide init nushell | save -f ~/.zoxide.nu
