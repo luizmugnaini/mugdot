@@ -52,3 +52,6 @@ opt.spelllang = { "en" }
 opt.spell = true
 
 opt.updatetime = 50
+
+-- Whether or not to display text messages on the screen.
+vim.diagnostic.config({ virtual_text = false })
