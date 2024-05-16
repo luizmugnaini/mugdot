@@ -38,10 +38,10 @@ color = "0xff5d62"
 program = "cmd.exe"
 args = [
     "/k",
-    "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\Tools\\VsDevCmd.bat\"",
-    "-startdir=none",
-    "-arch=x64",
-    "-host_arch=x64",
+    "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat\"",
+    "x64",
+    ">",
+    "NUL",
     "&&",
     "nu"
 ]
