@@ -1,8 +1,6 @@
+-- =============================================================================
 --
 -- Settings copied from 'zoxide init'. Run `clink set` to modify these options, e.g. `clink set zoxide.cmd f`
---
--- To initalize zoxide, add this script to one of clink's lua script locations (e.g. zoxide.lua)
--- (see https://chrisant996.github.io/clink/clink.html#location-of-lua-scripts)
 --
 
 settings.add("zoxide.cmd", "z", "Changes the prefix of the aliases")
@@ -15,6 +13,7 @@ settings.add(
 	"Changes the priority of the promptfilter hook (only if usepromptfilter is true)"
 )
 
+-- =============================================================================
 --
 -- Utility functions for zoxide.
 --
@@ -55,6 +54,7 @@ local function __zoxide_add(dir)
 	os.execute('zoxide add -- "' .. dir:gsub("^(.-)\\*$", "%1") .. '"')
 end
 
+-- =============================================================================
 --
 -- Hook configuration for zoxide.
 --
@@ -95,6 +95,7 @@ else
 	clink.onbeginedit(__zoxide_hook)
 end
 
+-- =============================================================================
 --
 -- Define aliases.
 --
@@ -121,6 +122,7 @@ local function __zoxide_zi(keywords)
 	return __zoxide_query({ "--interactive" }, keywords)
 end
 
+-- =============================================================================
 --
 -- Clink input text filter.
 --
@@ -164,3 +166,8 @@ if clink.onfilterinput then
 else
 	clink.onendedit(onfilterinput)
 end
+
+-- =============================================================================
+--
+-- To initalize zoxide, add this script to one of clink's lua script locations (e.g. zoxide.lua)
+-- (see https://chrisant996.github.io/clink/clink.html#location-of-lua-scripts)

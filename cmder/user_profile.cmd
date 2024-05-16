@@ -17,3 +17,9 @@
 :: %ccall% "/customOption" "command/program"
 
 @echo off
+
+:: Set env variables for the MSVC toolchain.
+call "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" x64 > NUL
+
+:: Latex-related binaries.
+set "PATH=%HOME%/AppData/Local/Programs/MiKTeX/miktex/bin/x64;%PATH%"
