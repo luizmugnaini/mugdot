@@ -1,10 +1,6 @@
-# [emacs]
-# target = "~/.emacs.d"
-# recursive = true
-
-[clang-format]
-src = "clang\\.clang-format"
-target = "C:\\Users\\luizm"
+[emacs]
+target = "~/.emacs.d"
+recursive = true
 
 [git]
 target = "C:\\ProgramData\\Git"

@@ -38,12 +38,9 @@ color = "0xff5d62"
 program = "cmd.exe"
 args = [
     "/k",
-    "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat\"",
-    "x64",
-    ">",
-    "NUL",
+    "%CMDER_ROOT%\\vendor\\init.bat",
     "&&",
-    "nu"
+    "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat\" x64 > NUL",
 ]
 
 [cursor.style]
