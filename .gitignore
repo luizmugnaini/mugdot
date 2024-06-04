@@ -18,18 +18,20 @@ dwm/dwm
 dwm/dwmblocks/dwmblocks
 
 # Emacs stuff
-emacs/.local/
 emacs/custom.el
+emacs/server/
+emacs/.local/
 emacs/straight/
 emacs/eshell/
 emacs/elpa/
+emacs/eln-cache/
 emacs/.cask/
 emacs/projectile-bookmarks.eld
 emacs/transient/
 emacs/var/
+emacs/projects
 emacs/.last-package-update-day
 .yas-compiled-snippets.el
+*.elc
 *\#
 *~
-
-nushell/history.txt
