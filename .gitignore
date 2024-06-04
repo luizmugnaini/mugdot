@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ncspot
 ncspot/userstate.cbor
 
@@ -27,3 +28,42 @@ emacs/var/
 emacs/.last-package-update-day
 .yas-compiled-snippets.el
 *\#
+=======
+# ncspot
+ncspot/userstate.cbor
+
+
+# Ruff linter
+/.ruff_cache
+
+# nvim
+nvim/lazy-lock.json
+
+# dwm stuff
+*.o
+*.diff
+*.orig
+config.h
+blocks.h
+dwm/dwm
+dwm/dwmblocks/dwmblocks
+
+# Emacs stuff
+emacs/custom.el
+emacs/server/
+emacs/.local/
+emacs/straight/
+emacs/eshell/
+emacs/elpa/
+emacs/eln-cache/
+emacs/.cask/
+emacs/projectile-bookmarks.eld
+emacs/transient/
+emacs/var/
+emacs/projects
+emacs/.last-package-update-day
+.yas-compiled-snippets.el
+*.elc
+*\#
+*~
+>>>>>>> 581cc45 (EMACS FOR THE WIN, Vim peasants)
