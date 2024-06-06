@@ -20,6 +20,7 @@ dwm/dwmblocks/dwmblocks
 # Emacs stuff
 emacs/custom.el
 emacs/server/
+emacs/url/
 emacs/.local/
 emacs/straight/
 emacs/eshell/

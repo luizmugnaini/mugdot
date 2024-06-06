@@ -44,6 +44,13 @@
 ;;; Code:
 
 ;;; ============================================================================
+;;; Bytecode compiler settings
+;;; ============================================================================
+
+;; Annoying as hell
+(setq byte-compile-warnings '(not free-vars unresolved))
+
+;;; ============================================================================
 ;;; Startup
 ;;; ============================================================================
 
@@ -114,6 +121,9 @@
 
 (defconst mug-emacs-temp-dir (eval-when-compile (concat mug-temp-dir "/emacs"))
   "Directory where emacs should store its temporary files.")
+
+;; Directory containing additional modules
+(add-to-list 'load-path (concat mug-emacs-dir "/lisp"))
 
 ;; Set the default directories
 (setq default-directory    mug-dev-dir
@@ -354,10 +364,7 @@
   (define-key key-translation-map (kbd "C-<up>")           (kbd "C-w"))
   (define-key key-translation-map (kbd "C-<left>")         (kbd "C-a"))
   (define-key key-translation-map (kbd "C-<down>")         (kbd "C-s"))
-  (define-key key-translation-map (kbd "C-<right>")        (kbd "C-d"))
-  (define-key key-translation-map (kbd "C-<print>")        (kbd "C-p"))
-  (define-key key-translation-map (kbd "C-<prt-scr>")      (kbd "C-p"))
-  (define-key key-translation-map (kbd "C-<print-screen>") (kbd "C-p")))
+  (define-key key-translation-map (kbd "C-<right>")        (kbd "C-d")))
 
 ;; -----------------------------------------------------------------------------
 ;; Elisp setup
@@ -391,10 +398,9 @@
   :init
   (super-save-mode +1)
   :custom
-  (super-save-silent              t)
-  (super-save-auto-save-when-idle t)
+  (super-save-silent    t)
+  (super-save-when-idle t)
   :config
-  ;; save on find-file
   (add-to-list 'super-save-hook-triggers 'find-file-hook))
 
 ;; -----------------------------------------------------------------------------
@@ -419,7 +425,6 @@
   :commands (vertico-mode)
   :init     (vertico-mode)
   :custom   (vertico-cycle t))
-
 
 ;;; ============================================================================
 ;;; Getting EVIL
@@ -495,27 +500,11 @@
 ;;; General development setup
 ;;; ============================================================================
 
-;; Git management with Magit for the win
-(straight-use-package 'magit)
-
-(use-package prog-mode
-  :straight (:type built-in)
-  :bind (:map prog-mode-map
-              ("C-p c" . project-compile)
-              ("C-p r" . project-recompile)
-              ("C-p f" . project-find-file))
-  :config
-  ;; Automatic bracket pairing
-  (electric-pair-mode 1))
-
 ;; -----------------------------------------------------------------------------
 ;; Completions, tags, and jumping around!
 ;; -----------------------------------------------------------------------------
 
 (use-package xref
-  :defines (xref-show-definitions-function)
-  :bind (:map prog-mode-map
-              ("C-j s" . xref-find-apropos))
   :custom
   ;; Show results in the minibuffer
   (xref-show-definitions-function #'xref-show-definitions-completing-read)
@@ -527,48 +516,60 @@
 
 (use-package citre
   :defer t
+  :defines (citre-mode-map
+            citre-ctags-program
+            citre-readtags-program
+            citre-default-create-tags-file-location
+            citre-auto-enable-citre-mode-modes)
   :bind (:map citre-mode-map
               ("C-c j" . citre-jump)
               ("C-c J" . citre-jump-back)
-              ("C-c u" . citre-update-this-tags-file))
+              ("C-c u" . citre-update-this-tags-file)
+              ("C-c o" . xref-find-definitions-other-window))
   :init
   (require 'citre-config)
   :config
   (setq citre-ctags-program (mug-win-or-linux
                              (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe")
                              "/usr/bin/ctags")
-        citre-tags-global-cache-dir             (concat mug-emacs-cache-dir "/tags")
-        citre-default-create-tags-file-location 'in-dir
-        citre-auto-enable-citre-mode-modes      '(prog-mode)))
+        citre-readtags-program (mug-win-or-linux
+                             (concat mug-home-dir "/scoop/apps/universal-ctags/current/readtags.exe")
+                             "/usr/bin/readtags")
+        citre-default-create-tags-file-location 'in-dir))
 
 (use-package company
   :defines  (company-active-map)
   :commands (company-complete company-select-previous company-select-next)
-  :hook     (prog-mode . company-mode)
   :bind (:map company-active-map
               ("C-m" . company-select-previous)
               ("C-n" . company-select-next))
   :custom
-  (company-dabbrev-other-buffers      t)
-  (company-dabbrev-code-other-buffers t)
-  (company-show-numbers               nil)
-  (company-require-match              nil) ; Don't mess with my key presses!!
-  (company-minimum-prefix-length        1) ; Number of characters needed before starting the search
-  (company-idle-delay                 0.1) ; Delay before starting to search
+  (company-show-numbers          nil) ; Useless info
+  (company-require-match         nil) ; Don't mess with my key presses!!
+  (company-minimum-prefix-length   1) ; Number of characters needed before starting the search
+  (company-idle-delay            1.5) ; Number of seconds before attempting completion
   :config
+  ;; Don't use Clang for fuck sake!!!
+  (setq company-clang-executable nil)
   (setq company-backends '((company-capf
-                            company-clang
-                            company-files
-                            company-semantic
-                            :with company-yasnippet))))
+                            :with company-yasnippet)))
+
+  ;; Prune some of the results
+  (setq company-transformers '(delete-consecutive-dups
+                               company-sort-by-occurrence))
+
+  (use-package company-ctags
+    :defer t
+    :requires company
+    :functions (company-ctags-auto-setup)
+    :init
+    (company-ctags-auto-setup)))
 
 ;; -----------------------------------------------------------------------------
 ;; Snippets
 ;; -----------------------------------------------------------------------------
 
 (use-package yasnippet
-  :hook ((LaTeX-hook . yas-minor-mode)
-         (prog-mode  . yas-minor-mode))
   :custom
   (yas-snippet-dirs (concat mug-emacs-dir "/snippets")))
 
@@ -577,6 +578,7 @@
 ;; -----------------------------------------------------------------------------
 
 (require 'ansi-color)
+
 (defun mug-colourful-compilation ()
   "Handle ansi escape sequences from `compilation-filter-start' to `point'."
   (let ((inhibit-read-only t))
@@ -584,6 +586,28 @@
      compilation-filter-start (point))))
 
 (add-hook 'compilation-filter-hook #'mug-colourful-compilation)
+
+;; -----------------------------------------------------------------------------
+;; Version control
+;; -----------------------------------------------------------------------------
+
+;; Git management with Magit for the win
+(straight-use-package 'magit)
+
+;; -----------------------------------------------------------------------------
+;; Programming mode setup
+;; -----------------------------------------------------------------------------
+
+(use-package prog-mode
+  :straight (:type built-in)
+  :hook ((prog-mode . yas-minor-mode)
+         (prog-mode . citre-mode)
+         (prog-mode . company-mode))
+  :bind (:map prog-mode-map
+              ("C-j c" . project-compile)
+              ("C-j r" . project-recompile)
+              ("C-j f" . project-find-file)
+              ("C-j s" . xref-find-apropos)))
 
 ;;; ============================================================================
 ;;; C and C++ setup
@@ -658,7 +682,12 @@ that are relevant for your installation. "
 (defun mug-c-format-buffer ()
   "Format the current buffer."
   (interactive)
-  (shell-command-on-region (point-min) (point-max) mug-c-formatter nil t))
+  (let ((current-point        (point))
+        (current-window-start (window-start)))
+    (shell-command-on-region (point-min) (point-max) mug-c-formatter nil t)
+    ;; Return the user to the previous state
+    (set-window-start (selected-window) current-window-start)
+    (goto-char current-point)))
 
 ;; -----------------------------------------------------------------------------
 ;; Find header or implementation of the current C/C++ file
@@ -709,193 +738,17 @@ that are relevant for your installation. "
 ;; C and C++ styling and keybindings
 ;; -----------------------------------------------------------------------------
 
-(defun mug-c-mode-hook ()
-  "Set C and C++ styling"
-  ;; Indentation width
-  (setq tab-width 4)
-
-  ;; Auto-format the buffer before saving if the `mug-c-formatter' is found.
-  (if mug-c-formatter-found
-      (add-hook 'before-save-hook #'mug-c-format-buffer nil 'local)))
-
 (use-package cc-mode
   :straight (:type built-in)
   :bind
   (:map c++-mode-map
-        ("C-c f" . mug-c-find-corresponding))
+        ("C-c i" . mug-c-find-corresponding)
+        ("C-c f" . mug-c-format-buffer))
   (:map c-mode-map
-        ("C-c f" . mug-c-find-corresponding))
+        ("C-c i" . mug-c-find-corresponding))
   :config
-  (add-hook 'c++-mode-hook  #'mug-c-mode-hook)
-  (add-hook 'c-mode-hook    #'mug-c-mode-hook))
-
-;;; ============================================================================
-;;; Latex configuration:
-;;; ============================================================================
-
-;; (use-package latex
-;;   :defer t
-;;   :mode ("\\.tex\\'" . LaTeX-mode)
-;;   :straight auctex
-;;   :hook ((LaTeX-mode . yas-minor-mode)
-;;          (LaTeX-mode . TeX-source-correlate-mode)
-;;          (LaTeX-mode . flyspell-mode)
-;; 	 (LaTeX-mode . outline-minor-mode))
-;;   :bind (:map LaTeX-mode-map
-;; 	      ("<C-tab>" . outline-toggle-children)
-;; 	      ("C-c C-c" . tex-compile)
-;; 	      ("C-g C-q" . LaTeX-fill-paragraph)
-;; 	      ("C-f C-r" . reftex-cleveref-cref))
-;;   :config
-;;   (when mug-sys-is-win
-;;     (setq exec-path (append exec-path '(concat mug-home-dir "/AppData/Local/Programs/MiKTeX/miktex/bin/x64"))))
-
-;;   ;; Basic settings
-;;   (setq TeX-parse-self t)
-;;   (setq-default TeX-master nil)
-;;   (setq visual-fill-column-center-text t)
-
-;;   ;; Indentation settings
-;;   (setq LaTeX-indent-level 0
-;; 	LaTeX-item-indent -2)
-;;         TeX-PDF-mode t
-;;         TeX-source-correlate-mode t
-;;         TeX-source-correlate-start-server t)
-
-;;   ;; References setup
-;;   (setq-default reftex-plug-into-AUCTeX t)
-
-;;   (use-package cdlatex
-;;     :after yasnippet
-;;     :hook ((LaTeX-mode  . turn-on-cdlatex)
-;; 	   (cdlatex-tab . yas-expand)
-;;            (cdlatex-tab . mug-cdlatex-in-yas-field))
-;;     :bind (:map cdlatex-mode-map
-;; 		("<tab>" . cdlatex-tab))
-;;     :config
-;;     (keymap-local-unset "^")
-;;     (setq cdlatex-use-dollar-to-ensure-math 0 ;; disable the use of dollar signs
-;; 	  cdlatex-paired-parens "{(["
-;; 	  cdlatex-simplify-sub-super-scripts t)
-
-;;     ;; YaSnippet integration
-;;     (defun mug-cdlatex-in-yas-field ()
-;;       ;; Check if we're at the end of the Yas field
-;;       (when-let* ((_ (overlayp yas--active-field-overlay))
-;;                   (end (overlay-end yas--active-field-overlay)))
-;;         (if (>= (point) end)
-;;             ;; Call yas-next-field if cdlatex can't expand here
-;;             (let ((s (thing-at-point 'sexp)))
-;;               (unless (and s (assoc (substring-no-properties s)
-;;                                     cdlatex-command-alist-comb))
-;;                 (yas-next-field-or-maybe-expand)
-;;                 t))
-;;           ;; otherwise expand and jump to the correct location
-;;           (let (cdlatex-tab-hook minp)
-;;             (setq minp
-;;                   (min (save-excursion (cdlatex-tab)
-;;                                        (point))
-;;                        (overlay-end yas--active-field-overlay)))
-;;             (goto-char minp) t))))
-
-;;     (defun yas-next-field-or-cdlatex nil
-;;       "Jump to the next Yas field correctly with cdlatex active."
-;;       (interactive)
-;;       (if
-;;           (or (bound-and-true-p cdlatex-mode)
-;;               (bound-and-true-p org-cdlatex-mode))
-;;           (cdlatex-tab)
-;;         (yas-next-field-or-maybe-expand))))
-
-;;     ;; Auto-expanding snippets
-;;     (use-package aas
-;;       :hook (LaTeX-mode . aas-activate-for-major-mode)
-;;       :commands (aas-set-snippets)
-;;       :config
-;;       (aas-set-snippets 'text-mode
-;; 	".a" "ã"
-;; 	".A" "Ã"
-;; 	"/a" "â"
-;; 	"/A" "Â"
-;; 	";a" "á"
-;; 	";A" "Á"
-;; 	",a" "à"
-;; 	",A" "À"
-;; 	".o" "õ"
-;; 	".O" "Õ"
-;; 	"/o" "ô"
-;; 	"/O" "Ô"
-;; 	";o" "ó"
-;; 	";O" "Ó"
-;; 	";e" "é"
-;; 	";E" "É"
-;; 	"/e" "ê"
-;; 	"/E" "Ê"
-;; 	";c" "ç"
-;; 	";i" "í"
-;; 	";I" "Í"
-;; 	";u" "ú"
-;; 	";U" "Ú")
-;;       (aas-set-snippets 'latex-mode
-;; 	;; Math environments
-;; 	"mk" (lambda () (interactive)
-;;                "Inline math"
-;;                (yas-expand-snippet "\\\\($0\\\\)"))
-;; 	"!m" (lambda () (interactive)
-;;                "Display math"
-;;                (yas-expand-snippet "\\[\n$0\n\\]"))
-;; 	"!ali" (lambda () (interactive)
-;; 		 "align environment"
-;; 		 (yas-expand-snippet "\\begin{align*}\n$0\n\\end{align*}"))
-;; 	"!g" (lambda () (interactive)
-;;                "gather environment"
-;;                (yas-expand-snippet "\\begin{gather*}\n$0\n\\end{gather*}"))
-;; 	"!eq" (lambda () (interactive)
-;; 		"equation environment"
-;; 		(yas-expand-snippet "\\begin{equation}\\label{eq:$1}\n$0\n\\end{equation}"))
-
-;; 	"!beg" (lambda () (interactive)
-;;                  "begin environment"
-;;                  (yas-expand-snippet
-;;                   "\\begin{$1}\n$0\n\\end{$1}"))
-;; 	"!enum" (lambda () (interactive)
-;;                   "enumerate environment"
-;;                   (yas-expand-snippet
-;;                    "\\begin{enumerate}[(a)]\\setlength\\itemsep{0em}\n\\item$0\n\\end{enumerate}"))
-;; 	"!item" (lambda () (interactive)
-;;                   "itemize environment"
-;;                   (yas-expand-snippet
-;;                    "\\begin{itemize}\\setlength\\itemsep{0em}\n\\item$0\n\\end{itemize}"))
-;; 	:cond #'texmathp
-;; 	"->" "\\to"
-;; 	"-->" "\\longrightarrow"
-;; 	"!>" "\\mapsto"
-;; 	"ox" "\\otimes"
-;; 	"opp" "\\oplus"
-;; 	"OO" "\\infty"
-;; 	"**" "\\times"
-;; 	"cc" "\\subseteq"
-;; 	";sm" "\\setminus"
-;; 	"inn" "\\in"
-;; 	"inv" "^{-1}"
-;; 	"!=" "\\neq"
-;; 	":=" "\\coloneq"
-;; 	"==" "\\iso"
-;; 	"//" (lambda () (interactive)
-;;                "Fraction"
-;;                (yas-expand-snippet "\\frac{$1}{$2}$0"))
-;; 	"tt" (lambda () (interactive)
-;;                "Text in math environment"
-;;                (yas-expand-snippet "\\text{$1}$0"))
-;; 	";set" (lambda () (interactive)
-;; 		 "Collection --- set"
-;; 		 (yas-expand-snippet "\\\\{$1\\\\}$0"))
-;; 	"diag" (lambda () (interactive)
-;; 		 "diagram environment"
-;; 		 (yas-expand-snippet "\\begin{tikzcd}\n  $0\n\\end{tikzcd}"))
-;; 	"bmat" (lambda () (interactive)
-;; 		 "Matrix"
-;; 		 (yas-expand-snippet "\\begin{bmatrix}\n  $0\n\\end{bmatrix}"))))
+  ;; Indentation width
+  (setq c-basic-offset 4))
 
 (provide 'init)
 
