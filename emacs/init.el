@@ -408,7 +408,15 @@
 ;; -----------------------------------------------------------------------------
 
 (use-package modus-themes
-  :init (load-theme 'modus-vivendi-deuteranopia))
+  :init
+  (defconst modus-vivendi-tinted-palette-overrides
+    ;; Language construct mappings
+    '((variable fg-main)
+      (comment  fg-clay)
+      (type     fg-active-value)
+      (constant fg-active-value)
+      (fnname   fg-main)))
+  (load-theme 'modus-vivendi-tinted))
 
 ;; -----------------------------------------------------------------------------
 ;; General utilities
