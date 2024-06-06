@@ -1,34 +1,3 @@
-<<<<<<< HEAD
-# ncspot
-ncspot/userstate.cbor
-
-
-# Ruff linter
-/.ruff_cache
-
-# dwm stuff
-*.o
-*.diff
-*.orig
-config.h
-blocks.h
-dwm/dwm
-dwm/dwmblocks/dwmblocks
-
-# Emacs stuff
-emacs/.local/
-emacs/custom.el
-emacs/straight/
-emacs/eshell/
-emacs/elpa/
-emacs/.cask/
-emacs/projectile-bookmarks.eld
-emacs/transient/
-emacs/var/
-emacs/.last-package-update-day
-.yas-compiled-snippets.el
-*\#
-=======
 # ncspot
 ncspot/userstate.cbor
 
@@ -51,6 +20,7 @@ dwm/dwmblocks/dwmblocks
 # Emacs stuff
 emacs/custom.el
 emacs/server/
+emacs/url/
 emacs/.local/
 emacs/straight/
 emacs/eshell/
@@ -66,4 +36,3 @@ emacs/.last-package-update-day
 *.elc
 *\#
 *~
->>>>>>> 581cc45 (EMACS FOR THE WIN, Vim peasants)
