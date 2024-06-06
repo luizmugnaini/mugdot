@@ -16,28 +16,20 @@ require("lazy").setup({
 	-- -------------------------------------------------------------------------
 	-- Visuals.
 	-- -------------------------------------------------------------------------
-	
+
 	-- Code parser.
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
-	
+
 	-- Themes
-	{ "sainnhe/gruvbox-material" },
+	{ "miikanissi/modus-themes.nvim" },
 	{ "rebelot/kanagawa.nvim" },
-	
+
 	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
 	-- -------------------------------------------------------------------------
-	
-	-- * Forward search: "<leader>l"
-	-- * Backwards search: "<leader>L"
-	{
-		"ggandor/leap.nvim",
-		dependencies = { "tpope/vim-repeat" },
-		event = "VeryLazy",
-	},
-	
+
 	{ "akinsho/toggleterm.nvim", version = "*", event = "VeryLazy" },
-	
+
 	-- Telescope file navigation with "<leader>ff".
 	{
 		"nvim-telescope/telescope.nvim",
@@ -45,7 +37,7 @@ require("lazy").setup({
 		dependencies = { "nvim-lua/plenary.nvim" },
 		event = "VeryLazy",
 	},
-	
+
 	-- Utility for line and block comments.
 	-- * Add line comment with "<leader>lc".
 	-- * Add block comment with "<leader>bc".
@@ -56,17 +48,17 @@ require("lazy").setup({
 		end,
 		event = "VeryLazy",
 	},
-	
+
 	-- Automatic code formatting.
 	{ "stevearc/conform.nvim", event = "VeryLazy" },
-	
+
 	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
 	{ "folke/trouble.nvim", event = "VeryLazy" },
-	
+
 	-- -------------------------------------------------------------------------
 	-- LSP support
 	-- -------------------------------------------------------------------------
-	
+
 	-- LSP management within Neovim.
 	{
 		"williamboman/mason.nvim",
@@ -76,21 +68,21 @@ require("lazy").setup({
 		event = "VeryLazy",
 	},
 	{ "williamboman/mason-lspconfig.nvim", event = "VeryLazy" },
-	
+
 	-- LSP support.
 	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x", event = "VeryLazy" },
 	{ "neovim/nvim-lspconfig", event = "VeryLazy" },
-	
+
 	-- -------------------------------------------------------------------------
 	-- Snippets and completion support
 	-- -------------------------------------------------------------------------
-	
+
 	-- Snippet engine
 	{
 		"L3MON4D3/LuaSnip",
 		build = "make install_jsregexp",
 	},
-	
+
 	-- Snippets and completion
 	{
 		"hrsh7th/nvim-cmp",
