@@ -47,6 +47,10 @@
 ;;; Bytecode compiler settings
 ;;; ============================================================================
 
+;; Ignore useless compiler warnings that actually don't even concern this init.el
+(setq native-comp-async-report-warnings-errors nil)
+(remove-hook 'native-comp-async-compile-warnings-hook 'native-comp-async-compile-warnings-logger)
+
 ;; Annoying as hell
 (setq byte-compile-warnings '(not free-vars unresolved))
 
@@ -602,25 +606,6 @@
 (straight-use-package 'magit)
 
 ;; -----------------------------------------------------------------------------
-;; Programming mode setup
-;; -----------------------------------------------------------------------------
-
-(use-package prog-mode
-  :straight (:type built-in)
-  :hook ((prog-mode . yas-minor-mode)
-         (prog-mode . citre-mode)
-         (prog-mode . company-mode))
-  :bind (:map prog-mode-map
-              ("C-j c" . project-compile)
-              ("C-j r" . project-recompile)
-              ("C-j f" . project-find-file)
-              ("C-j s" . xref-find-apropos)))
-
-;;; ============================================================================
-;;; C and C++ setup
-;;; ============================================================================
-
-;; -----------------------------------------------------------------------------
 ;; Handle the Windows MSVC environment hell
 ;; -----------------------------------------------------------------------------
 
@@ -759,6 +744,23 @@ that are relevant for your installation. "
 
   ;; Indentation width
   (setq c-basic-offset 4))
+
+;; -----------------------------------------------------------------------------
+;; Programming mode setup
+;; -----------------------------------------------------------------------------
+
+(use-package prog-mode
+  :straight (:type built-in)
+  :hook ((prog-mode . yas-minor-mode)
+         (prog-mode . citre-mode)
+         (prog-mode . company-mode))
+  :bind (:map prog-mode-map
+              ("C-j c" . project-compile)
+              ("C-j r" . project-recompile))
+  :config
+  (define-key evil-normal-state-map (kbd "SPC f f") 'project-find-file))
+
+;; -----------------------------------------------------------------------------
 
 (provide 'init)
 
