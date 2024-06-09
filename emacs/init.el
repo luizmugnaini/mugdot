@@ -470,6 +470,7 @@
     (evil-yank (point) (line-end-position)))
 
   ;; Keybindings
+  (define-key evil-normal-state-map (kbd "SPC w") 'save-buffer)
   (define-key evil-normal-state-map (kbd "Y") 'mug-evil-yank-to-end-of-line)
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
@@ -524,26 +525,23 @@
 
 (use-package citre
   :defer t
-  :defines (citre-mode-map
-            citre-ctags-program
-            citre-readtags-program
-            citre-default-create-tags-file-location
-            citre-auto-enable-citre-mode-modes)
   :bind (:map citre-mode-map
-              ("C-c j" . citre-jump)
-              ("C-c J" . citre-jump-back)
-              ("C-c u" . citre-update-this-tags-file)
-              ("C-c o" . xref-find-definitions-other-window))
+              ("C-c u" . citre-update-this-tags-file))
   :init
   (require 'citre-config)
   :config
+  ;; Keybinding for jumping around
+  (define-key evil-normal-state-map (kbd "SPC g d") 'citre-jump)
+  (define-key evil-normal-state-map (kbd "SPC g b") 'citre-jump-back)
+  (define-key evil-normal-state-map (kbd "SPC g o") 'xref-find-definitions-other-window)
+
+  ;; Citre setup
   (setq citre-ctags-program (mug-win-or-linux
                              (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe")
                              "/usr/bin/ctags")
-        citre-readtags-program (mug-win-or-linux
-                             (concat mug-home-dir "/scoop/apps/universal-ctags/current/readtags.exe")
-                             "/usr/bin/readtags")
-        citre-default-create-tags-file-location 'in-dir))
+        citre-tags-global-cache-dir             (concat mug-emacs-cache-dir "/tags")
+        citre-default-create-tags-file-location 'in-dir
+        citre-auto-enable-citre-mode-modes      '(prog-mode)))
 
 (use-package company
   :defines  (company-active-map)
@@ -566,6 +564,7 @@
   (setq company-transformers '(delete-consecutive-dups
                                company-sort-by-occurrence))
 
+  ;; Better interaction with ctags
   (use-package company-ctags
     :defer t
     :requires company
@@ -752,9 +751,12 @@ that are relevant for your installation. "
   (:map c++-mode-map
         ("C-c i" . mug-c-find-corresponding)
         ("C-c f" . mug-c-format-buffer))
-  (:map c-mode-map
-        ("C-c i" . mug-c-find-corresponding))
   :config
+  ;; Keybindings
+  (define-key evil-normal-state-map (kbd "SPC f c") 'mug-c-find-corresponding)
+  (define-key evil-normal-state-map (kbd "SPC f o") 'mug-c-find-corresponding-other-window)
+  (define-key evil-normal-state-map (kbd "SPC f b") 'mug-c-format-buffer)
+
   ;; Indentation width
   (setq c-basic-offset 4))
 
