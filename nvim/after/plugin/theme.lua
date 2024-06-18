@@ -21,7 +21,11 @@ local function set_colorscheme(color)
 	elseif color == "modus" then
 		require("modus-themes").setup({
 			style = "modus_vivendi",
-			variant = "deuteranopia",
+			variant = "tinted",
+			styles = {
+				comments = { italic = false },
+				keywords = { italic = false },
+			},
 		})
 	elseif color == "gruvbox-material" then
 		vim.g.gruvbox_material_better_performance = 1
@@ -32,5 +36,5 @@ local function set_colorscheme(color)
 	vim.cmd.colorscheme(color)
 end
 
-set_colorscheme("modus")
+set_colorscheme("kanagawa")
 vim.cmd.highlight("clear SignColumn")
