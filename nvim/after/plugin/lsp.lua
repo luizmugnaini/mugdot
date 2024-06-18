@@ -2,19 +2,6 @@ local enable_lsp = true
 
 if enable_lsp then
 	-- ----------------------------------------------------------------------------
-	-- Mason
-	-- ----------------------------------------------------------------------------
-
-	require("mason").setup({
-		ensure_installed = {
-			"pyright",
-			"clangd",
-			"rust_analyzer",
-			"lua_ls",
-		},
-	})
-
-	-- ----------------------------------------------------------------------------
 	-- lspconfig
 	-- ----------------------------------------------------------------------------
 
@@ -29,13 +16,6 @@ if enable_lsp then
 		root_dir = function()
 			lsp.dir.find_first({ ".git", ".clang-format", ".clangd", ".clang-tidy" })
 		end,
-	})
-	lspconfig.lua_ls.setup({
-		capabilities = cmp_capabilities,
-		settings = {
-			-- Fix "undefined global 'vim'"
-			Lua = { diagnostics = { globals = { "vim" } } },
-		},
 	})
 	lspconfig.pyright.setup({ capabilities = cmp_capabilities })
 
@@ -68,4 +48,20 @@ if enable_lsp then
 	end)
 
 	lsp.setup()
+
+	-- ----------------------------------------------------------------------------
+	-- Viewing error messages
+	-- ----------------------------------------------------------------------------
+
+	require("trouble").setup({
+		height = 3,
+		auto_open = false,
+		auto_close = true,
+		auto_preview = false,
+		icons = false,
+	})
+
+	vim.keymap.set("n", "<leader>tt", function()
+		require("trouble").open()
+	end, { desc = "[T]trouble [T]oggle" })
 end

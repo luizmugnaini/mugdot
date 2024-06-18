@@ -39,8 +39,6 @@ require("lazy").setup({
 	},
 
 	-- Utility for line and block comments.
-	-- * Add line comment with "<leader>lc".
-	-- * Add block comment with "<leader>bc".
 	{
 		"numToStr/Comment.nvim",
 		config = function()
@@ -51,27 +49,6 @@ require("lazy").setup({
 
 	-- Automatic code formatting.
 	{ "stevearc/conform.nvim", event = "VeryLazy" },
-
-	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
-	{ "folke/trouble.nvim", event = "VeryLazy" },
-
-	-- -------------------------------------------------------------------------
-	-- LSP support
-	-- -------------------------------------------------------------------------
-
-	-- LSP management within Neovim.
-	{
-		"williamboman/mason.nvim",
-		build = function()
-			pcall(vim.cmd, "MasonUpdate")
-		end,
-		event = "VeryLazy",
-	},
-	{ "williamboman/mason-lspconfig.nvim", event = "VeryLazy" },
-
-	-- LSP support.
-	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x", event = "VeryLazy" },
-	{ "neovim/nvim-lspconfig", event = "VeryLazy" },
 
 	-- -------------------------------------------------------------------------
 	-- Snippets and completion support
@@ -92,4 +69,15 @@ require("lazy").setup({
 			"saadparwaiz1/cmp_luasnip",
 		},
 	},
+
+	-- -------------------------------------------------------------------------
+	-- LSP support
+	-- -------------------------------------------------------------------------
+
+	-- LSP support.
+	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x", event = "VeryLazy" },
+	{ "hrsh7th/cmp-nvim-lsp" },
+	{ "neovim/nvim-lspconfig", event = "VeryLazy" },
+	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
+	{ "folke/trouble.nvim", event = "VeryLazy" },
 })
