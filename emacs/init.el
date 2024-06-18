@@ -325,6 +325,7 @@
            ("\\.h$"    . c++-mode) ; oof, C++?
            ("\\.hh$"   . c++-mode)
            ("\\.hpp$"  . c++-mode)
+           ("\\.inl$"  . c++-mode)
            ;; Use GLSL as if it was C
            ("\\.glsl$" . c-mode)
            ("\\.comp$" . c-mode)
@@ -350,6 +351,7 @@
   (keymap-global-unset "C-x C-c")
   (keymap-global-unset "C-x C-d")
   (keymap-global-unset "C-x C-z")
+  (keymap-global-unset "C-x C-s")
   (keymap-global-unset   "C-x s")
   (keymap-global-unset   "C-x f")
   (keymap-global-unset   "C-h h")
@@ -365,10 +367,10 @@
   ;; when pressed together with some other key, in order to prevent such a fucking
   ;; bullshit, I translated every possible shit that could happen into the right
   ;; thing that it should be binded in the first place.
-  (define-key key-translation-map (kbd "C-<up>")           (kbd "C-w"))
-  (define-key key-translation-map (kbd "C-<left>")         (kbd "C-a"))
-  (define-key key-translation-map (kbd "C-<down>")         (kbd "C-s"))
-  (define-key key-translation-map (kbd "C-<right>")        (kbd "C-d")))
+  (define-key key-translation-map (kbd "C-<up>")    (kbd "C-w"))
+  (define-key key-translation-map (kbd "C-<left>")  (kbd "C-a"))
+  (define-key key-translation-map (kbd "C-<down>")  (kbd "C-s"))
+  (define-key key-translation-map (kbd "C-<right>") (kbd "C-d")))
 
 ;; -----------------------------------------------------------------------------
 ;; Elisp setup
@@ -436,6 +438,9 @@
 (use-package vertico
   :commands (vertico-mode)
   :init     (vertico-mode)
+  :bind (:map vertico-map
+              ("C-j" . vertico-previous)
+              ("C-n" . vertico-next))
   :custom   (vertico-cycle t))
 
 ;;; ============================================================================
@@ -458,6 +463,17 @@
 	evil-esc-delay                         0)
 
   (evil-mode 1)
+  :bind (:map evil-normal-state-map
+              ("SPC w"   . save-buffer)
+              ("SPC s s" . split-window-right)
+              ("SPC o"   . other-window)
+              ("SPC b b" . switch-to-buffer)
+              ("SPC f f" . find-file)
+              ("SPC f o" . find-file-other-window)
+              ("SPC f p" . project-find-file)
+              ("SPC c c" . project-compile)
+              ("SPC r r" . project-recompile)
+              ("SPC f z" . rg))
   :config
   (defun mug-evil-hook ()
     "My evil mode."
@@ -472,12 +488,11 @@
     "Yank to end of line."
     (interactive)
     (evil-yank (point) (line-end-position)))
-
-  ;; Keybindings
-  (define-key evil-normal-state-map (kbd "SPC w") 'save-buffer)
   (define-key evil-normal-state-map (kbd "Y") 'mug-evil-yank-to-end-of-line)
+
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
 
   ;; Disable useless messages...
   (advice-add 'evil-forward-char  :around #'mug--suppress-message)
@@ -534,11 +549,6 @@
   :init
   (require 'citre-config)
   :config
-  ;; Keybinding for jumping around
-  (define-key evil-normal-state-map (kbd "SPC g d") 'citre-jump)
-  (define-key evil-normal-state-map (kbd "SPC g b") 'citre-jump-back)
-  (define-key evil-normal-state-map (kbd "SPC g o") 'xref-find-definitions-other-window)
-
   ;; Citre setup
   (setq citre-ctags-program (mug-win-or-linux
                              (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe")
@@ -732,18 +742,19 @@ that are relevant for your installation. "
 
 (use-package cc-mode
   :straight (:type built-in)
-  :bind
-  (:map c++-mode-map
-        ("C-c i" . mug-c-find-corresponding)
-        ("C-c f" . mug-c-format-buffer))
   :config
   ;; Keybindings
   (define-key evil-normal-state-map (kbd "SPC f c") 'mug-c-find-corresponding)
-  (define-key evil-normal-state-map (kbd "SPC f o") 'mug-c-find-corresponding-other-window)
   (define-key evil-normal-state-map (kbd "SPC f b") 'mug-c-format-buffer)
 
   ;; Indentation width
   (setq c-basic-offset 4))
+
+;; -----------------------------------------------------------------------------
+;; Odin lang
+;; -----------------------------------------------------------------------------
+
+(require 'odin-mode)
 
 ;; -----------------------------------------------------------------------------
 ;; Programming mode setup
@@ -754,11 +765,10 @@ that are relevant for your installation. "
   :hook ((prog-mode . yas-minor-mode)
          (prog-mode . citre-mode)
          (prog-mode . company-mode))
-  :bind (:map prog-mode-map
-              ("C-j c" . project-compile)
-              ("C-j r" . project-recompile))
-  :config
-  (define-key evil-normal-state-map (kbd "SPC f f") 'project-find-file))
+  :bind (:map evil-normal-state-map
+              ("g d" . citre-jump)
+              ("g b" . citre-jump-back)
+              ("g o" . xref-find-definitions-other-window)))
 
 ;; -----------------------------------------------------------------------------
 
