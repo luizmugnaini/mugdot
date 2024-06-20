@@ -16,9 +16,6 @@ target = "~/.config/git"
 src = "minecraft/scripts"
 target = "~/.local/bin"
 
-[ncspot]
-target = "~/.config/ncspot"
-
 [nvim]
 target = "~/.config/nvim"
 recursive = true
@@ -32,9 +29,6 @@ target = "~/.config/tmux"
 [tmux_scripts]
 src = "tmux/scripts"
 target = "~/.local/bin"
-
-[starship]
-target = "~/.config/starship"
 
 [x]
 target = "~/"
