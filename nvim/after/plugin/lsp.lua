@@ -1,4 +1,4 @@
-local enable_lsp = true
+local enable_lsp = false
 
 if enable_lsp then
 	-- ----------------------------------------------------------------------------
