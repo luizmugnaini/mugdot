@@ -1,5 +1,0 @@
-require("mug.settings")
-require("mug.remap")
-require("mug.ft")
-require("mug.fmt")
-require("mug.lazy")
