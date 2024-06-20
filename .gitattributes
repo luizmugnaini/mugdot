@@ -1,5 +1,6 @@
 * text=auto
 
+*.lua text
 *.c text
 *.cpp text
 *.h text
