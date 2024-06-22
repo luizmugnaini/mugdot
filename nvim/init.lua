@@ -2,6 +2,12 @@
 -- General settings
 -- -----------------------------------------------------------------------------
 
+vim.g.mug_enable_lsp = false
+vim.g.mug_enable_treesitter = true
+
+-- Use SPACE as the leader key.
+vim.g.mapleader = " "
+
 -- Find python and set its provider path.
 local python_path_proc = io.popen('python -c "import sys;print(sys.executable)"')
 if python_path_proc ~= nil then
@@ -17,67 +23,72 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
 
-vim.g.mapleader = " " -- Use SPACE as the leader key.
+-- Visuals
+vim.opt.guicursor = "" -- Use a block as the cursor.
+vim.opt.showmode = false -- Don't show the current mode in the minibuffer.
+vim.opt.number = false -- Don't show line numbers
+vim.opt.termguicolors = true
 
-local opt = vim.opt
+-- Indentation
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.smartindent = true
 
-opt.guicursor = "" -- Use a block as the cursor.
-opt.showmode = false -- Don't show the current mode in the minibuffer.
-opt.number = false -- Don't show line numbers
+-- Text rendering behaviour
+vim.opt.wrap = false
+vim.opt.scrolloff = 4 -- Minimal number of lines below cursor line
 
--- Indentation stuff
-opt.tabstop = 4
-opt.shiftwidth = 4
-opt.expandtab = true
-opt.smartindent = true
-
-opt.wrap = false -- Text wrapping
-opt.scrolloff = 4 -- Minimal number of lines below cursor line
-
-opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+-- Visual mode
+vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
 -- Backup
-opt.swapfile = false
-opt.backup = false
-opt.undodir = vim.fn.stdpath("data") .. "/undo"
-opt.undofile = true
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = vim.fn.stdpath("data") .. "/undo"
+vim.opt.undofile = true
 
 -- Searching functionality
-opt.grepprg = "rg --vimgrep"
-opt.hlsearch = false
-opt.incsearch = true
-opt.smartcase = true
-opt.ignorecase = true
+vim.opt.grepprg = "rg --vimgrep"
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+vim.opt.smartcase = true
+vim.opt.ignorecase = true
 
-opt.termguicolors = true
+-- Spelling
+vim.opt.spelllang = { "en" }
+vim.opt.spell = false
 
-opt.isfname:append("@-@")
-
-opt.spelllang = { "en" }
-opt.spell = true
-
-opt.updatetime = 50
+vim.opt.updatetime = 50
 
 -- -----------------------------------------------------------------------------
 -- Keybindings
 -- -----------------------------------------------------------------------------
 
 local all_modes = { "n", "i", "x", "v", "s", "c", "o", "l", "t" }
-local nins_modes = { "n", "x", "o" } -- non-insert modes.
+local nins_modes = { "n", "x", "o" }
 
-vim.keymap.set("v", "<C-y>", '"+y', { desc = "Copy to external clipboard" })
 vim.keymap.set(all_modes, "<C-k>", "<Esc>", { desc = "Escape to normal mode", silent = true })
+vim.keymap.set("v", "<C-y>", '"+y', { desc = "Copy to external clipboard" })
 vim.keymap.set(nins_modes, "<leader>w", vim.cmd.write, { desc = "[W]rite file" })
 vim.keymap.set(nins_modes, "<leader>qq", vim.cmd.quit, { desc = "Kill the current buffer" })
-vim.keymap.set(nins_modes, "<leader>qa", vim.cmd.wqall, { desc = "Save and kill all buffers" })
-vim.keymap.set(nins_modes, "<leader>qa", vim.cmd.wq, { desc = "Save and kill the current buffer" })
 vim.keymap.set(nins_modes, "<leader>bf", vim.cmd.Ex, { desc = "Native file browsing" })
-vim.keymap.set(nins_modes, "<leader>ss", vim.cmd.vsplit, { silent = true, desc = "Split Vertically" })
-vim.keymap.set(nins_modes, "<leader>sh", vim.cmd.split, { silent = true, desc = "Split horizontally" })
-vim.keymap.set(nins_modes, "<leader>o", vim.cmd("wincmd w"), { silent = true, desc = "Move to next window" })
-vim.keymap.set(nins_modes, "<leader>gt", "<C-]>", { desc = "Go to definition using ctags" })
-vim.keymap.set(nins_modes, "<leader>gb", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
-vim.keymap.set(nins_modes, "<leader>ut", vim.cmd("!ctags -R"), { desc = "Update the tag cache" })
+
+-- Window splits
+vim.keymap.set(nins_modes, "<leader>ss", vim.cmd.vsplit, { desc = "Split Vertically", silent = true })
+vim.keymap.set(nins_modes, "<leader>sh", vim.cmd.split, { desc = "Split horizontally", silent = true })
+
+-- Window movement
+vim.keymap.set(nins_modes, "<leader>o", function()
+	vim.cmd.wincmd("w")
+end, { desc = "Move to next window", silent = true })
+
+-- Tags
+vim.keymap.set(nins_modes, "gt", "<C-]>", { desc = "Go to definition using ctags" })
+vim.keymap.set(nins_modes, "gb", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
+vim.keymap.set(nins_modes, "<leader>ut", function()
+	vim.cmd("!ctags -R")
+end, { desc = "Update the tag cache" })
 
 -- -----------------------------------------------------------------------------
 -- File type configuration.
@@ -114,11 +125,10 @@ require("lazy").setup({
 	-- -------------------------------------------------------------------------
 
 	-- Code parser.
-	-- { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 
-	-- Themes
-	{ "miikanissi/modus-themes.nvim" },
-	{ "rebelot/kanagawa.nvim" },
+	-- Theme building helper.
+	{ "tjdevries/colorbuddy.nvim" },
 
 	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
