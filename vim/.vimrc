@@ -11,7 +11,7 @@ nnoremap <leader>w :w<CR>
 nnoremap <leader>bf :Ex<CR>
 
 colorscheme habamax
-syntax enable            " Enables syntax highlighing
+syntax enable
 set guicursor=i:block    " Use a block as the cursor, always
 set novisualbell         " The visual bell fucking sucks
 set lazyredraw           " Don't redraw while executing macros (good performance config)
