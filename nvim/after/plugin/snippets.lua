@@ -33,9 +33,8 @@ cmp.setup({
 		["<C-p>"] = cmp.mapping.select_prev_item(),
 	}),
 	sources = {
-		{ name = "luasnip", priority = 30 },
-		{ name = "nvim_lsp", priority = 20 },
-		{ name = "path", priority = 10 },
+		{ name = "luasnip", priority = 20 },
+		{ name = "nvim_lsp", priority = 10 },
 	},
 })
 

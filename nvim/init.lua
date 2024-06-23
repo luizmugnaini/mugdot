@@ -28,6 +28,9 @@ vim.opt.guicursor = "" -- Use a block as the cursor.
 vim.opt.showmode = false -- Don't show the current mode in the minibuffer.
 vim.opt.number = false -- Don't show line numbers
 vim.opt.termguicolors = true
+vim.opt.signcolumn = "no"
+vim.opt.showtabline = 0
+vim.opt.statusline = " %f %h%m%r%=%-14.(%l,%c%)"
 
 -- Indentation
 vim.opt.tabstop = 4
@@ -62,6 +65,70 @@ vim.opt.spell = false
 vim.opt.updatetime = 50
 
 -- -----------------------------------------------------------------------------
+-- Auto-commands.
+-- -----------------------------------------------------------------------------
+
+local mug_group = vim.api.nvim_create_augroup("mug", { clear = true })
+
+local c_like =
+	{ "*.c", "*.h", "*.cc", ".cpp", ".hpp", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" }
+
+function trim_whitespaces()
+	local view = vim.fn.winsaveview()
+	vim.api.nvim_exec([[keepjumps keeppatterns silent! %s/\s\+$//e]], { output = false })
+	vim.fn.winrestview(view)
+end
+
+function fmt_buf(formatter)
+	local view = vim.fn.winsaveview()
+	vim.api.nvim_exec([[keepjumps keeppatterns silent %!]] .. formatter, { output = false })
+	vim.fn.winrestview(view)
+end
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	desc = "Detect GLSL files",
+	group = mug_group,
+	pattern = { "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" },
+	command = "set filetype=glsl",
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+	desc = "Remove trailing whitespaces",
+	group = mug_group,
+	pattern = "*",
+	callback = function()
+		trim_whitespaces()
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+	desc = "Format C-like files",
+	group = mug_group,
+	pattern = c_like,
+	callback = function()
+		fmt_buf("clang-format")
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+	desc = "Format Python files",
+	group = mug_group,
+	pattern = "*.py",
+	callback = function()
+		fmt_buf("black -q -")
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+	desc = "Format Lua files",
+	group = mug_group,
+	pattern = "*.lua",
+	callback = function()
+		fmt_buf("stylua -")
+	end,
+})
+
+-- -----------------------------------------------------------------------------
 -- Keybindings
 -- -----------------------------------------------------------------------------
 
@@ -89,17 +156,6 @@ vim.keymap.set(nins_modes, "gb", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" 
 vim.keymap.set(nins_modes, "<leader>ut", function()
 	vim.cmd("!ctags -R")
 end, { desc = "Update the tag cache" })
-
--- -----------------------------------------------------------------------------
--- File type configuration.
--- -----------------------------------------------------------------------------
-
--- GLSL
-vim.api.nvim_create_autocmd("BufEnter", {
-	desc = "Detect GLSL files",
-	pattern = { "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" },
-	command = "set filetype=glsl",
-})
 
 -- -----------------------------------------------------------------------------
 -- Packages
@@ -134,8 +190,6 @@ require("lazy").setup({
 	-- Utilities for better development.
 	-- -------------------------------------------------------------------------
 
-	{ "akinsho/toggleterm.nvim", version = "*", event = "VeryLazy" },
-
 	-- Telescope file navigation with "<leader>ff".
 	{
 		"nvim-telescope/telescope.nvim",
@@ -152,9 +206,6 @@ require("lazy").setup({
 		end,
 		event = "VeryLazy",
 	},
-
-	-- Automatic code formatting.
-	{ "stevearc/conform.nvim", event = "VeryLazy" },
 
 	-- -------------------------------------------------------------------------
 	-- Snippets and completion support
