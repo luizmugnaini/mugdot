@@ -1,9 +1,26 @@
+-- =============================================================================
+-- My custom NeoVim experience.
+--
+-- Author: Luiz G. Mugnaini A. <luizmugnaini@gmail.com>
+-- =============================================================================
+
+-- Ternary "operator"
+function tern(cond, opt_true, opt_false)
+	if cond then
+		return opt_true
+	else
+		return opt_false
+	end
+end
+
+vim.g.mug_enable_lsp = os.getenv("LSP")
+vim.g.mug_enable_treesitter = true
+vim.g.mug_os_windows = package.config:sub(1, 1) == "\\"
+vim.g.mug_home = tern(vim.g.mug_os_windows, os.getenv("USERPROFILE"), os.getenv("HOME"))
+
 -- -----------------------------------------------------------------------------
 -- General settings
 -- -----------------------------------------------------------------------------
-
-vim.g.mug_enable_lsp = false
-vim.g.mug_enable_treesitter = true
 
 -- Use SPACE as the leader key.
 vim.g.mapleader = " "
@@ -64,6 +81,9 @@ vim.opt.spell = false
 
 vim.opt.updatetime = 50
 
+-- Tags
+vim.opt.tags = "tags"
+
 -- -----------------------------------------------------------------------------
 -- Auto-commands.
 -- -----------------------------------------------------------------------------
@@ -71,7 +91,7 @@ vim.opt.updatetime = 50
 local mug_group = vim.api.nvim_create_augroup("mug", { clear = true })
 
 local c_like =
-	{ "*.c", "*.h", "*.cc", ".cpp", ".hpp", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" }
+	{ "*.c", "*.h", "*.cc", "*.cpp", "*.hpp", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" }
 
 function trim_whitespaces()
 	local view = vim.fn.winsaveview()
@@ -92,41 +112,41 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	command = "set filetype=glsl",
 })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-	desc = "Remove trailing whitespaces",
-	group = mug_group,
-	pattern = "*",
-	callback = function()
-		trim_whitespaces()
-	end,
-})
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+-- 	desc = "Remove trailing whitespaces",
+-- 	group = mug_group,
+-- 	pattern = "*",
+-- 	callback = function()
+-- 		trim_whitespaces()
+-- 	end,
+-- })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-	desc = "Format C-like files",
-	group = mug_group,
-	pattern = c_like,
-	callback = function()
-		fmt_buf("clang-format")
-	end,
-})
-
-vim.api.nvim_create_autocmd("BufWritePre", {
-	desc = "Format Python files",
-	group = mug_group,
-	pattern = "*.py",
-	callback = function()
-		fmt_buf("black -q -")
-	end,
-})
-
-vim.api.nvim_create_autocmd("BufWritePre", {
-	desc = "Format Lua files",
-	group = mug_group,
-	pattern = "*.lua",
-	callback = function()
-		fmt_buf("stylua -")
-	end,
-})
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+-- 	desc = "Format C-like files",
+-- 	group = mug_group,
+-- 	pattern = c_like,
+-- 	callback = function()
+-- 		fmt_buf("clang-format")
+-- 	end,
+-- })
+--
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+-- 	desc = "Format Python files",
+-- 	group = mug_group,
+-- 	pattern = "*.py",
+-- 	callback = function()
+-- 		fmt_buf("black -q -")
+-- 	end,
+-- })
+--
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+-- 	desc = "Format Lua files",
+-- 	group = mug_group,
+-- 	pattern = "*.lua",
+-- 	callback = function()
+-- 		fmt_buf("stylua -")
+-- 	end,
+-- })
 
 -- -----------------------------------------------------------------------------
 -- Keybindings
@@ -138,12 +158,12 @@ local nins_modes = { "n", "x", "o" }
 vim.keymap.set(all_modes, "<C-k>", "<Esc>", { desc = "Escape to normal mode", silent = true })
 vim.keymap.set("v", "<C-y>", '"+y', { desc = "Copy to external clipboard" })
 vim.keymap.set(nins_modes, "<leader>w", vim.cmd.write, { desc = "[W]rite file" })
-vim.keymap.set(nins_modes, "<leader>qq", vim.cmd.quit, { desc = "Kill the current buffer" })
+vim.keymap.set(nins_modes, "<leader>q", vim.cmd.quit, { desc = "Kill the current buffer" })
 vim.keymap.set(nins_modes, "<leader>bf", vim.cmd.Ex, { desc = "Native file browsing" })
 
 -- Window splits
-vim.keymap.set(nins_modes, "<leader>ss", vim.cmd.vsplit, { desc = "Split Vertically", silent = true })
-vim.keymap.set(nins_modes, "<leader>sh", vim.cmd.split, { desc = "Split horizontally", silent = true })
+vim.keymap.set(nins_modes, "<leader>s", vim.cmd.vsplit, { desc = "Split Vertically", silent = true })
+vim.keymap.set(nins_modes, "<leader>h", vim.cmd.split, { desc = "Split horizontally", silent = true })
 
 -- Window movement
 vim.keymap.set(nins_modes, "<leader>o", function()
@@ -151,10 +171,15 @@ vim.keymap.set(nins_modes, "<leader>o", function()
 end, { desc = "Move to next window", silent = true })
 
 -- Tags
-vim.keymap.set(nins_modes, "gt", "<C-]>", { desc = "Go to definition using ctags" })
+local ctags_exe =
+	tern(vim.g.mug_os_windows, vim.g.mug_home .. "/scoop/apps/universal-ctags/current/ctags.exe", "/usr/bin/ctags")
+local ctags_args =
+	"-o tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
+vim.keymap.set(nins_modes, "gd", "<C-]>", { desc = "Go to definition" })
+vim.keymap.set(nins_modes, "gt", vim.cmd.tselect, { desc = "Get all tags under this identifier" })
 vim.keymap.set(nins_modes, "gb", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
 vim.keymap.set(nins_modes, "<leader>ut", function()
-	vim.cmd("!ctags -R")
+	vim.cmd("!" .. ctags_exe .. " " .. ctags_args)
 end, { desc = "Update the tag cache" })
 
 -- -----------------------------------------------------------------------------
@@ -207,21 +232,25 @@ require("lazy").setup({
 		event = "VeryLazy",
 	},
 
+	{ "nvimdev/guard.nvim", dependencies = { "nvimdev/guard-collection" } },
+
+	{ "ludovicchabant/vim-gutentags" },
+
 	-- -------------------------------------------------------------------------
 	-- Snippets and completion support
 	-- -------------------------------------------------------------------------
 
 	{ "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
-	{ "hrsh7th/nvim-cmp", dependencies = { "saadparwaiz1/cmp_luasnip" } },
+	{ "hrsh7th/nvim-cmp", dependencies = { "saadparwaiz1/cmp_luasnip", "hrsh7th/cmp-buffer" } },
 
 	-- -------------------------------------------------------------------------
 	-- LSP support
 	-- -------------------------------------------------------------------------
 
 	-- LSP support.
-	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x", event = "VeryLazy" },
-	{ "hrsh7th/cmp-nvim-lsp" },
-	{ "neovim/nvim-lspconfig", event = "VeryLazy" },
+	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x", event = "VeryLazy", cond = vim.g.mug_enable_lsp },
+	{ "hrsh7th/cmp-nvim-lsp", event = "VeryLazy", cond = vim.g.mug_enable_lsp },
+	{ "neovim/nvim-lspconfig", event = "VeryLazy", cond = vim.g.mug_enable_lsp },
 	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
-	{ "folke/trouble.nvim", event = "VeryLazy" },
+	{ "folke/trouble.nvim", event = "VeryLazy", cond = vim.g.mug_enable_lsp },
 })
