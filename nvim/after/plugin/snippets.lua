@@ -24,7 +24,7 @@ local cmp = require("cmp")
 cmp.setup({
 	snippet = {
 		expand = function(args)
-			require("luasnip").lsp_expand(args.body)
+			vim.snippet.expand(args.body)
 		end,
 	},
 	mapping = cmp.mapping.preset.insert({
@@ -33,16 +33,16 @@ cmp.setup({
 		["<C-p>"] = cmp.mapping.select_prev_item(),
 	}),
 	sources = {
-		{ name = "luasnip", priority = 20 },
-		{ name = "nvim_lsp", priority = 10 },
+		{ name = "luasnip" },
+		{ name = "nvim_lsp" },
+		{ name = "buffer" },
 	},
 })
 
 -- Latex completion
 cmp.setup.filetype("tex", {
-	sources = cmp.config.sources({
+	sources = {
 		{ name = "luasnip" },
-	}, {
 		{ name = "buffer" },
-	}),
+	},
 })
