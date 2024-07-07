@@ -70,7 +70,7 @@ export TERMINAL="alacritty"
 export BROWSER="firefox"
 
 alias vim="nvim"
-alias v="nvim"
+alias v="vim"
 
 # Makes my Ctrl-k output an Esc so that I can use zsh vim mode smoothly
 bindkey -s ^k "\x1b"
