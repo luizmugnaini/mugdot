@@ -4,7 +4,6 @@
 -- Author: Luiz G. Mugnaini A. <luizmugnaini@gmail.com>
 -- =============================================================================
 
--- Ternary "operator"
 function tern(cond, opt_true, opt_false)
 	if cond then
 		return opt_true
@@ -13,8 +12,6 @@ function tern(cond, opt_true, opt_false)
 	end
 end
 
-vim.g.mug_enable_lsp = os.getenv("LSP")
-vim.g.mug_enable_treesitter = true
 vim.g.mug_os_windows = package.config:sub(1, 1) == "\\"
 vim.g.mug_home = tern(vim.g.mug_os_windows, os.getenv("USERPROFILE"), os.getenv("HOME"))
 
@@ -42,7 +39,7 @@ vim.g.loaded_perl_provider = 0
 
 -- Visuals
 vim.opt.guicursor = "" -- Use a block as the cursor.
-vim.opt.showmode = false -- Don't show the current mode in the minibuffer.
+vim.opt.showmode = false -- Don't show the current mode in the minibuffer
 vim.opt.number = false -- Don't show line numbers
 vim.opt.termguicolors = true
 vim.opt.signcolumn = "no"
@@ -83,6 +80,10 @@ vim.opt.updatetime = 50
 
 -- Tags
 vim.opt.tags = "tags"
+
+-- Misc
+vim.opt.encoding = "utf8"
+vim.opt.clipboard = "unnamedplus" -- Copy to and from vim using the system clipboard register
 
 -- -----------------------------------------------------------------------------
 -- Auto-commands.
@@ -156,10 +157,9 @@ local all_modes = { "n", "i", "x", "v", "s", "c", "o", "l", "t" }
 local nins_modes = { "n", "x", "o" }
 
 vim.keymap.set(all_modes, "<C-k>", "<Esc>", { desc = "Escape to normal mode", silent = true })
-vim.keymap.set("v", "<C-y>", '"+y', { desc = "Copy to external clipboard" })
 vim.keymap.set(nins_modes, "<leader>w", vim.cmd.write, { desc = "[W]rite file" })
 vim.keymap.set(nins_modes, "<leader>q", vim.cmd.quit, { desc = "Kill the current buffer" })
-vim.keymap.set(nins_modes, "<leader>bf", vim.cmd.Ex, { desc = "Native file browsing" })
+vim.keymap.set(nins_modes, "<leader>e", vim.cmd.Ex, { desc = "Explore files" })
 
 -- Window splits
 vim.keymap.set(nins_modes, "<leader>s", vim.cmd.vsplit, { desc = "Split Vertically", silent = true })
@@ -201,15 +201,39 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+	defaults = { lazy = true },
+
 	-- -------------------------------------------------------------------------
 	-- Visuals.
 	-- -------------------------------------------------------------------------
 
 	-- Code parser.
-	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	{
+		"nvim-treesitter/nvim-treesitter",
+		enabled = true,
+		build = ":TSUpdate",
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				ensure_installed = { "c", "cpp", "lua" },
+				indent = { enable = { "python" } },
+				sync_install = false,
+				auto_install = false,
+				highlight = {
+					enable = true,
+					disable = { "latex" },
+					additional_vim_regex_highlighting = false,
+				},
+			})
+		end,
+	},
 
-	-- Theme building helper.
-	{ "tjdevries/colorbuddy.nvim" },
+	-- Custom colorscheme.
+	{
+		"tjdevries/colorbuddy.nvim",
+		init = function()
+			vim.cmd.colorscheme("muggy")
+		end,
+	},
 
 	-- -------------------------------------------------------------------------
 	-- Utilities for better development.
@@ -221,36 +245,178 @@ require("lazy").setup({
 		tag = "0.1.6",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		event = "VeryLazy",
+		config = function()
+			local builtin = require("telescope.builtin")
+
+			vim.keymap.set("n", "<leader>ff", function()
+				builtin.find_files({
+					hidden = true,
+					file_ignore_patterns = { ".git" },
+				})
+			end, { desc = "[F]ind [F]ile" })
+			vim.keymap.set("n", "<leader>bb", builtin.buffers, { desc = "[F]ind [B]uffers" })
+			vim.keymap.set("n", "<leader>fz", function()
+				builtin.grep_string({ search = vim.fn.input("> ") })
+			end, { desc = "Fuzzy finder" })
+		end,
 	},
 
 	-- Utility for line and block comments.
 	{
 		"numToStr/Comment.nvim",
-		config = function()
-			require("Comment").setup()
-		end,
 		event = "VeryLazy",
+		config = function()
+			require("Comment").setup({
+				toggler = {
+					line = "<A-;>",
+				},
+				opleader = {
+					line = "<A-;>",
+				},
+			})
+		end,
 	},
 
-	{ "nvimdev/guard.nvim", dependencies = { "nvimdev/guard-collection" } },
+	-- Automatic formatting at save.
+	{
+		"nvimdev/guard.nvim",
+		dependencies = { "nvimdev/guard-collection" },
+		event = "VeryLazy",
+		ft = { "c", "cpp", "glsl", "lua", "python" },
+		config = function()
+			local ft = require("guard.filetype")
 
-	{ "ludovicchabant/vim-gutentags" },
+			ft("c,cpp,glsl"):fmt("clang-format")
+			ft("lua"):fmt("stylua")
+			ft("python"):fmt("black")
+
+			require("guard").setup({
+				fmt_on_save = true,
+			})
+		end,
+	},
 
 	-- -------------------------------------------------------------------------
-	-- Snippets and completion support
+	-- Snippets
 	-- -------------------------------------------------------------------------
 
-	{ "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
-	{ "hrsh7th/nvim-cmp", dependencies = { "saadparwaiz1/cmp_luasnip", "hrsh7th/cmp-buffer" } },
+	{
+		"L3MON4D3/LuaSnip",
+		build = "make install_jsregexp",
+		ft = { "tex", "c", "cpp" },
+		config = function()
+			local ls = require("luasnip")
+
+			require("luasnip.loaders.from_lua").lazy_load({ paths = vim.g.mug_home .. "/.config/mugdot/nvim/snippets/" })
+
+			ls.config.setup({
+				-- Enable autotriggered snippets
+				enable_autosnippets = true,
+			})
+
+			vim.keymap.set({ "i" }, "<C-e>", function()
+				ls.expand()
+			end, { silent = true, desc = "Expand snippet" })
+		end,
+	},
 
 	-- -------------------------------------------------------------------------
 	-- LSP support
 	-- -------------------------------------------------------------------------
 
-	-- LSP support.
-	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x", event = "VeryLazy", cond = vim.g.mug_enable_lsp },
-	{ "hrsh7th/cmp-nvim-lsp", event = "VeryLazy", cond = vim.g.mug_enable_lsp },
-	{ "neovim/nvim-lspconfig", event = "VeryLazy", cond = vim.g.mug_enable_lsp },
-	-- View errors and warnings from the LSP in a separate buffer with "<leader>tt".
-	{ "folke/trouble.nvim", event = "VeryLazy", cond = vim.g.mug_enable_lsp },
+	{
+		"VonHeikemen/lsp-zero.nvim",
+		cond = (os.getenv("LSP") ~= nil),
+		branch = "v3.x",
+		-- event = "VeryLazy",
+		dependencies = {
+			"neovim/nvim-lspconfig",
+			"saadparwaiz1/cmp_luasnip",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/nvim-cmp",
+			"folke/trouble.nvim",
+		},
+		config = function()
+			-- ----------------------------------------------------------------------------
+			-- Completions
+			-- ----------------------------------------------------------------------------
+
+			local cmp = require("cmp")
+
+			cmp.setup({
+				snippet = {
+					expand = function(args)
+						vim.snippet.expand(args.body)
+					end,
+				},
+				mapping = cmp.mapping.preset.insert({
+					["<C-y>"] = cmp.mapping.confirm({ select = true }),
+					["<C-j>"] = cmp.mapping.select_prev_item(),
+					["<C-n>"] = cmp.mapping.select_next_item(),
+				}),
+				sources = {
+					{ name = "luasnip" },
+					{ name = "nvim_lsp" },
+					{ name = "buffer" },
+				},
+			})
+
+			-- ----------------------------------------------------------------------------
+			-- LSP config
+			-- ----------------------------------------------------------------------------
+
+			local lsp = require("lsp-zero").preset({ name = "recommended" })
+			local lspconfig = require("lspconfig")
+			local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+			lspconfig.clangd.setup({
+				cmd = { "clangd", "--log=verbose", "--compile-commands-dir=./build" },
+				filetypes = { "c", "cpp" },
+				capabilities = cmp_capabilities,
+				root_dir = function()
+					lsp.dir.find_first({ ".git", ".clang-format", ".clangd", ".clang-tidy" })
+				end,
+			})
+			lspconfig.pyright.setup({ capabilities = cmp_capabilities })
+
+			lsp.extend_cmp()
+			lsp.set_preferences({
+				suggest_lsp_servers = false,
+				sign_icons = { error = "E", warn = "W", hint = "H", info = "I" },
+			})
+			lsp.on_attach(function(client, bufnr)
+				local opts = { buffer = bufnr, remap = false }
+				vim.keymap.set("n", "gd", function()
+					vim.lsp.buf.definition()
+				end, opts)
+				vim.keymap.set("n", "gr", function()
+					vim.lsp.buf.references()
+				end, opts)
+				vim.keymap.set("n", "K", function()
+					vim.lsp.buf.hover()
+				end, opts)
+				vim.keymap.set("n", "<leader>ca", function()
+					vim.lsp.buf.code_action()
+				end, opts)
+				vim.keymap.set("n", "<leader>rn", function()
+					vim.lsp.buf.rename()
+				end, opts)
+			end)
+
+			lsp.setup()
+
+			require("trouble").setup({
+				height = 3,
+				auto_open = false,
+				auto_close = true,
+				auto_preview = false,
+				icons = false,
+			})
+
+			vim.keymap.set("n", "<leader>tt", function()
+				require("trouble").open()
+			end, { desc = "[T]trouble [T]oggle" })
+		end,
+	},
 })
