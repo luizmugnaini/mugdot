@@ -79,9 +79,10 @@ vim.opt.spell = false
 vim.opt.updatetime = 50
 
 -- Tags
-vim.opt.tags = "tags"
+vim.opt.tags = ".tags"
 
 -- Misc
+vim.opt.wildignore = { "*.o", "*.obj", "*.lib", "*.a", "*.exe", "*.pdb", "*.ilk", ".git" }
 vim.opt.encoding = "utf8"
 vim.opt.clipboard = "unnamedplus" -- Copy to and from vim using the system clipboard register
 
@@ -112,42 +113,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	pattern = { "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" },
 	command = "set filetype=glsl",
 })
-
--- vim.api.nvim_create_autocmd("BufWritePre", {
--- 	desc = "Remove trailing whitespaces",
--- 	group = mug_group,
--- 	pattern = "*",
--- 	callback = function()
--- 		trim_whitespaces()
--- 	end,
--- })
-
--- vim.api.nvim_create_autocmd("BufWritePre", {
--- 	desc = "Format C-like files",
--- 	group = mug_group,
--- 	pattern = c_like,
--- 	callback = function()
--- 		fmt_buf("clang-format")
--- 	end,
--- })
---
--- vim.api.nvim_create_autocmd("BufWritePre", {
--- 	desc = "Format Python files",
--- 	group = mug_group,
--- 	pattern = "*.py",
--- 	callback = function()
--- 		fmt_buf("black -q -")
--- 	end,
--- })
---
--- vim.api.nvim_create_autocmd("BufWritePre", {
--- 	desc = "Format Lua files",
--- 	group = mug_group,
--- 	pattern = "*.lua",
--- 	callback = function()
--- 		fmt_buf("stylua -")
--- 	end,
--- })
 
 -- -----------------------------------------------------------------------------
 -- Keybindings
