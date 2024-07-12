@@ -5,10 +5,15 @@
 *.cpp text
 *.h text
 *.hpp text
-
+*.sh text
+*.cmd text
 *.md text
 *.txt text
+*.toml text
+*.json text
+*.conf text
 
+*.ttf binary
 *.jpg binary
 *.png binary
 *.wav binary

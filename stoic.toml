@@ -1,5 +1,5 @@
 [alacritty]
-src = "alacritty/alacritty.toml"
+src = "alacritty/alacritty_linux.toml"
 target = "~/.config/alacritty/alacritty.toml"
 
 [zsh]
@@ -11,10 +11,6 @@ recursive = true
 
 [git]
 target = "~/.config/git"
-
-[minecraft]
-src = "minecraft/scripts"
-target = "~/.local/bin"
 
 [nvim]
 target = "~/.config/nvim"
