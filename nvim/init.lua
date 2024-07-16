@@ -139,10 +139,10 @@ end, { desc = "Move to next window", silent = true })
 local ctags_exe =
 	tern(vim.g.mug_os_windows, vim.g.mug_home .. "/scoop/apps/universal-ctags/current/ctags.exe", "/usr/bin/ctags")
 local ctags_args =
-	"-o tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
+	"-o .tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
 vim.keymap.set(nins_modes, "gd", "<C-]>", { desc = "Go to definition" })
 vim.keymap.set(nins_modes, "gt", vim.cmd.tselect, { desc = "Get all tags under this identifier" })
-vim.keymap.set(nins_modes, "gb", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
+vim.keymap.set(nins_modes, "gp", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
 vim.keymap.set(nins_modes, "<leader>ut", function()
 	vim.cmd("!" .. ctags_exe .. " " .. ctags_args)
 end, { desc = "Update the tag cache" })
