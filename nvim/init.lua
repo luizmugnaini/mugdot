@@ -44,7 +44,7 @@ vim.opt.number = false -- Don't show line numbers
 vim.opt.termguicolors = true
 vim.opt.signcolumn = "no"
 vim.opt.showtabline = 0
-vim.opt.statusline = " %f %h%m%r%=%-14.(%l,%c%)"
+vim.opt.statusline = " %f %h%m%r%=%-14.(%l%)"
 
 -- Indentation
 vim.opt.tabstop = 4
