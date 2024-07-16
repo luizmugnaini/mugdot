@@ -44,8 +44,6 @@ return {
 			"///",
 			"/// Description:",
 			"/// Author: Luiz G. Mugnaini A. <luizmuganini@gmail.com>",
-			"",
-			"#pragma once",
 		}),
 	}),
 }
