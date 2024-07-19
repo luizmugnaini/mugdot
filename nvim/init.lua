@@ -23,7 +23,7 @@ vim.g.mug_home = tern(vim.g.mug_os_windows, os.getenv("USERPROFILE"), os.getenv(
 vim.g.mapleader = " "
 
 -- Find python and set its provider path.
-local python_path_proc = io.popen('python -c "import sys;print(sys.executable)"')
+local python_path_proc = io.popen('python3 -c "import sys;print(sys.executable)"')
 if python_path_proc ~= nil then
 	local python_path = python_path_proc:read("l")
 	if python_path ~= nil and python_path ~= "" then
@@ -136,15 +136,19 @@ vim.keymap.set(nins_modes, "<leader>o", function()
 end, { desc = "Move to next window", silent = true })
 
 -- Tags
-local ctags_exe =
-	tern(vim.g.mug_os_windows, vim.g.mug_home .. "/scoop/apps/universal-ctags/current/ctags.exe", "/usr/bin/ctags")
-local ctags_args =
-	"-o .tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
+local ctags = {
+	exe = tern(
+		vim.g.mug_os_windows,
+		vim.g.mug_home .. "/scoop/apps/universal-ctags/current/ctags.exe",
+		"/usr/bin/ctags"
+	),
+	args = "-o .tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse",
+}
 vim.keymap.set(nins_modes, "gd", "<C-]>", { desc = "Go to definition" })
 vim.keymap.set(nins_modes, "gt", vim.cmd.tselect, { desc = "Get all tags under this identifier" })
 vim.keymap.set(nins_modes, "gp", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
 vim.keymap.set(nins_modes, "<leader>ut", function()
-	vim.cmd("!" .. ctags_exe .. " " .. ctags_args)
+	vim.cmd("!" .. ctags.exe .. " " .. ctags.args)
 end, { desc = "Update the tag cache" })
 
 -- -----------------------------------------------------------------------------
@@ -252,7 +256,7 @@ require("lazy").setup({
 			local ft = require("guard.filetype")
 
 			ft("c,cpp,glsl"):fmt("clang-format")
-			ft("lua"):fmt("stylua")
+			ft("lua"):fmt("stylua", { "--indent-type=Spaces" })
 			ft("python"):fmt("black")
 
 			require("guard").setup({
