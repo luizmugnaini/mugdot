@@ -14,6 +14,13 @@ zmodload zsh/complist
 compinit
 _comp_options+=(globdots)
 
+# Oh my zsh stuff ---------------------------------------------------------------------------------
+
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="refined"
+plugins=(git)
+source $ZSH/oh-my-zsh.sh
+
 # Vim mode ----------------------------------------------------------------------------------------
 
 bindkey -v
@@ -75,8 +82,7 @@ alias v="vim"
 # Makes my Ctrl-k output an Esc so that I can use zsh vim mode smoothly
 bindkey -s ^k "\x1b"
 
-alias l="eza --long --icons --git --group-directories-first"
-alias ls="eza --icons --group-directories-first"
+alias l="eza --long --group-directories-first"
 
 alias b="bat --theme=Coldark-Dark"
 
@@ -89,11 +95,8 @@ alias cd="z"
 alias ..="z .."
 eval "$(zoxide init zsh)"
 
-# Prompt styling with "oh my zsh"
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="refined"
-plugins=(git)
-source $ZSH/oh-my-zsh.sh
+# Debugger
+alias gdb="gdb -q"
 
 # Screen control ----------------------------------------------------------------------------------
 
@@ -111,12 +114,6 @@ alias kbdset="xset r rate 500 60"
 
 alias blue="bluetoothctl"
 alias wallbg="feh --bg-fill --no-fehbg"
-
-# -------------------------------------------------------------------------------------------------
-
-# Git
-alias glog="git log --decorate --graph"
-alias gst="git status"
 
 # Python ------------------------------------------------------------------------------------------
 
@@ -157,7 +154,7 @@ alias monitor-right="xrandr --output eDP-1 --auto --right-of HDMI-1"
 
 alias wacom-hdmi="xsetwacom set 'Wacom One by Wacom S Pen stylus' MapToOutput HDMI-1"
 
-# -------------------------------------------------------------------------------------------------
+# Misc --------------------------------------------------------------------------------------------
 
 # Syntax highlighting for zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
