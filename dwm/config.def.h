@@ -17,8 +17,8 @@ static const unsigned int gappx = 5;    /* gaps between windows */
 static const unsigned int snap = 10;    /* snap pixel (original: 32) */
 static const int showbar = 1;           /* 0 means no bar */
 static const int topbar = 1;            /* 0 means bottom bar */
-static const char *fonts[] = {"Iosevka NF:size=10"};
-static const char dmenufont[] = "Iosevka NF:size=10";
+static const char *fonts[] = {"Terminus (TTF):size=10.5"};
+static const char dmenufont[] = "Terminus (TTF):size=10.5";
 static const char col_gray1[] = "#222222";
 static const char col_gray2[] = "#444444";
 static const char col_gray3[] = "#bbbbbb";
@@ -41,7 +41,6 @@ static const Rule rules[] = {
      *	WM_NAME(STRING) = title
      */
     /* class      instance    title   tags mask  isfloating   monitor */
-    {"Gimp", NULL, NULL, 0, 1, -1},
     {"Firefox", NULL, NULL, 1 << 8, 0, -1},
 };
 
@@ -75,24 +74,18 @@ static const Layout layouts[] = {
 
 /* commands */
 
-/* dmenu
- * component of dmenucmd, manipulated in spawn() */
+// dmenu
 static char dmenumon[2] = "0";
 static const char *dmenucmd[] = {
     "dmenu_run", "-m",  dmenumon,   "-fn", dmenufont, "-nb", col_gray1, "-nf",
     col_gray3,   "-sb", col_purple, "-sf", col_gray4, NULL};
 
-/* rofi */
-static const char *roficmd[] = {"rofi", "-show", "run", NULL};
-
-/* terminal */
+// Dev commands
 static const char *termcmd[] = {"alacritty", NULL};
-
-/* browser */
-static const char *browsercmd[] = {"firefox", NULL};
-
-/* emacs */
 static const char *emacscmd[] = {"emacs", NULL};
+
+// Brwoser
+static const char *browsercmd[] = {"firefox", NULL};
 
 // System locking and suspend
 static const char *lockcmd[] = {"slock", NULL};
@@ -107,10 +100,7 @@ static const char *upvolcmd[] = {"pamixer", "-i", "5", NULL};
 static Key keys[] = {
     /* modifier            key        function        argument */
     /* dmenu */
-    {MODKEY | ShiftMask, XK_p, spawn, {.v = dmenucmd}},
-
-    /* rofi */
-    {MODKEY, XK_p, spawn, {.v = roficmd}},
+    {MODKEY, XK_p, spawn, {.v = dmenucmd}},
 
     /* terminal */
     {MODKEY, XK_Return, spawn, {.v = termcmd}},
