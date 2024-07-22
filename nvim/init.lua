@@ -142,11 +142,11 @@ local ctags = {
 		vim.g.mug_home .. "/scoop/apps/universal-ctags/current/ctags.exe",
 		"/usr/bin/ctags"
 	),
-	args = "-o .tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse",
+	args = "-o .tags --languages=c,c++ --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse",
 }
 vim.keymap.set(nins_modes, "gd", "<C-]>", { desc = "Go to definition" })
 vim.keymap.set(nins_modes, "gt", vim.cmd.tselect, { desc = "Get all tags under this identifier" })
-vim.keymap.set(nins_modes, "gp", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
+vim.keymap.set(nins_modes, "gp", vim.cmd.pop, { desc = "Go to previous tag" })
 vim.keymap.set(nins_modes, "<leader>ut", function()
 	vim.cmd("!" .. ctags.exe .. " " .. ctags.args)
 end, { desc = "Update the tag cache" })
