@@ -5,15 +5,19 @@
 -- =============================================================================
 
 function tern(cond, opt_true, opt_false)
-	if cond then
-		return opt_true
-	else
-		return opt_false
-	end
+    if cond then
+        return opt_true
+    else
+        return opt_false
+    end
 end
 
 vim.g.mug_os_windows = package.config:sub(1, 1) == "\\"
 vim.g.mug_home = tern(vim.g.mug_os_windows, os.getenv("USERPROFILE"), os.getenv("HOME"))
+vim.g.mug_nvim_dir = vim.g.mug_home .. "/.config/mugdot/nvim"
+
+vim.g.lsp_enabled = (os.getenv("LSP") ~= nil)
+vim.g.treesitter_enabled = true
 
 -- -----------------------------------------------------------------------------
 -- General settings
@@ -25,11 +29,11 @@ vim.g.mapleader = " "
 -- Find python and set its provider path.
 local python_path_proc = io.popen('python3 -c "import sys;print(sys.executable)"')
 if python_path_proc ~= nil then
-	local python_path = python_path_proc:read("l")
-	if python_path ~= nil and python_path ~= "" then
-		vim.g.python3_host_prog = python_path
-	end
-	python_path_proc:close()
+    local python_path = python_path_proc:read("l")
+    if python_path ~= nil and python_path ~= "" then
+        vim.g.python3_host_prog = python_path
+    end
+    python_path_proc:close()
 end
 
 -- Disable useless language providers.
@@ -93,25 +97,25 @@ vim.opt.clipboard = "unnamedplus" -- Copy to and from vim using the system clipb
 local mug_group = vim.api.nvim_create_augroup("mug", { clear = true })
 
 local c_like =
-	{ "*.c", "*.h", "*.cc", "*.cpp", "*.hpp", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" }
+    { "*.c", "*.h", "*.cc", "*.cpp", "*.hpp", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" }
 
 function trim_whitespaces()
-	local view = vim.fn.winsaveview()
-	vim.api.nvim_exec([[keepjumps keeppatterns silent! %s/\s\+$//e]], { output = false })
-	vim.fn.winrestview(view)
+    local view = vim.fn.winsaveview()
+    vim.api.nvim_exec([[keepjumps keeppatterns silent! %s/\s\+$//e]], { output = false })
+    vim.fn.winrestview(view)
 end
 
 function fmt_buf(formatter)
-	local view = vim.fn.winsaveview()
-	vim.api.nvim_exec([[keepjumps keeppatterns silent %!]] .. formatter, { output = false })
-	vim.fn.winrestview(view)
+    local view = vim.fn.winsaveview()
+    vim.api.nvim_exec([[keepjumps keeppatterns silent %!]] .. formatter, { output = false })
+    vim.fn.winrestview(view)
 end
 
 vim.api.nvim_create_autocmd("BufEnter", {
-	desc = "Detect GLSL files",
-	group = mug_group,
-	pattern = { "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" },
-	command = "set filetype=glsl",
+    desc = "Detect GLSL files",
+    group = mug_group,
+    pattern = { "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" },
+    command = "set filetype=glsl",
 })
 
 -- -----------------------------------------------------------------------------
@@ -119,37 +123,38 @@ vim.api.nvim_create_autocmd("BufEnter", {
 -- -----------------------------------------------------------------------------
 
 local all_modes = { "n", "i", "x", "v", "s", "c", "o", "l", "t" }
-local nins_modes = { "n", "x", "o" }
+local non_insert_modes = { "n", "v", "x", "o" }
 
-vim.keymap.set(all_modes, "<C-k>", "<Esc>", { desc = "Escape to normal mode", silent = true })
-vim.keymap.set(nins_modes, "<leader>w", vim.cmd.write, { desc = "[W]rite file" })
-vim.keymap.set(nins_modes, "<leader>q", vim.cmd.quit, { desc = "Kill the current buffer" })
-vim.keymap.set(nins_modes, "<leader>e", vim.cmd.Ex, { desc = "Explore files" })
+vim.keymap.set(all_modes, "<C-k>", "<Esc>", { silent = true })
+
+vim.keymap.set(non_insert_modes, "<leader>w", vim.cmd.write, { desc = "[W]rite file" })
+vim.keymap.set(non_insert_modes, "<leader>q", vim.cmd.quit, { desc = "Kill the current buffer" })
+vim.keymap.set(non_insert_modes, "<leader>e", vim.cmd.Ex, { desc = "Explore files" })
 
 -- Window splits
-vim.keymap.set(nins_modes, "<leader>s", vim.cmd.vsplit, { desc = "Split Vertically", silent = true })
-vim.keymap.set(nins_modes, "<leader>h", vim.cmd.split, { desc = "Split horizontally", silent = true })
+vim.keymap.set(non_insert_modes, "<leader>s", vim.cmd.vsplit, { desc = "Split Vertically", silent = true })
+vim.keymap.set(non_insert_modes, "<leader>h", vim.cmd.split, { desc = "Split horizontally", silent = true })
 
 -- Window movement
-vim.keymap.set(nins_modes, "<leader>o", function()
-	vim.cmd.wincmd("w")
+vim.keymap.set(non_insert_modes, "<leader>o", function()
+    vim.cmd.wincmd("w")
 end, { desc = "Move to next window", silent = true })
 
 -- Tags
-local ctags = {
-	exe = tern(
-		vim.g.mug_os_windows,
-		vim.g.mug_home .. "/scoop/apps/universal-ctags/current/ctags.exe",
-		"/usr/bin/ctags"
-	),
-	args = "-o .tags --languages=c,c++ --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse",
-}
-vim.keymap.set(nins_modes, "gd", "<C-]>", { desc = "Go to definition" })
-vim.keymap.set(nins_modes, "gt", vim.cmd.tselect, { desc = "Get all tags under this identifier" })
-vim.keymap.set(nins_modes, "gp", vim.cmd.pop, { desc = "Go to previous tag" })
-vim.keymap.set(nins_modes, "<leader>ut", function()
-	vim.cmd("!" .. ctags.exe .. " " .. ctags.args)
-end, { desc = "Update the tag cache" })
+vim.keymap.set(non_insert_modes, "gd", "<C-]>", { desc = "Go to definition" })
+vim.keymap.set(non_insert_modes, "gt", vim.cmd.tselect, { desc = "Get all tags under this identifier" })
+vim.keymap.set(non_insert_modes, "gp", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
+
+local ctags_exe =
+    tern(vim.g.mug_os_windows, vim.g.mug_home .. "/scoop/apps/universal-ctags/current/ctags.exe", "/usr/bin/ctags")
+local ctags_args =
+    "-o .tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
+vim.keymap.set(
+    non_insert_modes,
+    "<leader>ut",
+    "<cmd>!" .. ctags_exe .. " " .. ctags_args .. "<cr>",
+    { desc = "Update the tag cache" }
+)
 
 -- -----------------------------------------------------------------------------
 -- Packages
@@ -158,234 +163,242 @@ end, { desc = "Update the tag cache" })
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not vim.loop.fs_stat(lazypath) then
-	vim.fn.system({
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable",
-		lazypath,
-	})
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable",
+        lazypath,
+    })
 end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	defaults = { lazy = true },
+    -- -------------------------------------------------------------------------
+    -- Visuals.
+    -- -------------------------------------------------------------------------
 
-	-- -------------------------------------------------------------------------
-	-- Visuals.
-	-- -------------------------------------------------------------------------
+    -- Code parser.
+    {
+        "nvim-treesitter/nvim-treesitter",
+        cond = vim.g.treesitter_enabled,
+        build = ":TSUpdate",
+        config = function()
+            require("nvim-treesitter.configs").setup({
+                ensure_installed = { "c", "cpp", "lua" },
+                indent = { enable = { "python" } },
+                sync_install = false,
+                auto_install = false,
+                highlight = {
+                    enable = true,
+                    disable = { "latex" },
+                    additional_vim_regex_highlighting = false,
+                },
+            })
+        end,
+    },
 
-	-- Code parser.
-	{
-		"nvim-treesitter/nvim-treesitter",
-		enabled = true,
-		build = ":TSUpdate",
-		config = function()
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "c", "cpp", "lua" },
-				indent = { enable = { "python" } },
-				sync_install = false,
-				auto_install = false,
-				highlight = {
-					enable = true,
-					disable = { "latex" },
-					additional_vim_regex_highlighting = false,
-				},
-			})
-		end,
-	},
+    -- Custom colorscheme.
+    {
+        "tjdevries/colorbuddy.nvim",
+        init = function()
+            vim.cmd.colorscheme("muggy")
+        end,
+    },
 
-	-- Custom colorscheme.
-	{
-		"tjdevries/colorbuddy.nvim",
-		init = function()
-			vim.cmd.colorscheme("muggy")
-		end,
-	},
+    -- -------------------------------------------------------------------------
+    -- Utilities for better development.
+    -- -------------------------------------------------------------------------
 
-	-- -------------------------------------------------------------------------
-	-- Utilities for better development.
-	-- -------------------------------------------------------------------------
+    {
+        "nvim-telescope/telescope.nvim",
+        tag = "0.1.6",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        event = "VeryLazy",
+        config = function()
+            local builtin = require("telescope.builtin")
 
-	-- Telescope file navigation with "<leader>ff".
-	{
-		"nvim-telescope/telescope.nvim",
-		tag = "0.1.6",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		event = "VeryLazy",
-		config = function()
-			local builtin = require("telescope.builtin")
+            vim.keymap.set("n", "<leader>ff", function()
+                builtin.find_files({ hidden = true, file_ignore_patterns = { ".git" } })
+            end, { desc = "Find file" })
+            vim.keymap.set("n", "<leader>bb", builtin.buffers, { desc = "Find open buffer" })
+            vim.keymap.set("n", "<leader>fz", function()
+                builtin.grep_string({ search = vim.fn.input("> ") })
+            end, { desc = "Fuzzy find string" })
+        end,
+    },
 
-			vim.keymap.set("n", "<leader>ff", function()
-				builtin.find_files({
-					hidden = true,
-					file_ignore_patterns = { ".git" },
-				})
-			end, { desc = "[F]ind [F]ile" })
-			vim.keymap.set("n", "<leader>bb", builtin.buffers, { desc = "[F]ind [B]uffers" })
-			vim.keymap.set("n", "<leader>fz", function()
-				builtin.grep_string({ search = vim.fn.input("> ") })
-			end, { desc = "Fuzzy finder" })
-		end,
-	},
+    -- Utility for line and block comments.
+    {
+        "numToStr/Comment.nvim",
+        event = "VeryLazy",
+        config = function()
+            require("Comment").setup({
+                toggler = {
+                    line = "<A-;>",
+                },
+                opleader = {
+                    line = "<A-;>",
+                },
+            })
+        end,
+    },
 
-	-- Utility for line and block comments.
-	{
-		"numToStr/Comment.nvim",
-		event = "VeryLazy",
-		config = function()
-			require("Comment").setup({
-				toggler = {
-					line = "<A-;>",
-				},
-				opleader = {
-					line = "<A-;>",
-				},
-			})
-		end,
-	},
+    -- Automatic formatting at save.
+    {
+        "nvimdev/guard.nvim",
+        dependencies = { "nvimdev/guard-collection" },
+        event = "VeryLazy",
+        ft = { "c", "cpp", "glsl", "lua", "python" },
+        config = function()
+            local ft = require("guard.filetype")
+            ft("c,cpp,glsl"):fmt("clang-format")
+            ft("lua"):fmt("stylua", { "--indent-type=Spaces" })
+            ft("python"):fmt("black")
 
-	-- Automatic formatting at save.
-	{
-		"nvimdev/guard.nvim",
-		dependencies = { "nvimdev/guard-collection" },
-		event = "VeryLazy",
-		ft = { "c", "cpp", "glsl", "lua", "python" },
-		config = function()
-			local ft = require("guard.filetype")
+            require("guard").setup({ fmt_on_save = true })
+        end,
+    },
 
-			ft("c,cpp,glsl"):fmt("clang-format")
-			ft("lua"):fmt("stylua", { "--indent-type=Spaces" })
-			ft("python"):fmt("black")
+    -- -------------------------------------------------------------------------
+    -- Snippets
+    -- -------------------------------------------------------------------------
 
-			require("guard").setup({
-				fmt_on_save = true,
-			})
-		end,
-	},
+    {
+        "L3MON4D3/LuaSnip",
+        build = "make install_jsregexp",
+        ft = { "tex", "c", "cpp" },
+        config = function()
+            local ls = require("luasnip")
 
-	-- -------------------------------------------------------------------------
-	-- Snippets
-	-- -------------------------------------------------------------------------
+            require("luasnip.loaders.from_lua").lazy_load({ paths = vim.g.mug_nvim_dir .. "/snippets" })
+            ls.config.setup({ enable_autosnippets = true })
 
-	{
-		"L3MON4D3/LuaSnip",
-		build = "make install_jsregexp",
-		ft = { "tex", "c", "cpp" },
-		config = function()
-			local ls = require("luasnip")
+            vim.keymap.set({ "i" }, "<C-e>", function()
+                ls.expand()
+            end, { silent = true, desc = "Expand snippet" })
+        end,
+    },
 
-			require("luasnip.loaders.from_lua").lazy_load({ paths = vim.g.mug_home .. "/.config/mugdot/nvim/snippets/" })
+    {
+        "hrsh7th/nvim-cmp",
+        cond = not vim.g.lsp_enabled,
+        dependencies = { "hrsh7th/cmp-buffer" },
+        config = function()
+            local cmp = require("cmp")
 
-			ls.config.setup({
-				-- Enable autotriggered snippets
-				enable_autosnippets = true,
-			})
+            cmp.setup({
+                snippet = {
+                    expand = function(args)
+                        vim.snippet.expand(args.body)
+                    end,
+                },
+                mapping = cmp.mapping.preset.insert({
+                    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+                    ["<C-j>"] = cmp.mapping.select_prev_item(),
+                    ["<C-n>"] = cmp.mapping.select_next_item(),
+                }),
+                sources = { { name = "luasnip" }, { name = "buffer" } },
+            })
+        end,
+    },
 
-			vim.keymap.set({ "i" }, "<C-e>", function()
-				ls.expand()
-			end, { silent = true, desc = "Expand snippet" })
-		end,
-	},
+    -- -------------------------------------------------------------------------
+    -- LSP support
+    -- -------------------------------------------------------------------------
 
-	-- -------------------------------------------------------------------------
-	-- LSP support
-	-- -------------------------------------------------------------------------
+    {
+        "VonHeikemen/lsp-zero.nvim",
+        cond = vim.g.lsp_enabled,
+        branch = "v3.x",
+        -- event = "VeryLazy",
+        dependencies = {
+            "neovim/nvim-lspconfig",
+            "L3MON4D3/LuaSnip",
+            "saadparwaiz1/cmp_luasnip",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/nvim-cmp",
+            "folke/trouble.nvim",
+        },
+        config = function()
+            -- ----------------------------------------------------------------------------
+            -- Completions
+            -- ----------------------------------------------------------------------------
 
-	{
-		"VonHeikemen/lsp-zero.nvim",
-		cond = (os.getenv("LSP") ~= nil),
-		branch = "v3.x",
-		-- event = "VeryLazy",
-		dependencies = {
-			"neovim/nvim-lspconfig",
-			"saadparwaiz1/cmp_luasnip",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/nvim-cmp",
-			"folke/trouble.nvim",
-		},
-		config = function()
-			-- ----------------------------------------------------------------------------
-			-- Completions
-			-- ----------------------------------------------------------------------------
+            local cmp = require("cmp")
+            local ls = require("luasnip")
 
-			local cmp = require("cmp")
+            cmp.setup({
+                snippet = {
+                    expand = function(args)
+                        require("luasnip").lsp_expand(args.body)
+                    end,
+                },
+                mapping = cmp.mapping.preset.insert({
+                    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+                    ["<C-j>"] = cmp.mapping.select_prev_item(),
+                    ["<C-n>"] = cmp.mapping.select_next_item(),
+                }),
+                sources = { { name = "luasnip" }, { name = "nvim_lsp" }, { name = "buffer" } },
+            })
 
-			cmp.setup({
-				snippet = {
-					expand = function(args)
-						vim.snippet.expand(args.body)
-					end,
-				},
-				mapping = cmp.mapping.preset.insert({
-					["<C-y>"] = cmp.mapping.confirm({ select = true }),
-					["<C-j>"] = cmp.mapping.select_prev_item(),
-					["<C-n>"] = cmp.mapping.select_next_item(),
-				}),
-				sources = {
-					{ name = "luasnip" },
-					{ name = "nvim_lsp" },
-					{ name = "buffer" },
-				},
-			})
+            -- ----------------------------------------------------------------------------
+            -- LSP config
+            -- ----------------------------------------------------------------------------
 
-			-- ----------------------------------------------------------------------------
-			-- LSP config
-			-- ----------------------------------------------------------------------------
+            local lsp = require("lsp-zero").preset({ name = "recommended" })
+            local lspconfig = require("lspconfig")
+            local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-			local lsp = require("lsp-zero").preset({ name = "recommended" })
-			local lspconfig = require("lspconfig")
-			local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+            lspconfig.clangd.setup({
+                cmd = { "clangd", "--log=verbose", "--compile-commands-dir=./build" },
+                filetypes = { "c", "cpp" },
+                capabilities = cmp_capabilities,
+                root_dir = function()
+                    lsp.dir.find_first({ ".git", ".clang-format", ".clangd", ".clang-tidy" })
+                end,
+            })
+            lspconfig.pyright.setup({ capabilities = cmp_capabilities })
 
-			lspconfig.clangd.setup({
-				cmd = { "clangd", "--log=verbose", "--compile-commands-dir=./build" },
-				filetypes = { "c", "cpp" },
-				capabilities = cmp_capabilities,
-				root_dir = function()
-					lsp.dir.find_first({ ".git", ".clang-format", ".clangd", ".clang-tidy" })
-				end,
-			})
-			lspconfig.pyright.setup({ capabilities = cmp_capabilities })
+            lsp.extend_cmp()
+            lsp.set_preferences({
+                suggest_lsp_servers = false,
+                sign_icons = { error = "E", warn = "W", hint = "H", info = "I" },
+            })
+            lsp.on_attach(function(client, bufnr)
+                local opts = { buffer = bufnr, remap = false }
+                vim.keymap.set("n", "gd", function()
+                    vim.lsp.buf.definition()
+                end, opts)
+                vim.keymap.set("n", "gr", function()
+                    vim.lsp.buf.references()
+                end, opts)
+                vim.keymap.set("n", "K", function()
+                    vim.lsp.buf.hover()
+                end, opts)
+                vim.keymap.set("n", "<leader>ca", function()
+                    vim.lsp.buf.code_action()
+                end, opts)
+                vim.keymap.set("n", "<leader>rn", function()
+                    vim.lsp.buf.rename()
+                end, opts)
+            end)
 
-			lsp.extend_cmp()
-			lsp.set_preferences({
-				suggest_lsp_servers = false,
-				sign_icons = { error = "E", warn = "W", hint = "H", info = "I" },
-			})
-			lsp.on_attach(function(client, bufnr)
-				local opts = { buffer = bufnr, remap = false }
-				vim.keymap.set("n", "gd", function()
-					vim.lsp.buf.definition()
-				end, opts)
-				vim.keymap.set("n", "gr", function()
-					vim.lsp.buf.references()
-				end, opts)
-				vim.keymap.set("n", "K", function()
-					vim.lsp.buf.hover()
-				end, opts)
-				vim.keymap.set("n", "<leader>ca", function()
-					vim.lsp.buf.code_action()
-				end, opts)
-				vim.keymap.set("n", "<leader>rn", function()
-					vim.lsp.buf.rename()
-				end, opts)
-			end)
+            lsp.setup()
 
-			lsp.setup()
+            require("trouble").setup({
+                height = 3,
+                auto_open = false,
+                auto_close = true,
+                auto_preview = false,
+                icons = false,
+            })
 
-			require("trouble").setup({
-				height = 3,
-				auto_open = false,
-				auto_close = true,
-				auto_preview = false,
-				icons = false,
-			})
-
-			vim.keymap.set("n", "<leader>tt", function()
-				require("trouble").open()
-			end, { desc = "[T]trouble [T]oggle" })
-		end,
-	},
+            vim.keymap.set("n", "<leader>tt", function()
+                require("trouble").open()
+            end, { desc = "Toggle Trouble window" })
+        end,
+    },
 })
