@@ -1,21 +1,14 @@
 # Dotfiles 🖇️
 
-These are my humble configuration files I use in my machine running Arch Linux! I'm currently using my own home-brewed dotfiles
-manager, [`stoic-dotfiles`](https://github.com/luizmugnaini/stoic).
-
-There are two main branches: `windows` and `linux`, which I switch to whenever I'm in one of those systems.
+These are my config files I use across all of my machines, be it Linux or Windows! I'm currently using my
+own home-brewed dotfiles manager, [`stoic-dotfiles`](https://github.com/luizmugnaini/stoic).
 
 ## Usage
 
-Install [`stoic-dotfiles`](https://crates.io/crates/stoic-dotfiles) via `cargo`:
-
+If you want to try my configs, feel free to do so. One way to setup all symlinks in Linux is to install
+[`stoic-dotfiles`](https://crates.io/crates/stoic-dotfiles) via `cargo`:
 ```bash
 cargo install stoic-dotfiles
 ```
-
-In order to set all symlinks correctly you simply need to run `stoic-dotfiles` in the repository root directory:
-
-```bash
-cd mugdot
-stoic
-```
+and then just run `stoic` inside of the repository directory. On Windows I'm creating the directory
+symlinks manually for the time being.
