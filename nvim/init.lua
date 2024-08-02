@@ -180,12 +180,6 @@ require("lazy").setup({
     -- Visuals.
     -- -------------------------------------------------------------------------
 
-    {
-        "nvim-treesitter/nvim-treesitter",
-        cond = vim.g.treesitter_enabled,
-        build = ":TSUpdate",
-    },
-
     -- Custom colorscheme.
     {
         "tjdevries/colorbuddy.nvim",

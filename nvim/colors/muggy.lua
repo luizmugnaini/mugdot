@@ -2,6 +2,12 @@
 --
 -- Theme based on the modus-themes vivendi-tinted colorscheme. Built using colorbuddy.nvim
 --
+-- As a side-note, if you ever want to know the highlight group of a certain keyword in
+-- the current cursor position, run the following command:
+-- ```
+-- :echo synIDattr(synID(line('.'), col('.'), 1), 'name')
+-- ```
+--
 -- Author: Luiz G. Mugnaini A. <luizmugnaini@gmail.com>
 
 vim.opt.bg = "dark"
@@ -44,7 +50,8 @@ Group.new("Comment", colors.clay)
 Group.new("Todo", colors.fg, colors.rust, styles.none)
 
 Group.new("Identifier", colors.fg)
-Group.new("Function", colors.fg)
+Group.new("Function", colors.magentaLight)
+Group.new("cOperator", colors.magenta)
 
 Group.new("Constant", colors.fg)
 Group.new("String", colors.blue)
