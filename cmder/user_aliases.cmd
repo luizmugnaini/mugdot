@@ -18,5 +18,5 @@ dev=cd /d D:/$*
 vi=vim $*
 vim=nvim $*
 raddbg=D:/app/raddebugger/build/raddbg.exe $*
-remedy=D:/app/remedybg/remedybg.exe $*
+remedybg=D:/app/remedybg/remedybg.exe $*
 ctags=C:/Users/luizm/scoop/app/universal-ctags/current/ctags.exe
