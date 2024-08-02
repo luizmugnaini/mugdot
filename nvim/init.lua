@@ -48,7 +48,7 @@ vim.opt.number = false -- Don't show line numbers
 vim.opt.termguicolors = true
 vim.opt.signcolumn = "no"
 vim.opt.showtabline = 0
-vim.opt.statusline = " %f %h%m%r%=%-14.(%l%)"
+vim.opt.statusline = " %f %h%m%r%=%-14.(%l,%c%)"
 
 -- Indentation
 vim.opt.tabstop = 4
@@ -87,6 +87,7 @@ vim.opt.tags = ".tags"
 
 -- Misc
 vim.opt.wildignore = { "*.o", "*.obj", "*.lib", "*.a", "*.exe", "*.pdb", "*.ilk", ".git" }
+vim.g.netrw_sort_sequence = "[\\/],*"
 vim.opt.encoding = "utf8"
 vim.opt.clipboard = "unnamedplus" -- Copy to and from vim using the system clipboard register
 
@@ -179,24 +180,10 @@ require("lazy").setup({
     -- Visuals.
     -- -------------------------------------------------------------------------
 
-    -- Code parser.
     {
         "nvim-treesitter/nvim-treesitter",
         cond = vim.g.treesitter_enabled,
         build = ":TSUpdate",
-        config = function()
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = { "c", "cpp", "lua" },
-                indent = { enable = { "python" } },
-                sync_install = false,
-                auto_install = false,
-                highlight = {
-                    enable = true,
-                    disable = { "latex" },
-                    additional_vim_regex_highlighting = false,
-                },
-            })
-        end,
     },
 
     -- Custom colorscheme.
@@ -247,17 +234,29 @@ require("lazy").setup({
 
     -- Automatic formatting at save.
     {
-        "nvimdev/guard.nvim",
-        dependencies = { "nvimdev/guard-collection" },
+        "stevearc/conform.nvim",
         event = "VeryLazy",
         ft = { "c", "cpp", "glsl", "lua", "python" },
         config = function()
-            local ft = require("guard.filetype")
-            ft("c,cpp,glsl"):fmt("clang-format")
-            ft("lua"):fmt("stylua", { "--indent-type=Spaces" })
-            ft("python"):fmt("black")
+            require("conform").setup({
+                formatters = {
+                    stylua = { append_args = { "--indent-type=Spaces" } },
+                },
+                formatters_by_ft = {
+                    c = { "clang-format" },
+                    cpp = { "clang-format" },
+                    glsl = { "clang-format" },
+                    lua = { "stylua" },
+                    python = { "black" },
+                },
+            })
 
-            require("guard").setup({ fmt_on_save = true })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                pattern = "*",
+                callback = function(args)
+                    require("conform").format({ bufnr = args.buf })
+                end,
+            })
         end,
     },
 
@@ -268,7 +267,7 @@ require("lazy").setup({
     {
         "L3MON4D3/LuaSnip",
         build = "make install_jsregexp",
-        ft = { "tex", "c", "cpp" },
+        ft = { "tex", "c", "cpp", "glsl" },
         config = function()
             local ls = require("luasnip")
 
