@@ -1,5 +1,5 @@
 " Better syntax highlighting for C++.
 
-syn keyword cppBuiltinNames typename namespace template class
+syn keyword cppBuiltinNames nullptr typename namespace template class noexcept
 
-hi def link cppBuiltinNames cIdentifier
+hi def link cppBuiltinNames Keyword
