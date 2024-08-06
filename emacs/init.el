@@ -40,6 +40,8 @@
 ;;
 ;;
 ;; (I don't know who made this ascii art)
+;;
+;; NOTE: Eval the configs with <C-c e> and precompile into bytecode with <C-c C-f>
 
 ;;; Code:
 
