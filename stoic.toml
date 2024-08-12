@@ -22,6 +22,10 @@ recursive = true
 [vim]
 target = "~/"
 
+[vim_colors]
+src = "nvim/colors/mug.vim"
+target = "~/.vim/colors/mug.vim"
+
 [tmux]
 target = "~/.config/tmux"
 

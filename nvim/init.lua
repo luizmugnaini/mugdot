@@ -16,9 +16,6 @@ vim.g.mug_os_windows = package.config:sub(1, 1) == "\\"
 vim.g.mug_home = tern(vim.g.mug_os_windows, os.getenv("USERPROFILE"), os.getenv("HOME"))
 vim.g.mug_nvim_dir = vim.g.mug_home .. "/.config/mugdot/nvim"
 
-vim.g.lsp_enabled = (os.getenv("LSP") ~= nil)
-vim.g.treesitter_enabled = true
-
 -- -----------------------------------------------------------------------------
 -- General settings
 -- -----------------------------------------------------------------------------
@@ -72,7 +69,7 @@ vim.opt.undofile = true
 -- Searching functionality
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.hlsearch = false
-vim.opt.incsearch = true
+vim.opt.incsearch = false
 vim.opt.smartcase = true
 vim.opt.ignorecase = true
 
@@ -157,6 +154,8 @@ vim.keymap.set(
     { desc = "Update the tag cache" }
 )
 
+vim.cmd.colorscheme("mug")
+
 -- -----------------------------------------------------------------------------
 -- Packages
 -- -----------------------------------------------------------------------------
@@ -176,18 +175,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-    -- -------------------------------------------------------------------------
-    -- Visuals.
-    -- -------------------------------------------------------------------------
-
-    -- Custom colorscheme.
-    {
-        "tjdevries/colorbuddy.nvim",
-        init = function()
-            vim.cmd.colorscheme("muggy")
-        end,
-    },
-
     -- -------------------------------------------------------------------------
     -- Utilities for better development.
     -- -------------------------------------------------------------------------
@@ -294,104 +281,6 @@ require("lazy").setup({
                 }),
                 sources = { { name = "luasnip" }, { name = "buffer" } },
             })
-        end,
-    },
-
-    -- -------------------------------------------------------------------------
-    -- LSP support
-    -- -------------------------------------------------------------------------
-
-    {
-        "VonHeikemen/lsp-zero.nvim",
-        cond = vim.g.lsp_enabled,
-        branch = "v3.x",
-        -- event = "VeryLazy",
-        dependencies = {
-            "neovim/nvim-lspconfig",
-            "L3MON4D3/LuaSnip",
-            "saadparwaiz1/cmp_luasnip",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/nvim-cmp",
-            "folke/trouble.nvim",
-        },
-        config = function()
-            -- ----------------------------------------------------------------------------
-            -- Completions
-            -- ----------------------------------------------------------------------------
-
-            local cmp = require("cmp")
-            local ls = require("luasnip")
-
-            cmp.setup({
-                snippet = {
-                    expand = function(args)
-                        require("luasnip").lsp_expand(args.body)
-                    end,
-                },
-                mapping = cmp.mapping.preset.insert({
-                    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-                    ["<C-j>"] = cmp.mapping.select_prev_item(),
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
-                }),
-                sources = { { name = "luasnip" }, { name = "nvim_lsp" }, { name = "buffer" } },
-            })
-
-            -- ----------------------------------------------------------------------------
-            -- LSP config
-            -- ----------------------------------------------------------------------------
-
-            local lsp = require("lsp-zero").preset({ name = "recommended" })
-            local lspconfig = require("lspconfig")
-            local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-            lspconfig.clangd.setup({
-                cmd = { "clangd", "--log=verbose", "--compile-commands-dir=./build" },
-                filetypes = { "c", "cpp" },
-                capabilities = cmp_capabilities,
-                root_dir = function()
-                    lsp.dir.find_first({ ".git", ".clang-format", ".clangd", ".clang-tidy" })
-                end,
-            })
-            lspconfig.pyright.setup({ capabilities = cmp_capabilities })
-
-            lsp.extend_cmp()
-            lsp.set_preferences({
-                suggest_lsp_servers = false,
-                sign_icons = { error = "E", warn = "W", hint = "H", info = "I" },
-            })
-            lsp.on_attach(function(client, bufnr)
-                local opts = { buffer = bufnr, remap = false }
-                vim.keymap.set("n", "gd", function()
-                    vim.lsp.buf.definition()
-                end, opts)
-                vim.keymap.set("n", "gr", function()
-                    vim.lsp.buf.references()
-                end, opts)
-                vim.keymap.set("n", "K", function()
-                    vim.lsp.buf.hover()
-                end, opts)
-                vim.keymap.set("n", "<leader>ca", function()
-                    vim.lsp.buf.code_action()
-                end, opts)
-                vim.keymap.set("n", "<leader>rn", function()
-                    vim.lsp.buf.rename()
-                end, opts)
-            end)
-
-            lsp.setup()
-
-            require("trouble").setup({
-                height = 3,
-                auto_open = false,
-                auto_close = true,
-                auto_preview = false,
-                icons = false,
-            })
-
-            vim.keymap.set("n", "<leader>tt", function()
-                require("trouble").open()
-            end, { desc = "Toggle Trouble window" })
         end,
     },
 })

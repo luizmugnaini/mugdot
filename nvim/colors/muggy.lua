@@ -45,39 +45,38 @@ Color.new("red", "#ff7f9f")
 -- -----------------------------------------------------------------------------
 
 Group.new("Normal", colors.fg, colors.bg)
-
-Group.new("Comment", colors.clay)
-Group.new("Todo", colors.fg, colors.rust, styles.none)
-
+Group.new("Delimeter", colors.fg)
 Group.new("Identifier", colors.fg)
-Group.new("Function", colors.magentaLight)
-Group.new("cOperator", colors.magenta)
-
 Group.new("Constant", colors.fg)
-Group.new("String", colors.blue)
-Group.new("Character", colors.blue)
 Group.new("Number", colors.fg)
 Group.new("Float", colors.fg)
-Group.new("Boolean", colors.green)
+Group.new("Operator", colors.fg)
+Group.new("Todo", colors.fg, colors.rust, styles.none)
 
-Group.new("Type", colors.green)
+Group.new("Comment", colors.clay)
+
+Group.new("Function", colors.magentaLight)
+
+Group.new("cOperator", colors.magenta)
 Group.new("StorageClass", colors.magenta)
 Group.new("Structure", colors.magenta)
 Group.new("Typedef", colors.magenta)
-
 Group.new("Special", colors.magenta)
-
 Group.new("Statement", colors.magenta)
 Group.new("Conditional", colors.magenta)
 Group.new("Repeat", colors.magenta)
 Group.new("Label", colors.magenta)
-Group.new("Operator", colors.fg)
 Group.new("Keyword", colors.magenta)
+
+Group.new("String", colors.blue)
+Group.new("Character", colors.blue)
+Group.new("Directory", colors.blue)
+
+Group.new("Boolean", colors.green)
+Group.new("Type", colors.green)
 
 Group.new("MatchParen", colors.none, colors.pink)
 Group.new("Visual", colors.none, colors.greyActive)
-
-Group.new("Delimeter", colors.fg)
 
 Group.new("PreProc", colors.red)
 Group.new("Include", colors.red)
@@ -86,8 +85,6 @@ Group.new("PreCondit", colors.red)
 
 Group.new("StatusLine", colors.fg, colors.greyActive)
 Group.new("StatusLineNC", colors.fg, colors.greyInactive)
-
-Group.new("Directory", colors.blue)
 
 -- -----------------------------------------------------------------------------
 -- Treesitter groups
