@@ -29,10 +29,42 @@ end
 
 config.font_size = 12
 config.window_frame = { font = config.font, font_size = 9 }
+
+local colors = {
+    grey = "#2b3045",
+    blue = "#79a8ff",
+    green = "#6ae4b9",
+    magenta = "#b6a0ff",
+    red = "#ff7f9f",
+    white = "#C8C093",
+    yellow = "#f1b090",
+}
 config.colors = {
     background = "#0d0e1c",
     foreground = "#ffffff",
+    ansi = {
+        colors.grey,
+        colors.red,
+        colors.green,
+        colors.yellow,
+        colors.blue,
+        colors.magenta,
+        colors.white,
+        colors.magenta,
+    },
+    brights = {
+        colors.grey,
+        colors.red,
+        colors.green,
+        colors.yellow,
+        colors.blue,
+        colors.magenta,
+        colors.white,
+        colors.magenta,
+    },
 }
+
+config.audible_bell = "Disabled"
 
 config.leader = { key = "Space", mods = "CTRL" }
 config.keys = {
