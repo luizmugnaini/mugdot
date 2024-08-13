@@ -26,6 +26,10 @@ target = "~/"
 src = "nvim/colors/mug.vim"
 target = "~/.vim/colors/mug.vim"
 
+[vim_syntax]
+src = "nvim/after/syntax"
+target = "~/.vim/after/syntax"
+
 [tmux]
 target = "~/.config/tmux"
 
