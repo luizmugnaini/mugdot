@@ -37,7 +37,7 @@ colorscheme mug
 " Visuals
 set guicursor=i:block
 set t_Co=256
-set novisualbell
+set belloff=all
 set conceallevel=0
 set lazyredraw
 
