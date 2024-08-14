@@ -1,10 +1,24 @@
 " Name: mug.vim
 " Author: Luiz G. Mugnaini A. <luizmugnaini@gmail.com>
-"
-" Querying the highlight group of the word under the cursor:
+" Notes: In order to query the highlight group of the word under the cursor
+" you can run
 " ```
 " :echo synIDattr(synID(line('.'), col('.'), 1), 'name')
 " ```
+" Copyright:
+"           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+"                    Version 2, December 2004
+"
+" Copyright (C) 2024 Luiz G. Mugnaini A. <luizmugnaini@gmail.com>
+"
+" Everyone is permitted to copy and distribute verbatim or modified
+" copies of this license document, and changing it is allowed as long
+" as the name is changed.
+"
+"            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+"   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+"
+"  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 if exists('syntax on')
     syntax reset
@@ -26,10 +40,10 @@ hi Constant     guifg=#ffffff guibg=NONE
 hi Number       guifg=#ffffff guibg=NONE
 hi Float        guifg=#ffffff guibg=NONE
 hi Operator     guifg=#ffffff guibg=NONE
-hi luaTable     guifg=#ffffff guibg=NONE
-
-" rust #db7b5f
 hi Todo         guifg=#ffffff guibg=#db7b5f
+hi luaTable     guifg=#ffffff guibg=NONE
+hi vimHiGroup   guifg=#ffffff guibg=NONE
+hi vimGroup     guifg=#ffffff guibg=NONE
 
 " clay #f1b090
 hi Comment      guifg=#f1b090 guibg=NONE

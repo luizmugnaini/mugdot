@@ -126,7 +126,9 @@ local non_insert_modes = { "n", "v", "x", "o" }
 vim.keymap.set(all_modes, "<C-k>", "<Esc>", { silent = true })
 
 vim.keymap.set(non_insert_modes, "<leader>w", vim.cmd.write, { desc = "[W]rite file" })
-vim.keymap.set(non_insert_modes, "<leader>q", vim.cmd.quit, { desc = "Kill the current buffer" })
+vim.keymap.set(non_insert_modes, "<leader>q", function()
+    vim.cmd("wq")
+end, { desc = "Kill the current buffer" })
 vim.keymap.set(non_insert_modes, "<leader>e", vim.cmd.Ex, { desc = "Explore files" })
 
 -- Window splits
@@ -153,6 +155,10 @@ vim.keymap.set(
     "<cmd>!" .. ctags_exe .. " " .. ctags_args .. "<cr>",
     { desc = "Update the tag cache" }
 )
+
+-- -----------------------------------------------------------------------------
+-- Colors
+-- -----------------------------------------------------------------------------
 
 vim.cmd.colorscheme("mug")
 

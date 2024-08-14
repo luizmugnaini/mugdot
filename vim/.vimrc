@@ -2,7 +2,6 @@
 nnoremap <SPACE> <Nop>
 let mapleader="\<Space>"
 
-" Other alternatives for using escape
 nnoremap <C-k> <Esc>
 inoremap <C-k> <Esc>
 vnoremap <C-k> <Esc>
@@ -12,26 +11,28 @@ cnoremap <C-k> <C-c>
 onoremap <C-k> <Esc>
 lnoremap <C-k> <Esc>
 tnoremap <C-k> <Esc>
-" Create splits
+
 nnoremap <leader>s :vsplit<CR>
 nnoremap <leader>h :split<CR>
-" Switch between splits
 nnoremap <leader>o :wincmd w<CR>
-" Quick save
+
+nnoremap <leader>q :wq<CR>
 nnoremap <leader>w :w<CR>
-" Browse files
 nnoremap <leader>e :Ex<CR>
-" Tag searching
+
 nnoremap gd <C-]>
 nnoremap gt :tselect<CR>
 nnoremap gp :pop<CR>
-nnoremap <leader>ut :!ctags -o .tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse<CR>
+if has("win32") || has("win64")
+    nnoremap <leader>ut :!~/scoop/apps/universal-ctags/current/ctags.exe -o .tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse<CR>
+elseif has("unix")
+    nnoremap <leader>ut :!/user/bin/ctags -o .tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse<CR>
+endif
+
+" Query highlight group
+nnoremap <leader>qhg :echo synIDattr(synID(line('.'), col('.'), 1), 'name')<CR>
 
 " Colorscheme
-syntax enable
-if has('termguicolors')
-  set termguicolors
-endif
 colorscheme mug
 
 " Visuals
@@ -63,9 +64,10 @@ set expandtab            " Converts tabs to spaces
 set smartindent          " Makes indenting smart
 set autoindent           " Good auto indent
 
-" Status line and mini-buffer
-set laststatus=0
-set noshowmode
+set noshowmode           " I'm not stupid
+set laststatus=2         " Always show the statusline
+set statusline=\ %f\ %h%m%r%=%-14.(%l,%c%)
+
 set cmdheight=1
 set scrolloff=4
 set pumheight=10
