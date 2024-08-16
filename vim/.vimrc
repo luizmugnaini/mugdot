@@ -36,15 +36,15 @@ nnoremap <leader>qhg :echo synIDattr(synID(line('.'), col('.'), 1), 'name')<CR>
 colorscheme mug
 
 " Visuals
-set guicursor=i:block
-set t_Co=256
+set guicursor=i:block      " Block rocks in every mode.
+set guicursor+=a:blinkon0  " Disable blinking.
 set belloff=all
 set conceallevel=0
 set lazyredraw
 
 " Utilities
 set virtualedit=block
-set clipboard=unnamedplus
+set clipboard^=unnamed    " Jeez... just use the system clipboard.
 set smartcase
 set tags=.tags
 
@@ -84,3 +84,12 @@ set nowritebackup
 " Timings
 set updatetime=300
 set timeoutlen=500
+
+call plug#begin()
+
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+call plug#end()
+
+nnoremap <leader>ff :FZF<CR>
