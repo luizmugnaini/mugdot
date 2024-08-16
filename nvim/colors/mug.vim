@@ -24,11 +24,11 @@ if exists('syntax on')
     syntax reset
 endif
 
-set background=dark
 hi clear
+set background=dark
+set termguicolors
 
 let g:colors_name='mug'
-set t_Co=256
 
 " fg #ffffff
 " bg #0d0e1c
