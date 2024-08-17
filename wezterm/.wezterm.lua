@@ -68,6 +68,44 @@ config.audible_bell = "Disabled"
 
 config.leader = { key = "Space", mods = "CTRL" }
 config.keys = {
+    -- Spawning tabs and toggling between last used.
+    {
+        key = "o",
+        mods = "LEADER",
+        action = wezterm.action.ActivateLastTab,
+    },
+    {
+        key = "t",
+        mods = "LEADER",
+        action = wezterm.action.SpawnTab({ domain = "CurrentPaneDomain" }),
+    },
+    -- Pane creation and movement.
+    {
+        key = "v",
+        mods = "LEADER",
+        action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
+    },
+    {
+        key = "h",
+        mods = "LEADER",
+        action = act.ActivatePaneDirection("Left"),
+    },
+    {
+        key = "j",
+        mods = "LEADER",
+        action = act.ActivatePaneDirection("Down"),
+    },
+    {
+        key = "k",
+        mods = "LEADER",
+        action = act.ActivatePaneDirection("Up"),
+    },
+    {
+        key = "l",
+        mods = "LEADER",
+        action = act.ActivatePaneDirection("Right"),
+    },
+    -- Misc.
     {
         key = "f",
         mods = "LEADER",
@@ -78,17 +116,9 @@ config.keys = {
         mods = "LEADER",
         action = wezterm.action.ReloadConfiguration,
     },
-    {
-        key = "o",
-        mods = "LEADER",
-        action = wezterm.action.ActivateLastTab,
-    },
-    {
-        key = "v",
-        mods = "LEADER",
-        action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
-    },
 }
+
+-- Activate tab by its index (starts at 1).
 for tab_idx = 1, 9 do
     table.insert(config.keys, {
         key = tostring(tab_idx),
