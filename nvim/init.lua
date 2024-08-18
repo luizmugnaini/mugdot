@@ -12,9 +12,9 @@ function tern(cond, opt_true, opt_false)
     end
 end
 
-vim.g.mug_os_windows = package.config:sub(1, 1) == "\\"
-vim.g.mug_home = tern(vim.g.mug_os_windows, os.getenv("USERPROFILE"), os.getenv("HOME"))
-vim.g.mug_nvim_dir = vim.g.mug_home .. "/.config/mugdot/nvim"
+local os_windows = package.config:sub(1, 1) == "\\"
+local home_dir = tern(os_windows, os.getenv("USERPROFILE"), os.getenv("HOME"))
+local nvim_dir = home_dir .. "/.config/mugdot/nvim"
 
 -- -----------------------------------------------------------------------------
 -- General settings
@@ -145,8 +145,7 @@ vim.keymap.set(non_insert_modes, "gd", "<C-]>", { desc = "Go to definition" })
 vim.keymap.set(non_insert_modes, "gt", vim.cmd.tselect, { desc = "Get all tags under this identifier" })
 vim.keymap.set(non_insert_modes, "gp", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
 
-local ctags_exe =
-    tern(vim.g.mug_os_windows, vim.g.mug_home .. "/scoop/apps/universal-ctags/current/ctags.exe", "/usr/bin/ctags")
+local ctags_exe = tern(os_windows, home_dir .. "/scoop/apps/universal-ctags/current/ctags.exe", "/usr/bin/ctags")
 local ctags_args =
     "-o .tags --languages=c,c++ --kinds-all=* --extras=* --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
 vim.keymap.set(
@@ -258,7 +257,7 @@ require("lazy").setup({
         config = function()
             local ls = require("luasnip")
 
-            require("luasnip.loaders.from_lua").lazy_load({ paths = vim.g.mug_nvim_dir .. "/snippets" })
+            require("luasnip.loaders.from_lua").lazy_load({ paths = nvim_dir .. "/snippets" })
             ls.config.setup({ enable_autosnippets = true })
 
             vim.keymap.set({ "i" }, "<C-e>", function()
