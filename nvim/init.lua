@@ -110,10 +110,10 @@ function fmt_buf(formatter)
 end
 
 vim.api.nvim_create_autocmd("BufEnter", {
-    desc = "Detect GLSL files",
+    desc = "Treat GLSL files as C for syntax highlighting",
     group = mug_group,
     pattern = { "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" },
-    command = "set filetype=glsl",
+    command = "set filetype=c",
 })
 
 -- -----------------------------------------------------------------------------
