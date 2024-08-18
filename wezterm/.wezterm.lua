@@ -77,7 +77,7 @@ config.keys = {
     {
         key = "t",
         mods = "LEADER",
-        action = wezterm.action.SpawnTab({ domain = "CurrentPaneDomain" }),
+        action = wezterm.action.SpawnTab("CurrentPaneDomain"),
     },
     -- Pane creation and movement.
     {
@@ -88,22 +88,22 @@ config.keys = {
     {
         key = "h",
         mods = "LEADER",
-        action = act.ActivatePaneDirection("Left"),
+        action = wezterm.action.ActivatePaneDirection("Left"),
     },
     {
         key = "j",
         mods = "LEADER",
-        action = act.ActivatePaneDirection("Down"),
+        action = wezterm.action.ActivatePaneDirection("Down"),
     },
     {
         key = "k",
         mods = "LEADER",
-        action = act.ActivatePaneDirection("Up"),
+        action = wezterm.action.ActivatePaneDirection("Up"),
     },
     {
         key = "l",
         mods = "LEADER",
-        action = act.ActivatePaneDirection("Right"),
+        action = wezterm.action.ActivatePaneDirection("Right"),
     },
     -- Misc.
     {
