@@ -33,11 +33,9 @@
     ret = rebase --edit-todo
     ri = rebase -i
 [credential "https://github.com"]
-	helper = !/usr/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = !/usr/bin/gh auth git-credential
-[credential]
-	helper = cache --timeout=3600
+	helper = !gh auth git-credential
 [filter "lfs"]
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
