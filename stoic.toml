@@ -45,5 +45,5 @@ target = "~/.config"
 recursive = true
 
 [gdb]
-src = "scripts/.gdbinit"
+src = "gdb/.gdbinit"
 target = "~/"
