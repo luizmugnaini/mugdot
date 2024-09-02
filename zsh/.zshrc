@@ -76,9 +76,6 @@ export VISUAL="nvim"
 export TERMINAL="wezterm"
 export BROWSER="firefox"
 
-alias vim="nvim"
-alias v="vim"
-
 # Makes my Ctrl-k output an Esc so that I can use zsh vim mode smoothly
 bindkey -s ^k "\x1b"
 
