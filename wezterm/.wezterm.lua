@@ -21,7 +21,7 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
     }
     config.default_cwd = "D:\\"
 else
-    config.font = wezterm.font("Terminus (TTF)")
+    config.font = wezterm.font("Terminus")
 
     config.default_prog = { "zsh" }
     config.default_cwd = "~/"

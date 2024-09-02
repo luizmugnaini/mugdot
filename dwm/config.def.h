@@ -3,11 +3,11 @@
 //
 // external dependencies:
 // - firefox;
-// - alacritty;
+// - wezterm;
 // - slock;
-// - rofi;
-// - iosevka nerd font;
-// - pulse audio;
+// - dmenu;
+// - Terminus font;
+// - pamixer;
 
 #include <X11/XF86keysym.h>
 
@@ -17,13 +17,13 @@ static const unsigned int gappx = 5;    /* gaps between windows */
 static const unsigned int snap = 10;    /* snap pixel (original: 32) */
 static const int showbar = 1;           /* 0 means no bar */
 static const int topbar = 1;            /* 0 means bottom bar */
-static const char *fonts[] = {"Terminus (TTF):size=10.5"};
-static const char dmenufont[] = "Terminus (TTF):size=10.5";
+static const char *fonts[] = {"Terminus:size=9"};
+static const char dmenufont[] = "Terminus:size=9";
 static const char col_gray1[] = "#222222";
 static const char col_gray2[] = "#444444";
 static const char col_gray3[] = "#bbbbbb";
 static const char col_gray4[] = "#eeeeee";
-static const char col_purple[] = "#1e1c31";
+static const char col_purple[] = "#0d0e1c";
 static const char col_border[] = "#cd00cd";
 static const char *colors[][3] = {
     /*               fg         bg          border   */
@@ -81,7 +81,7 @@ static const char *dmenucmd[] = {
     col_gray3,   "-sb", col_purple, "-sf", col_gray4, NULL};
 
 // Dev commands
-static const char *termcmd[] = {"alacritty", NULL};
+static const char *termcmd[] = {"wezterm", NULL};
 static const char *emacscmd[] = {"emacs", NULL};
 
 // Brwoser

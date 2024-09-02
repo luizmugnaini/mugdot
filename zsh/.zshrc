@@ -18,7 +18,7 @@ _comp_options+=(globdots)
 
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="refined"
-plugins=(git)
+plugins=(git zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 
 # Vim mode ----------------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ export PATH="$HOME/.emacs.d/bin:$PATH"
 
 export EDITOR="nvim"
 export VISUAL="nvim"
-export TERMINAL="alacritty"
+export TERMINAL="wezterm"
 export BROWSER="firefox"
 
 alias vim="nvim"
@@ -82,9 +82,7 @@ alias v="vim"
 # Makes my Ctrl-k output an Esc so that I can use zsh vim mode smoothly
 bindkey -s ^k "\x1b"
 
-alias l="eza --long --group-directories-first"
-
-alias b="bat --theme=Coldark-Dark"
+alias ls="ls -g --color=always --group-directories-first --human-readable -X --almost-all"
 
 # File explorer
 alias n="nnn -Hde"
@@ -126,9 +124,9 @@ alias pip="python3 -m pip"
 alias p="python3"
 alias python="python3"
 
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# export PYENV_ROOT="$HOME/.pyenv"
+# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
 
 # JavaScript --------------------------------------------------------------------------------------
 

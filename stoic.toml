@@ -1,7 +1,3 @@
-[alacritty]
-src = "alacritty/alacritty_linux.toml"
-target = "~/.config/alacritty/alacritty.toml"
-
 [wezterm]
 target = "~/"
 
