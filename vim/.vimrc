@@ -49,7 +49,7 @@ set smartcase
 set tags=.tags
 
 " Buffers and stuff
-set hidden               " Required to keep multiple buffers open multiple buffers
+set hidden               " Required to keep multiple buffers open
 set history=500          " Sets how many lines of history VIM has to remember
 set autoread             " Set to auto read when a file is changed from the outside
 set mouse=a              " Enable your mouse
@@ -83,6 +83,7 @@ set nowritebackup
 
 " Timings
 set updatetime=300
+set timeout
 set timeoutlen=500
 
 call plug#begin()

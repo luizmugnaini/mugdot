@@ -88,6 +88,10 @@ vim.g.netrw_sort_sequence = "[\\/],*"
 vim.opt.encoding = "utf8"
 vim.opt.clipboard = "unnamedplus" -- Copy to and from vim using the system clipboard register
 
+-- Key mapping responsiveness
+vim.o.timeout = true
+vim.o.timeoutlen = 500
+
 -- -----------------------------------------------------------------------------
 -- Auto-commands.
 -- -----------------------------------------------------------------------------
