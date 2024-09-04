@@ -95,8 +95,10 @@ hi Define       guifg=#ff7f9f guibg=NONE
 hi PreCondit    guifg=#ff7f9f guibg=NONE
 
 " grey active   #4a4f69
-hi StatusLine   guifg=#ffffff guibg=#4a4f69
+hi StatusLine   guifg=#4a4f69 guibg=#ffffff
 
 " grey inactive #2b3045
-hi StatusLineNC guifg=#ffffff guibg=#2b3045
-hi Visual       guifg=NONE guibg=#2b3045
+hi StatusLineNC guifg=#2b3045 guibg=#ffffff 
+hi Visual       guifg=NONE    guibg=#2b3045
+
+hi VertSplit    guifg=#2b3045 guibg=#2b3045
