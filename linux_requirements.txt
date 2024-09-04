@@ -11,6 +11,7 @@ dmenu
 dnsmasq
 efibootmgr
 escrotum-git
+fd
 feh
 firefox
 gdb
