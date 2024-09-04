@@ -24,10 +24,12 @@ libxinerama
 linux
 linux-firmware
 linux-headers
+lld
 luajit
 ly
 man-db
 man-pages
+mold
 neovim
 networkmanager
 nnn
@@ -41,6 +43,7 @@ pipewire-pulse
 redshift
 ripgrep
 slock
+stylua
 terminus-font
 texlive-basic
 texlive-bibtexextra
