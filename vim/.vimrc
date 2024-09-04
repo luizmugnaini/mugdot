@@ -16,7 +16,7 @@ nnoremap <leader>s :vsplit<CR>
 nnoremap <leader>h :split<CR>
 nnoremap <leader>o :wincmd w<CR>
 
-nnoremap <leader>q :wq<CR>
+nnoremap <leader>q :q<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>e :Ex<CR>
 

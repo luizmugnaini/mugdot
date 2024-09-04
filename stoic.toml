@@ -15,15 +15,28 @@ target = "~/.config/git"
 target = "~/.config/nvim"
 recursive = true
 
-[vim]
-target = "~/"
+[nvim_colors]
+src = "vim/colors"
+target = "~/.config/nvim/colors"
+
+[nvim_syntax]
+src = "vim/after/syntax"
+target = "~/.config/nvim/after/syntax"
+
+[vimrc]
+src = "vim/.vimrc"
+target = "~/.vimrc"
+
+[vim_autoload]
+src = "vim/autoload"
+target = "~/.vim/autoload"
 
 [vim_colors]
-src = "nvim/colors/mug.vim"
-target = "~/.vim/colors/mug.vim"
+src = "vim/colors"
+target = "~/.vim/colors"
 
 [vim_syntax]
-src = "nvim/after/syntax"
+src = "vim/after/syntax"
 target = "~/.vim/after/syntax"
 
 [tmux]
