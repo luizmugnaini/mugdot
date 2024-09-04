@@ -127,7 +127,7 @@ vim.keymap.set(all_modes, "<C-k>", "<Esc>", { silent = true })
 
 vim.keymap.set(non_insert_modes, "<leader>w", vim.cmd.write, { desc = "[W]rite file" })
 vim.keymap.set(non_insert_modes, "<leader>q", function()
-    vim.cmd("wq")
+    vim.cmd("q")
 end, { desc = "Kill the current buffer" })
 vim.keymap.set(non_insert_modes, "<leader>e", vim.cmd.Ex, { desc = "Explore files" })
 
