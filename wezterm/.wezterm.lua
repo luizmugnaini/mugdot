@@ -68,12 +68,6 @@ config.audible_bell = "Disabled"
 
 config.leader = { key = "Space", mods = "CTRL" }
 config.keys = {
-    -- Spawning tabs and toggling between last used.
-    {
-        key = "o",
-        mods = "LEADER",
-        action = wezterm.action.ActivateLastTab,
-    },
     {
         key = "t",
         mods = "LEADER",
