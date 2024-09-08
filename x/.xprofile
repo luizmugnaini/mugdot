@@ -8,7 +8,7 @@ xrandr --output eDP-1 --auto --right-of HDMI-1 &
 dwmblocks &
 
 # Wallpaper
-feh --bg-fill --no-fehbg ~/Pictures/rayn.png &
+feh --bg-fill --no-fehbg ~/documents/pictures/shadow-of-the-colossus-background.jpg &
 
 # Keyboard layout
 setxkbmap br -variant nodeadkeys -option ctrl:nocaps &
