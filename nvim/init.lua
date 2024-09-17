@@ -150,8 +150,7 @@ vim.keymap.set(non_insert_modes, "gt", vim.cmd.tselect, { desc = "Get all tags u
 vim.keymap.set(non_insert_modes, "gp", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
 
 local ctags_exe = tern(os_windows, home_dir .. "/scoop/apps/universal-ctags/current/ctags.exe", "/usr/bin/ctags")
-local ctags_args =
-    "-o .tags --languages=c,c++ --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
+local ctags_args = "-o .tags --languages=c,c++ --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
 vim.keymap.set(
     non_insert_modes,
     "<leader>ut",
@@ -184,6 +183,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+    { "dstein64/vim-startuptime" },
+
     -- -------------------------------------------------------------------------
     -- Utilities for better development.
     -- -------------------------------------------------------------------------
@@ -191,10 +192,19 @@ require("lazy").setup({
     {
         "nvim-telescope/telescope.nvim",
         tag = "0.1.6",
-        dependencies = { "nvim-lua/plenary.nvim" },
+        dependencies = {
+            { "nvim-lua/plenary.nvim" },
+            {
+                "nvim-telescope/telescope-fzf-native.nvim",
+                build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+            },
+        },
         event = "VeryLazy",
         config = function()
+            local telescope = require("telescope")
             local builtin = require("telescope.builtin")
+
+            telescope.load_extension("fzf")
 
             vim.keymap.set("n", "<leader>ff", function()
                 builtin.find_files({ hidden = true, file_ignore_patterns = { ".git" } })
