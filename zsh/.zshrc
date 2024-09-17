@@ -81,6 +81,10 @@ bindkey -s ^k "\x1b"
 
 alias ls="ls -g --color=always --group-directories-first --human-readable -X --almost-all"
 
+# Vim/Neovim
+alias vim="nvim"
+alias vi="vim"
+
 # File explorer
 alias n="nnn -Hde"
 export NNN_OPENER="xdg-open"
