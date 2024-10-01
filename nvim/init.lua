@@ -236,7 +236,7 @@ require("lazy").setup({
     {
         "stevearc/conform.nvim",
         event = "VeryLazy",
-        ft = { "c", "cpp", "glsl", "lua", "python" },
+        ft = { "c", "cpp", "glsl", "lua", "python", "go" },
         config = function()
             require("conform").setup({
                 formatters = {
@@ -248,11 +248,12 @@ require("lazy").setup({
                     glsl = { "clang-format" },
                     lua = { "stylua" },
                     python = { "black" },
+                    go = { "gofmt" },
                 },
             })
 
             vim.api.nvim_create_autocmd("BufWritePre", {
-                pattern = "*",
+                pattern = { unpack(c_like), "*.lua", "*.py", "*.go" },
                 callback = function(args)
                     require("conform").format({ bufnr = args.buf })
                 end,
