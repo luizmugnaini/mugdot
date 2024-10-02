@@ -15,11 +15,11 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
         "/k",
         "%CMDER_ROOT%\\vendor\\init.bat",
         "&&",
-        "'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat'",
+        "%VSINSTALLDIR%\\Auxiliary\\Build\\vcvarsall.bat",
         "x64",
         "> NUL",
     }
-    config.default_cwd = "D:\\"
+    config.default_cwd = "D:/"
 else
     config.font = wezterm.font("Terminus")
 

@@ -16,3 +16,4 @@ raddbg=D:/app/raddebugger/build/raddbg.exe $*
 remedybg=D:/app/remedybg/remedybg.exe $*
 ctags=C:/Users/luizm/scoop/app/universal-ctags/current/ctags.exe
 vim=nvim $*
+v=vim $*
