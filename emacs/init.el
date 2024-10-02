@@ -96,10 +96,6 @@
 ;;; Directories
 ;;; ============================================================================
 
-;; -----------------------------------------------------------------------------
-;; User directories
-;; -----------------------------------------------------------------------------
-
 (defconst mug-home-dir (eval-when-compile (mug-win-or-linux (getenv "USERPROFILE") "~/"))
   "User home directory.")
 
@@ -111,10 +107,6 @@
 
 (defconst mug-temp-dir (eval-when-compile (mug-win-or-linux (getenv "TEMP") "/tmp"))
   "User temporary directory.")
-
-;; -----------------------------------------------------------------------------
-;; Directories to be used by Emacs
-;; -----------------------------------------------------------------------------
 
 (defconst mug-emacs-dir (eval-when-compile (concat mug-home-dir "/.config/mugdot/emacs"))
   "Directory where the Emacs configuration resides.")
@@ -173,7 +165,7 @@
     (find-file filename)))
 
 (defun mug-find-emacs-config ()
-  "Load the Emacs init.el file to the current frame."
+  "Load the Emacs init.el file to the current window."
   (interactive)
   (find-file (concat mug-emacs-dir "/init.el")))
 
@@ -226,30 +218,17 @@
   ;; Setup Emacs backups and auto-saves
   (backup-directory-alist
    `(("." . ,mug-emacs-backup-dir))) ; Set the backup directory
-  (make-backup-files    t)           ; Make backups frequently
-  (backup-by-copying    t)           ; Copy the files instead of renaming them
-  (kept-new-versions    10)          ; Number of new versions to maintain
-  (kept-old-versions    3)           ; Number of old versions to maintain
-  (delete-old-versions  t)           ; Clean the backup directory
-  (version-control      t)           ; Use numbering of the backup files
-  (vc-make-backup-files t)           ; Store even files controlled by a version-control system
+  (make-backup-files      t)         ; Make backups frequently
+  (backup-by-copying      t)         ; Copy the files instead of renaming them
+  (kept-new-versions     10)         ; Number of new versions to maintain
+  (kept-old-versions      3)         ; Number of old versions to maintain
+  (delete-old-versions    t)         ; Clean the backup directory
+  (version-control        t)         ; Use numbering of the backup files
+  (vc-make-backup-files   t)         ; Store even files controlled by a version-control system
   (auto-save-default    nil)         ; We'll use the super-save package
 
   ;; Ignore the following extensions when completing in the minibuffer
-  (completion-ignored-extensions
-   '(".a"
-     ".o"
-     ".so"
-     ".elf"
-     ".pdb"
-     ".bin"
-     ".exe"
-     ".elc"
-     ".aux"
-     ".bbl"
-     ".toc"
-     ".blg"
-     "~"))
+  (completion-ignored-extensions '(".a" ".o" ".so" ".elf" ".pdb" ".bin" ".exe" ".elc" ".aux" ".bbl" ".toc" ".blg" "~"))
 
   ;; Don't delay parenthesis matching
   (show-paren-delay 0)
@@ -261,22 +240,22 @@
   (enable-recursive-minibuffers t)
 
   ;; Horrible default UI stuff.
-  (window-divider-mode           -1)
-  (window-divider-default-places nil)
-  (column-number-mode            -1)
-  (display-line-numbers-mode     -1)
-  (mode-line-percent-position    nil)
-  (menu-bar-mode                 nil)
-  (tool-bar-mode                 nil)
-  (scroll-bar-mode               nil)
-  (tooltip-mode                  -1)
-  (ring-bell-function            'ignore)
-  (visible-bell                  nil)
-  (inhibit-startup-message       t)
-  (initial-scratch-message       nil)
+  (window-divider-mode               -1)
+  (window-divider-default-places    nil)
+  (column-number-mode                -1)
+  (display-line-numbers-mode         -1)
+  (mode-line-percent-position       nil)
+  (menu-bar-mode                    nil)
+  (tool-bar-mode                    nil)
+  (scroll-bar-mode                  nil)
+  (tooltip-mode                      -1)
+  (ring-bell-function           'ignore)
+  (visible-bell                     nil)
+  (inhibit-startup-message            t)
+  (initial-scratch-message          nil)
 
   ;; Scrolling settings
-  (scroll-step           3)
+  (scroll-step             3)
   (scroll-conservatively 101)
   (auto-window-vscroll   nil)
 
@@ -310,7 +289,7 @@
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
   ;; Fringe border
-  (set-fringe-mode               '(2 . 2))
+  (set-fringe-mode '(2 . 2))
 
   ;; <Escape> from anything
   (keymap-global-set "<escape>" 'keyboard-escape-quit)
@@ -321,21 +300,20 @@
   ;; Simplify the auto mode-detection
   (setq auto-mode-alist
         (append
-         '(("\\.c$"    . c-mode)
+         '(("\\.c$"    .   c-mode)
            ("\\.cc$"   . c++-mode)
            ("\\.cpp$"  . c++-mode)
            ("\\.h$"    . c++-mode) ; oof, C++?
            ("\\.hh$"   . c++-mode)
            ("\\.hpp$"  . c++-mode)
            ("\\.inl$"  . c++-mode)
-           ;; Use GLSL as if it was C
-           ("\\.glsl$" . c-mode)
-           ("\\.comp$" . c-mode)
-           ("\\.vert$" . c-mode)
-           ("\\.geom$" . c-mode)
-           ("\\.frag$" . c-mode)
-           ("\\.tesc$" . c-mode)
-           ("\\.tese$" . c-mode)
+           ("\\.glsl$" .   c-mode)
+           ("\\.comp$" .   c-mode)
+           ("\\.vert$" .   c-mode)
+           ("\\.geom$" .   c-mode)
+           ("\\.frag$" .   c-mode)
+           ("\\.tesc$" .   c-mode)
+           ("\\.tese$" .   c-mode)
            ;; Ordinary text files
            ("\\.txt$"  . indented-text-mode)) auto-mode-alist))
 
@@ -398,20 +376,6 @@
   (straight-use-package 'dired-collapse))
 
 ;; -----------------------------------------------------------------------------
-;; Automatic backup management
-;; -----------------------------------------------------------------------------
-
-(use-package super-save
-  :defines (super-save-mode super-save-hook-triggers)
-  :init
-  (super-save-mode +1)
-  :custom
-  (super-save-silent    t)
-  (super-save-when-idle t)
-  :config
-  (add-to-list 'super-save-hook-triggers 'find-file-hook))
-
-;; -----------------------------------------------------------------------------
 ;; Emacs theme and styling
 ;; -----------------------------------------------------------------------------
 
@@ -467,7 +431,8 @@
   (evil-mode 1)
   :bind (:map evil-normal-state-map
               ("SPC w"   . save-buffer)
-              ("SPC s s" . split-window-right)
+              ("SPC s"   . split-window-right)
+              ("SPC h"   . split-window-below)
               ("SPC o"   . other-window)
               ("SPC b b" . switch-to-buffer)
               ("SPC f f" . find-file)
@@ -559,34 +524,19 @@
         citre-default-create-tags-file-location 'in-dir
         citre-auto-enable-citre-mode-modes      '(prog-mode)))
 
-(use-package company
-  :defines  (company-active-map)
-  :commands (company-complete company-select-previous company-select-next)
-  :bind (:map company-active-map
-              ("C-m" . company-select-previous)
-              ("C-n" . company-select-next))
+(use-package corfu
   :custom
-  (company-show-numbers          nil) ; Useless info
-  (company-require-match         nil) ; Don't mess with my key presses!!
-  (company-minimum-prefix-length   1) ; Number of characters needed before starting the search
-  (company-idle-delay            1.5) ; Number of seconds before attempting completion
-  :config
-  ;; Don't use Clang for fuck sake!!!
-  (setq company-clang-executable nil)
-  (setq company-backends '((company-capf
-                            :with company-yasnippet)))
+  (corfu-cycle t) ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)  ;; Enable auto completion
+  :init
+  (global-corfu-mode))
 
-  ;; Prune some of the results
-  (setq company-transformers '(delete-consecutive-dups
-                               company-sort-by-occurrence))
+(use-package cape
+  :init
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  :custom
+  (cape-dabbrev-min-length 3))
 
-  ;; Better interaction with ctags
-  (use-package company-ctags
-    :defer t
-    :requires company
-    :functions (company-ctags-auto-setup)
-    :init
-    (company-ctags-auto-setup)))
 
 ;; -----------------------------------------------------------------------------
 ;; Snippets
@@ -595,20 +545,6 @@
 (use-package yasnippet
   :custom
   (yas-snippet-dirs (concat mug-emacs-dir "/snippets")))
-
-;; -----------------------------------------------------------------------------
-;; Colours in compilation mode
-;; -----------------------------------------------------------------------------
-
-(require 'ansi-color)
-
-(defun mug-colourful-compilation ()
-  "Handle ansi escape sequences from `compilation-filter-start' to `point'."
-  (let ((inhibit-read-only t))
-    (ansi-color-apply-on-region
-     compilation-filter-start (point))))
-
-(add-hook 'compilation-filter-hook #'mug-colourful-compilation)
 
 ;; -----------------------------------------------------------------------------
 ;; Version control
@@ -736,7 +672,7 @@ that are relevant for your installation. "
 (defun mug-c-scratch-buf ()
   "Make a C++ scratch buffer"
   (interactive)
-  (find-file (concat mug-emacs-temp-dir "/scratch.cc")))
+  (find-file (concat mug-emacs-temp-dir "/scratch.c")))
 
 ;; -----------------------------------------------------------------------------
 ;; C and C++ styling and keybindings
@@ -753,20 +689,23 @@ that are relevant for your installation. "
   (setq c-basic-offset 4))
 
 ;; -----------------------------------------------------------------------------
-;; Odin lang
+;; General programming setup
 ;; -----------------------------------------------------------------------------
 
-(require 'odin-mode)
+(require 'ansi-color)
 
-;; -----------------------------------------------------------------------------
-;; Programming mode setup
-;; -----------------------------------------------------------------------------
+(defun mug-colourful-compilation ()
+  "Handle ansi escape sequences from `compilation-filter-start' to `point'."
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region
+     compilation-filter-start (point))))
+
+(add-hook 'compilation-filter-hook #'mug-colourful-compilation)
 
 (use-package prog-mode
   :straight (:type built-in)
   :hook ((prog-mode . yas-minor-mode)
-         (prog-mode . citre-mode)
-         (prog-mode . company-mode))
+         (prog-mode . citre-mode))
   :bind (:map evil-normal-state-map
               ("g d" . citre-jump)
               ("g b" . citre-jump-back)
