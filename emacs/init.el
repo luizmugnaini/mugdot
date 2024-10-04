@@ -228,13 +228,14 @@
   (auto-save-default    nil)         ; We'll use the super-save package
 
   ;; Ignore the following extensions when completing in the minibuffer
-  (completion-ignored-extensions '(".a" ".o" ".so" ".elf" ".pdb" ".bin" ".exe" ".elc" ".aux" ".bbl" ".toc" ".blg" "~"))
+  (completion-ignored-extensions '(".a" ".o" ".so" ".lib" ".elf" ".pdb" ".bin" ".exe" ".elc" ".aux" ".bbl" ".toc" ".blg" "~"))
 
   ;; Don't delay parenthesis matching
   (show-paren-delay 0)
 
-  ;; Don't use tabs for indentation
-  (indent-tabs-mode nil)
+  (indent-tabs-mode nil) ;; Don't use tabs for indentation
+  (tab-width          4) ;; If you gotta render a tab, at least use a resonable width...
+
 
   ;; Support opening new minibuffers from inside existing minibuffers.
   (enable-recursive-minibuffers t)
@@ -266,13 +267,14 @@
   (read-extended-command-predicate #'command-completion-default-include-p)
 
   ;; Use UTF-8 encoding for everything
-  (set-terminal-coding-system 'utf-8)
-  (set-language-environment   'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (prefer-coding-system       'utf-8)
-  (locale-coding-system       'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-terminal-coding-system 'utf-8)
+  (dolist (fn '(set-terminal-coding-system
+                set-language-environment
+                set-keyboard-coding-system
+                prefer-coding-system
+                locale-coding-system
+                set-default-coding-systems))
+    (funcall fn 'utf-8))
+
   :config
 
   ;; Make accepting commands easier with y/n options
@@ -297,51 +299,14 @@
   ;; Translate <C-k> into an escape key press
   (define-key key-translation-map (kbd "C-k") (kbd "<escape>"))
 
-  ;; Simplify the auto mode-detection
-  (setq auto-mode-alist
-        (append
-         '(("\\.c$"    .   c-mode)
-           ("\\.cc$"   . c++-mode)
-           ("\\.cpp$"  . c++-mode)
-           ("\\.h$"    . c++-mode) ; oof, C++?
-           ("\\.hh$"   . c++-mode)
-           ("\\.hpp$"  . c++-mode)
-           ("\\.inl$"  . c++-mode)
-           ("\\.glsl$" .   c-mode)
-           ("\\.comp$" .   c-mode)
-           ("\\.vert$" .   c-mode)
-           ("\\.geom$" .   c-mode)
-           ("\\.frag$" .   c-mode)
-           ("\\.tesc$" .   c-mode)
-           ("\\.tese$" .   c-mode)
-           ;; Ordinary text files
-           ("\\.txt$"  . indented-text-mode)) auto-mode-alist))
-
   ;; Suppress meaningless messages in the *Messages* buffer:
-  (advice-add 'basic-save-buffer :around #'mug--suppress-message)
-  (advice-add 'undo              :around #'mug--suppress-message)
-  (advice-add 'undo-redo         :around #'mug--suppress-message)
-  (advice-add 'beginning-of-line :around #'mug--suppress-message)
-  (advice-add 'end-of-line       :around #'mug--suppress-message)
+  (dolist (fn '(basic-save-buffer undo undo-redo beginning-of-line end-of-line))
+    (advice-add fn :around #'mug--suppress-message))
 
-  ;; Annoying keyindings:
-  ;; Stuff that I keep pressing and doing something terrible or annoying, or that
-  ;; I want to use for something else.
-  (keymap-global-unset "C-x C-b")
-  (keymap-global-unset "C-x C-c")
-  (keymap-global-unset "C-x C-d")
-  (keymap-global-unset "C-x C-z")
-  (keymap-global-unset "C-x C-s")
-  (keymap-global-unset   "C-x s")
-  (keymap-global-unset   "C-x f")
-  (keymap-global-unset   "C-h h")
-  (keymap-global-unset   "C-h k")
-  (keymap-global-unset   "C-h j")
-  (keymap-global-unset   "C-h l")
-  (keymap-global-unset     "C-f")
-  (keymap-global-unset     "C-z")
-  (keymap-global-unset     "C-j")
-  (keymap-global-unset     "M-j")
+  ;; Annoying keybindings:
+  (dolist (key '("C-x C-b" "C-x C-c" "C-x C-d" "C-x C-z" "C-x C-s" "C-x s" "C-x f" "C-h h"
+                 "C-h k" "C-h j" "C-h l" "C-f" "C-z" "C-j" "M-j"))
+    (keymap-global-unset key))
 
   ;; This is needed for me because my keyboard uses the Caps Lock as a "magic" key
   ;; when pressed together with some other key, in order to prevent such a fucking
@@ -417,7 +382,7 @@
   :defines  (evil-mode evil-emacs-state-modes evil-normal-state-map)
   :commands (evil-yank evil-global-set-key)
   :init
-  (setq-default evil-want-keybinding nil)
+  (setq-default evil-want-keybinding     nil)
   (setq evil-want-integration              t
 	evil-want-C-u-scroll                 nil
 	evil-want-C-i-jump                   nil
@@ -430,7 +395,9 @@
 
   (evil-mode 1)
   :bind (:map evil-normal-state-map
+              ("Y"       . (lambda () (interactive) (evil-yank (point) (line-end-position))))
               ("SPC w"   . save-buffer)
+              ("SPC q"   . kill-buffer-and-window)
               ("SPC s"   . split-window-right)
               ("SPC h"   . split-window-below)
               ("SPC o"   . other-window)
@@ -451,22 +418,12 @@
       (add-to-list 'evil-emacs-state-modes mode)))
   (add-hook 'evil-mode-hook #'mug-evil-hook)
 
-  (defun mug-evil-yank-to-end-of-line ()
-    "Yank to end of line."
-    (interactive)
-    (evil-yank (point) (line-end-position)))
-  (define-key evil-normal-state-map (kbd "Y") 'mug-evil-yank-to-end-of-line)
-
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
-
   ;; Disable useless messages...
-  (advice-add 'evil-forward-char  :around #'mug--suppress-message)
-  (advice-add 'evil-backward-char :around #'mug--suppress-message)
-  (advice-add 'evil-next-line     :around #'mug--suppress-message)
-  (advice-add 'evil-previous-line :around #'mug--suppress-message)
-  (advice-add 'evil-line-move     :around #'mug--suppress-message)
+  (dolist (fn '(evil-forward-char evil-backward-char evil-next-line evil-previous-line evil-line-move))
+    (advice-add fn :around #'mug--suppress-message))
 
   ;; Keybinding goodies
   (use-package evil-collection
@@ -494,10 +451,6 @@
 ;;; ============================================================================
 ;;; General development setup
 ;;; ============================================================================
-
-;; -----------------------------------------------------------------------------
-;; Completions, tags, and jumping around!
-;; -----------------------------------------------------------------------------
 
 (use-package xref
   :custom
@@ -537,18 +490,9 @@
   :custom
   (cape-dabbrev-min-length 3))
 
-
-;; -----------------------------------------------------------------------------
-;; Snippets
-;; -----------------------------------------------------------------------------
-
 (use-package yasnippet
   :custom
   (yas-snippet-dirs (concat mug-emacs-dir "/snippets")))
-
-;; -----------------------------------------------------------------------------
-;; Version control
-;; -----------------------------------------------------------------------------
 
 ;; Git management with Magit for the win
 (straight-use-package 'magit)
@@ -569,35 +513,34 @@ that are relevant for your installation. "
   (setenv "PATH" mug-path-env)
   (setenv "INCLUDE"
           (concat
-           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/include"
+           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/include"
            ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/VS/include"
-           ";" "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/ucrt"
-           ";" "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/um"
-           ";" "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/shared"
-           ";" "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/winrt"
-           ";" "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/cppwinrt"
-           ))
+           ";" "C:/Program Files (x86)/Windows Kits/10/include/10.0.22621.0/ucrt"
+           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/um"
+           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/shared"
+           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/winrt"
+           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/cppwinrt"
+           ";" "C:/Program Files (x86)/Windows Kits/NETFXSDK/4.8/include/um"))
 
   (setenv "LIB"
           (concat
-           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/lib/x64"
-           ";" "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.22621.0/ucrt/x64"
-           ";" "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.22621.0/um/x64"
-           ))
+           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/lib/x64"
+           ";" "C:/Program Files (x86)/Windows Kits/NETFXSDK/4.8/lib/um/x64"
+           ";" "C:/Program Files (x86)/Windows Kits/10/lib/10.0.22621.0/ucrt/x64"
+           ";" "C:/Program Files (x86)/Windows Kits/10//lib/10.0.22621.0//um/x64"))
 
   (setenv  "LIBPATH"
            (concat
-            "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/lib/x64"
-            ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/lib/x86/store/references"
+            "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/lib/x64"
+            ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/lib/x86/store/references"
             ";" "C:/Program Files (x86)/Windows Kits/10/UnionMetadata/10.0.22621.0"
             ";" "C:/Program Files (x86)/Windows Kits/10/References/10.0.22621.0"
-            ";" "C:/Windows/Microsoft.NET/Framework64/v4.0.30319"
-            ))
+            ";" "C:/Windows/Microsoft.NET/Framework64/v4.0.30319"))
 
   (setenv "PATH"
           (concat
            (getenv "PATH")
-           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/bin/HostX64/x64"
+           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64"
            ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/VC/VCPackages"
            ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow"
            ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer"
@@ -610,14 +553,14 @@ that are relevant for your installation. "
            ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/Tools/")))
 
 ;; -----------------------------------------------------------------------------
-;; Formatting C/C++ and C-like files:
+;; C/C++ utility functions
 ;; -----------------------------------------------------------------------------
 
 (defconst mug-c-formatter "clang-format"
   "The name of the C/C++ formatter executable")
 
 (defconst mug-c-formatter-found (eval-when-compile (executable-find mug-c-formatter))
-  "Whether the C/C++ formatter `mug-c-formatter' executable was found or not.")
+  "Whether the C/C++ formatter `mug--c-formatter' executable was found or not.")
 
 (defun mug-c-format-buffer ()
   "Format the current buffer."
@@ -628,10 +571,6 @@ that are relevant for your installation. "
     ;; Return the user to the previous state
     (set-window-start (selected-window) current-window-start)
     (goto-char current-point)))
-
-;; -----------------------------------------------------------------------------
-;; Find header or implementation of the current C/C++ file
-;; -----------------------------------------------------------------------------
 
 ;; TODO: support project include/ directories, not only same-directory structures
 (defun mug--c-find-impl-or-decl-file-name ()
@@ -665,32 +604,32 @@ that are relevant for your installation. "
         (find-file-other-window file-name)
       (error "Unable to find a file corresponding to %s" buffer-file-name))))
 
-;; -----------------------------------------------------------------------------
-;; Just like elisp, we should also have scratch buffers for C/C++
-;; -----------------------------------------------------------------------------
-
 (defun mug-c-scratch-buf ()
   "Make a C++ scratch buffer"
   (interactive)
   (find-file (concat mug-emacs-temp-dir "/scratch.c")))
 
+;; Lightweight C-mode
+(require 'simpc-mode)
+(setq c-basic-offset 4)
+
 ;; -----------------------------------------------------------------------------
-;; C and C++ styling and keybindings
+;; Misc. secondary langs
 ;; -----------------------------------------------------------------------------
 
-(use-package cc-mode
-  :straight (:type built-in)
-  :config
-  ;; Keybindings
-  (define-key evil-normal-state-map (kbd "SPC f c") 'mug-c-find-corresponding)
-  (define-key evil-normal-state-map (kbd "SPC f b") 'mug-c-format-buffer)
-
-  ;; Indentation width
-  (setq c-basic-offset 4))
+(autoload 'go-mode "go-mode" nil t)
 
 ;; -----------------------------------------------------------------------------
 ;; General programming setup
 ;; -----------------------------------------------------------------------------
+
+(setq auto-mode-alist
+      (append
+       auto-mode-alist
+       '(("\\.\\(c\\|h\\)"                                   . simpc-mode)
+         ("\\.\\(comp\\|vert\\|geom\\|frag\\|tesc\\|tese\\)" . simpc-mode)
+         ("\\.txt"                                           . indented-text-mode)
+         ("\\.go"                                            . go-mode))))
 
 (require 'ansi-color)
 
@@ -707,9 +646,11 @@ that are relevant for your installation. "
   :hook ((prog-mode . yas-minor-mode)
          (prog-mode . citre-mode))
   :bind (:map evil-normal-state-map
-              ("g d" . citre-jump)
-              ("g b" . citre-jump-back)
-              ("g o" . xref-find-definitions-other-window)))
+              ("g d"     . citre-jump)
+              ("g b"     . citre-jump-back)
+              ("g o"     . xref-find-definitions-other-window)
+              ("SPC f c" . mug-c-find-corresponding)
+              ("SPC f b" . mug-c-format-buffer)))
 
 ;; -----------------------------------------------------------------------------
 
