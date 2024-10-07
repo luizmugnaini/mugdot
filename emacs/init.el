@@ -99,7 +99,7 @@
 (defconst mug-home-dir (eval-when-compile (mug-win-or-linux (getenv "USERPROFILE") "~/"))
   "User home directory.")
 
-(defconst mug-dev-dir (eval-when-compile (mug-win-or-linux "d:/" (concat mug-home-dir "/Projects")))
+(defconst mug-dev-dir (eval-when-compile (mug-win-or-linux "d:/" (concat mug-home-dir "/projects")))
   "Development directory.")
 
 (defconst mug-cache-dir (eval-when-compile (mug-win-or-linux (getenv "LOCALAPPDATA") "~/.cache"))
@@ -201,6 +201,8 @@
   (before-save      . delete-trailing-whitespace)
   (minibuffer-setup . cursor-intangible-mode)
   :custom
+  (package-native-compile t)
+
   ;; Allow foreign themes without asking
   (custom-safe-themes t)
 
@@ -283,7 +285,7 @@
   ;; Set the default font
   (set-face-attribute 'default nil
                       :font (mug-win-or-linux "Terminus (TTF) for Windows"
-                                              "Terminus (TTF)")
+                                              "Terminus")
                       :height 120)
 
   ;; Window resizing
@@ -384,14 +386,14 @@
   :init
   (setq-default evil-want-keybinding     nil)
   (setq evil-want-integration              t
-	evil-want-C-u-scroll                 nil
-	evil-want-C-i-jump                   nil
-	evil-respect-visual-line-mode          t
-	evil-undo-system              'undo-redo
-	evil-shift-width                       4
-	evil-insert-state-cursor            'box
-	evil-normal-state-cursor            'box
-	evil-esc-delay                         0)
+	    evil-want-C-u-scroll                 nil
+	    evil-want-C-i-jump                   nil
+	    evil-respect-visual-line-mode          t
+	    evil-undo-system              'undo-redo
+	    evil-shift-width                       4
+	    evil-insert-state-cursor            'box
+	    evil-normal-state-cursor            'box
+	    evil-esc-delay                         0)
 
   (evil-mode 1)
   :bind (:map evil-normal-state-map
@@ -433,6 +435,7 @@
     :init     (evil-collection-init)
     :custom
     (evil-collection-outline-bind-tab-p nil)
+    (evil-collection-want-unimpaired-p  nil)
     :config
     (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list))
 
@@ -605,13 +608,14 @@ that are relevant for your installation. "
       (error "Unable to find a file corresponding to %s" buffer-file-name))))
 
 (defun mug-c-scratch-buf ()
-  "Make a C++ scratch buffer"
+  "Make a C scratch buffer"
   (interactive)
   (find-file (concat mug-emacs-temp-dir "/scratch.c")))
 
 ;; Lightweight C-mode
 (require 'simpc-mode)
-(setq c-basic-offset 4)
+
+(add-hook 'simpc-mode-hook (lambda () 'before-save-hook #'mug-c-format-buffer))
 
 ;; -----------------------------------------------------------------------------
 ;; Misc. secondary langs
@@ -619,17 +623,23 @@ that are relevant for your installation. "
 
 (autoload 'go-mode "go-mode" nil t)
 
+(use-package lua-mode
+  :custom
+  (lua-indent-level 4))
+
 ;; -----------------------------------------------------------------------------
 ;; General programming setup
 ;; -----------------------------------------------------------------------------
 
 (setq auto-mode-alist
       (append
-       auto-mode-alist
-       '(("\\.\\(c\\|h\\)"                                   . simpc-mode)
-         ("\\.\\(comp\\|vert\\|geom\\|frag\\|tesc\\|tese\\)" . simpc-mode)
-         ("\\.txt"                                           . indented-text-mode)
-         ("\\.go"                                            . go-mode))))
+       '(("\\.h\\(h\\|pp\\)?\\'"                                . simpc-mode)
+         ("\\.c\\(c\\|pp\\)?\\'"                                . simpc-mode)
+         ("\\.\\(?:comp\\|vert\\|geom\\|frag\\|tesc\\|tese\\)$" . simpc-mode)
+         ("\\.go$"                                              . go-mode)
+         ("\\.lua$"                                             . lua-mode)
+         ("\\.txt$"                                             . indented-text-mode))
+       auto-mode-alist))
 
 (require 'ansi-color)
 
