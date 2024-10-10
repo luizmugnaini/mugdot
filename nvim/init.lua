@@ -252,12 +252,12 @@ require("lazy").setup({
                 },
             })
 
-            -- vim.api.nvim_create_autocmd("BufWritePre", {
-            --     pattern = { unpack(c_like), "*.lua", "*.py", "*.go" },
-            --     callback = function(args)
-            --         require("conform").format({ bufnr = args.buf })
-            --     end,
-            -- })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                pattern = { unpack(c_like), "*.lua", "*.py", "*.go" },
+                callback = function(args)
+                    require("conform").format({ bufnr = args.buf })
+                end,
+            })
 
             vim.keymap.set(non_insert_modes, "<leader>fb", function()
                 require("conform").format({ bufnr = 0 })
