@@ -6,6 +6,13 @@
 
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
+local mux = wezterm.mux
+
+-- Start with a maximized window.
+wezterm.on("gui-startup", function()
+    local tab, pane, window = mux.spawn_window({})
+    window:gui_window():maximize()
+end)
 
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
     config.font = wezterm.font("Terminus (TTF) for Windows")
