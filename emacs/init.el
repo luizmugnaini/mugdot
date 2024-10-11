@@ -615,7 +615,7 @@ that are relevant for your installation. "
 ;; Lightweight C-mode
 (require 'simpc-mode)
 
-(add-hook 'simpc-mode-hook (lambda () 'before-save-hook #'mug-c-format-buffer))
+(add-hook 'simpc-mode-hook (lambda () 'before-save-hook #'mug-c-format-buffer nil t))
 
 ;; -----------------------------------------------------------------------------
 ;; Misc. secondary langs
@@ -643,13 +643,13 @@ that are relevant for your installation. "
 
 (require 'ansi-color)
 
-(defun mug-colourful-compilation ()
+(defun mug--colourful-compilation ()
   "Handle ansi escape sequences from `compilation-filter-start' to `point'."
   (let ((inhibit-read-only t))
     (ansi-color-apply-on-region
      compilation-filter-start (point))))
 
-(add-hook 'compilation-filter-hook #'mug-colourful-compilation)
+(add-hook 'compilation-filter-hook #'mug--colourful-compilation)
 
 (use-package prog-mode
   :straight (:type built-in)
