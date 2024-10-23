@@ -83,7 +83,8 @@ vim.opt.updatetime = 50
 vim.opt.tags = ".tags"
 
 -- Misc
-vim.opt.wildignore = { "*.o", "*.obj", "*.lib", "*.a", "*.exe", "*.pdb", "*.ilk", ".git" }
+vim.opt.wildignore =
+    { "*.o", "*.obj", "*.lib", "*.a", "*.exe", "*.pdb", "*.ilk", ".git", "*.pdf", "*.png", "*.jpeg", "*.aseprite" }
 vim.g.netrw_sort_sequence = "[\\/],*"
 vim.opt.encoding = "utf8"
 vim.opt.clipboard = "unnamedplus" -- Copy to and from vim using the system clipboard register
@@ -118,6 +119,20 @@ vim.api.nvim_create_autocmd("BufEnter", {
     group = mug_group,
     pattern = { "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" },
     command = "set filetype=c",
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    desc = "Use LaTeX mode for .tex...",
+    group = mug_group,
+    pattern = { "*.tex" },
+    command = "set filetype=tex",
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+    desc = "Trim whitespaces in text files",
+    group = mug_group,
+    pattern = { "*.md", "*.txt", "*.tex" },
+    callback = trim_whitespaces,
 })
 
 -- -----------------------------------------------------------------------------
@@ -196,7 +211,7 @@ require("lazy").setup({
             { "nvim-lua/plenary.nvim" },
             {
                 "nvim-telescope/telescope-fzf-native.nvim",
-                build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+                build = "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
             },
         },
         event = "VeryLazy",
