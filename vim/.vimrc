@@ -100,7 +100,7 @@ set formatoptions-=t     " Disable automatic text wrapping while typing
 " Utilities --------------------------------------------------------------------
 
 " Code divisor header in C and C++ files.
-autocmd FileType c,cpp abbr cmt // -----------------------------------------------------------------------------<CR>-  -<ESC>a<CR>-----------------------------------------------------------------------------<Esc>
+autocmd FileType c,cpp abbr cmt // -----------------------------------------------------------------------------<CR> <ESC>a<CR>-----------------------------------------------------------------------------<Esc>
 
 " Plugins
 call plug#begin()
