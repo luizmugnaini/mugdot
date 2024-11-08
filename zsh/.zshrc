@@ -38,7 +38,7 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 #   - beam:  '\e[5 q'
 vim_normal='\e[1 q'
 vim_insert='\e[1 q'
-function zle-keymap-select {
+zle-keymap-select() {
   # normal, visual, cmd modes
   if [[ ${KEYMAP} == vicmd ]] ||
      [[ $1 = 'block' ]]; then
@@ -61,13 +61,24 @@ zle-line-init() {
 zle -N zle-line-init
 echo -ne $vim_insert # Use beam shape cursor on startup.
 
-preexec() { echo -ne $vim_insert ;} # Use cursor shape for each new prompt.
+preexec() {  # Use cursor shape for each new prompt.
+    echo -ne $vim_insert ;
+}
 
 # Path --------------------------------------------------------------------------------------------
+
+# MSVC: https://github.com/mstorsjo/msvc-wine
+export MSVC_HOME="$HOME/ext/msvc"
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.emacs.d/bin:$PATH"
+export PATH="$MSVC_HOME/bin/x64:$PATH"
+
+# Set environment variables for MSVC development on Linux
+msvc-setup() {
+    BIN=$MSVC_HOME/bin/x64 . $MSVC_HOME/msvcenv-native.sh
+}
 
 # Terminal utilities and env variables -----------------------------------------------------------
 
