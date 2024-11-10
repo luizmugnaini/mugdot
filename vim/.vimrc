@@ -37,7 +37,7 @@ endif
 nnoremap <leader>qhg :echo synIDattr(synID(line('.'), col('.'), 1), 'name')<CR>
 
 " Colorscheme
-colorscheme mug
+" colorscheme mug
 
 " Settings ---------------------------------------------------------------------
 
