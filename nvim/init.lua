@@ -115,9 +115,9 @@ function fmt_buf(formatter)
 end
 
 vim.api.nvim_create_autocmd("BufEnter", {
-    desc = "Treat GLSL files as C for syntax highlighting",
+    desc = "Treat miscelaneous files as C for syntax highlighting",
     group = mug_group,
-    pattern = { "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" },
+    pattern = { "*.cu", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" },
     command = "set filetype=c",
 })
 
@@ -165,7 +165,8 @@ vim.keymap.set(non_insert_modes, "gt", vim.cmd.tselect, { desc = "Get all tags u
 vim.keymap.set(non_insert_modes, "gp", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
 
 local ctags_exe = tern(os_windows, home_dir .. "/scoop/apps/universal-ctags/current/ctags.exe", "/usr/bin/ctags")
-local ctags_args = "-o .tags --languages=c,c++ --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
+local ctags_args =
+    "-o .tags --languages=c,c++,lua,python --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
 vim.keymap.set(
     non_insert_modes,
     "<leader>ut",
@@ -247,7 +248,7 @@ require("lazy").setup({
         end,
     },
 
-    -- Automatic formatting at save.
+    -- Automatic formatting on save.
     {
         "stevearc/conform.nvim",
         event = "VeryLazy",
