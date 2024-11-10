@@ -33,66 +33,66 @@ let g:colors_name='mug'
 " fg #ffffff
 " bg #0d0e1c
 hi Normal       guifg=#ffffff guibg=#0d0e1c
-hi netrwList    guifg=#ffffff guibg=NONE
-hi Delimeter    guifg=#ffffff guibg=NONE
-hi Identifier   guifg=#ffffff guibg=NONE
-hi Constant     guifg=#ffffff guibg=NONE
-hi Number       guifg=#ffffff guibg=NONE
-hi Float        guifg=#ffffff guibg=NONE
-hi Operator     guifg=#ffffff guibg=NONE
+hi netrwList    guifg=#ffffff
+hi Delimeter    guifg=#ffffff
+hi Identifier   guifg=#ffffff
+hi Constant     guifg=#ffffff
+hi Number       guifg=#ffffff
+hi Float        guifg=#ffffff
+hi Operator     guifg=#ffffff
 hi Todo         guifg=#ffffff guibg=#db7b5f
-hi luaTable     guifg=#ffffff guibg=NONE
-hi vimHiGroup   guifg=#ffffff guibg=NONE
-hi vimGroup     guifg=#ffffff guibg=NONE
+hi luaTable     guifg=#ffffff
+hi vimHiGroup   guifg=#ffffff
+hi vimGroup     guifg=#ffffff
 
 " clay #f1b090
-hi Comment      guifg=#f1b090 guibg=NONE
-hi netrwComment guifg=#f1b090 guibg=NONE
+hi Comment      guifg=#f1b090
+hi netrwComment guifg=#f1b090
 
 " magenta light #caa6df
-hi Function     guifg=#caa6df guibg=NONE
-hi luaFunction  guifg=#caa6df guibg=NONE
+hi Function     guifg=#caa6df
+hi luaFunction  guifg=#caa6df
 
 " magenta #b6a0ff
-hi StorageClass    guifg=#b6a0ff guibg=NONE
-hi Structure       guifg=#b6a0ff guibg=NONE
-hi Typedef         guifg=#b6a0ff guibg=NONE
-hi Special         guifg=#b6a0ff guibg=NONE
-hi Conditional     guifg=#b6a0ff guibg=NONE
-hi Repeat          guifg=#b6a0ff guibg=NONE
-hi Label           guifg=#b6a0ff guibg=NONE
-hi Keyword         guifg=#b6a0ff guibg=NONE
-hi cType           guifg=#b6a0ff guibg=NONE
-hi cOperator       guifg=#b6a0ff guibg=NONE
-hi cStatement      guifg=#b6a0ff guibg=NONE
-hi cppCast         guifg=#b6a0ff guibg=NONE
-hi cppBuiltinNames guifg=#b6a0ff guibg=NONE
-hi vimHighlight    guifg=#b6a0ff guibg=NONE
-hi vimCommand      guifg=#b6a0ff guibg=NONE
-hi vimNotFunc      guifg=#b6a0ff guibg=NONE
-hi pythonStatement guifg=#b6a0ff guibg=NONE
-hi pythonException guifg=#b6a0ff guibg=NONE
-hi tomlTable       guifg=#b6a0ff guibg=NONE
-hi luaStatement    guifg=#b6a0ff guibg=NONE
-hi luaOperator     guifg=#b6a0ff guibg=NONE
+hi StorageClass    guifg=#b6a0ff
+hi Structure       guifg=#b6a0ff
+hi Typedef         guifg=#b6a0ff
+hi Special         guifg=#b6a0ff
+hi Conditional     guifg=#b6a0ff
+hi Repeat          guifg=#b6a0ff
+hi Label           guifg=#b6a0ff
+hi Keyword         guifg=#b6a0ff
+hi cType           guifg=#b6a0ff
+hi cOperator       guifg=#b6a0ff
+hi cStatement      guifg=#b6a0ff
+hi cppCast         guifg=#b6a0ff
+hi cppBuiltinNames guifg=#b6a0ff
+hi vimHighlight    guifg=#b6a0ff
+hi vimCommand      guifg=#b6a0ff
+hi vimNotFunc      guifg=#b6a0ff
+hi pythonStatement guifg=#b6a0ff
+hi pythonException guifg=#b6a0ff
+hi tomlTable       guifg=#b6a0ff
+hi luaStatement    guifg=#b6a0ff
+hi luaOperator     guifg=#b6a0ff
 
 " magenta #b6a0ff
-hi MatchParen   guifg=NONE guibg=#b6a0ff
+hi MatchParen      guibg=#b6a0ff
 
 " blue #79a8ff
-hi String       guifg=#79a8ff guibg=NONE
-hi Character    guifg=#79a8ff guibg=NONE
-hi Directory    guifg=#79a8ff guibg=NONE
+hi String       guifg=#79a8ff
+hi Character    guifg=#79a8ff
+hi Directory    guifg=#79a8ff
 
 " green #6ae4b9
-hi Boolean      guifg=#6ae4b9 guibg=NONE
-hi Type         guifg=#6ae4b9 guibg=NONE
+hi Boolean      guifg=#6ae4b9
+hi Type         guifg=#6ae4b9
 
 " red #ff7f9f
-hi PreProc      guifg=#ff7f9f guibg=NONE
-hi Include      guifg=#ff7f9f guibg=NONE
-hi Define       guifg=#ff7f9f guibg=NONE
-hi PreCondit    guifg=#ff7f9f guibg=NONE
+hi PreProc      guifg=#ff7f9f
+hi Include      guifg=#ff7f9f
+hi Define       guifg=#ff7f9f
+hi PreCondit    guifg=#ff7f9f
 
 " grey active   #4a4f69
 " grey inactive #2b3045
@@ -105,4 +105,4 @@ else
 endif
 
 hi VertSplit    guifg=#2b3045 guibg=#2b3045
-hi Visual       guifg=NONE    guibg=#2b3045
+hi Visual       guibg=#2b3045
