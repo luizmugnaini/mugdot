@@ -4,16 +4,8 @@
 -- Author: Luiz G. Mugnaini A. <luizmugnaini@gmail.com>
 -- =============================================================================
 
-function tern(cond, opt_true, opt_false)
-    if cond then
-        return opt_true
-    else
-        return opt_false
-    end
-end
-
 local os_windows = package.config:sub(1, 1) == "\\"
-local home_dir = tern(os_windows, os.getenv("USERPROFILE"), os.getenv("HOME"))
+local home_dir = os_windows and os.getenv("USERPROFILE") or os.getenv("HOME")
 local nvim_dir = home_dir .. "/.config/mugdot/nvim"
 
 -- -----------------------------------------------------------------------------
@@ -164,7 +156,7 @@ vim.keymap.set(non_insert_modes, "gd", "<C-]>", { desc = "Go to definition" })
 vim.keymap.set(non_insert_modes, "gt", vim.cmd.tselect, { desc = "Get all tags under this identifier" })
 vim.keymap.set(non_insert_modes, "gp", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
 
-local ctags_exe = tern(os_windows, home_dir .. "/scoop/apps/universal-ctags/current/ctags.exe", "/usr/bin/ctags")
+local ctags_exe = os_windows and (home_dir .. "/scoop/apps/universal-ctags/current/ctags.exe") or "/usr/bin/ctags"
 local ctags_args =
     "-o .tags --languages=c,c++,lua,python --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
 vim.keymap.set(
