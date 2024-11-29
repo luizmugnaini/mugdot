@@ -204,7 +204,12 @@ require("lazy").setup({
             { "nvim-lua/plenary.nvim" },
             {
                 "nvim-telescope/telescope-fzf-native.nvim",
-                build = "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+                build = "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release"
+                    .. (
+                        os_windows -- Yep... stupid, I know.
+                            and " && mv build/Release/libfzf.dll build/libfzf.dll && mv build/Release/fzf.lib build/fzf.lib"
+                        or ""
+                    ),
             },
         },
         event = "VeryLazy",
