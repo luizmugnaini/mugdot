@@ -80,7 +80,6 @@ vim.g.netrw_sort_sequence = "[\\/],*"
 vim.opt.encoding          = "utf8"
 vim.opt.clipboard         = "unnamedplus" -- Copy to and from vim using the system clipboard register
 
-
 -- Buffer reloading
 --
 -- Automatically reload buffers which changed outside of the editor.
