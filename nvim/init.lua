@@ -259,7 +259,6 @@ require("lazy").setup({
                     c = { "clang-format" },
                     cpp = { "clang-format" },
                     glsl = { "clang-format" },
-                    lua = { "stylua" },
                     python = { "black" },
                     go = { "gofmt" },
                 },
