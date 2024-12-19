@@ -15,7 +15,7 @@ wezterm.on("gui-startup", function()
 end)
 
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-    config.font = wezterm.font("Terminus (TTF) for Windows")
+    config.font = wezterm.font("FiraCode Nerd Font Mono") -- "Terminus (TTF) for Windows")
 
     config.default_prog = {
         "cmd.exe",

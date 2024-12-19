@@ -5,8 +5,8 @@
 -- =============================================================================
 
 local os_windows = package.config:sub(1, 1) == "\\"
-local home_dir = os_windows and os.getenv("USERPROFILE") or os.getenv("HOME")
-local nvim_dir = home_dir .. "/.config/mugdot/nvim"
+local home_dir   = os_windows and os.getenv("USERPROFILE") or os.getenv("HOME")
+local nvim_dir   = home_dir .. "/.config/mugdot/nvim"
 
 -- -----------------------------------------------------------------------------
 -- General settings
@@ -31,22 +31,22 @@ vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
 
 -- Visuals
-vim.opt.guicursor = "" -- Use a block as the cursor.
-vim.opt.showmode = false -- Don't show the current mode in the minibuffer
-vim.opt.number = false -- Don't show line numbers
+vim.opt.guicursor     = ""    -- Use a block as the cursor.
+vim.opt.showmode      = false -- Don't show the current mode in the minibuffer
+vim.opt.number        = false -- Don't show line numbers
 vim.opt.termguicolors = true
-vim.opt.signcolumn = "no"
-vim.opt.showtabline = 0
-vim.opt.statusline = " %f %h%m%r%=%-14.(%l,%c%)"
+vim.opt.signcolumn    = "no"
+vim.opt.showtabline   = 0
+vim.opt.statusline    = " %f %h%m%r%=%-14.(%l,%c%)"
 
 -- Indentation
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+vim.opt.tabstop     = 4
+vim.opt.shiftwidth  = 4
+vim.opt.expandtab   = true
 vim.opt.smartindent = true
 
 -- Text rendering behaviour
-vim.opt.wrap = false
+vim.opt.wrap      = false
 vim.opt.scrolloff = 4 -- Minimal number of lines below cursor line
 
 -- Visual mode
@@ -54,20 +54,20 @@ vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in 
 
 -- Backup
 vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = vim.fn.stdpath("data") .. "/undo"
+vim.opt.backup   = false
+vim.opt.undodir  = vim.fn.stdpath("data") .. "/undo"
 vim.opt.undofile = true
 
 -- Searching functionality
-vim.opt.grepprg = "rg --vimgrep"
-vim.opt.hlsearch = false
-vim.opt.incsearch = false
-vim.opt.smartcase = true
+vim.opt.grepprg    = "rg --vimgrep"
+vim.opt.hlsearch   = false
+vim.opt.incsearch  = false
+vim.opt.smartcase  = true
 vim.opt.ignorecase = true
 
 -- Spelling
 vim.opt.spelllang = { "en" }
-vim.opt.spell = false
+vim.opt.spell     = false
 
 vim.opt.updatetime = 50
 
@@ -75,14 +75,13 @@ vim.opt.updatetime = 50
 vim.opt.tags = ".tags"
 
 -- Misc
-vim.opt.wildignore =
-    { "*.o", "*.obj", "*.lib", "*.a", "*.exe", "*.pdb", "*.ilk", ".git", "*.pdf", "*.png", "*.jpeg", "*.aseprite" }
+vim.opt.wildignore        = { "*.o", "*.obj", "*.lib", "*.a", "*.exe", "*.pdb", "*.ilk", ".git", "*.pdf", "*.png", "*.jpeg", "*.aseprite" }
 vim.g.netrw_sort_sequence = "[\\/],*"
-vim.opt.encoding = "utf8"
-vim.opt.clipboard = "unnamedplus" -- Copy to and from vim using the system clipboard register
+vim.opt.encoding          = "utf8"
+vim.opt.clipboard         = "unnamedplus" -- Copy to and from vim using the system clipboard register
 
 -- Key mapping responsiveness
-vim.o.timeout = true
+vim.o.timeout    = true
 vim.o.timeoutlen = 500
 
 -- -----------------------------------------------------------------------------
@@ -107,23 +106,23 @@ function fmt_buf(formatter)
 end
 
 vim.api.nvim_create_autocmd("BufEnter", {
-    desc = "Treat miscelaneous files as C for syntax highlighting",
-    group = mug_group,
+    desc    = "Treat miscelaneous files as C for syntax highlighting",
+    group   = mug_group,
     pattern = { "*.cu", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" },
     command = "set filetype=c",
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
-    desc = "Use LaTeX mode for .tex...",
-    group = mug_group,
+    desc    = "Use LaTeX mode for .tex...",
+    group   = mug_group,
     pattern = { "*.tex" },
     command = "set filetype=tex",
 })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-    desc = "Trim whitespaces in text files",
-    group = mug_group,
-    pattern = { "*.md", "*.txt", "*.tex" },
+    desc     = "Trim whitespaces in text files",
+    group    = mug_group,
+    pattern  = { "*.md", "*.txt", "*.tex" },
     callback = trim_whitespaces,
 })
 
@@ -131,7 +130,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 -- Keybindings
 -- -----------------------------------------------------------------------------
 
-local all_modes = { "n", "i", "x", "v", "s", "c", "o", "l", "t" }
+local all_modes        = { "n", "i", "x", "v", "s", "c", "o", "l", "t" }
 local non_insert_modes = { "n", "v", "x", "o" }
 
 vim.keymap.set(all_modes, "<C-k>", "<Esc>", { silent = true })
@@ -165,6 +164,10 @@ vim.keymap.set(
     "<cmd>!" .. ctags_exe .. " " .. ctags_args .. "<cr>",
     { desc = "Update the tag cache" }
 )
+
+-- Terminal mode.
+vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
+vim.keymap.set({"n", "t"}, "<leader>t", vim.cmd.FloatingTerminalToggle, { desc = "Toggle the floating terminal window" })
 
 -- -----------------------------------------------------------------------------
 -- Colors
@@ -212,10 +215,10 @@ require("lazy").setup({
                     ),
             },
         },
-        event = "VeryLazy",
+        event  = "VeryLazy",
         config = function()
             local telescope = require("telescope")
-            local builtin = require("telescope.builtin")
+            local builtin   = require("telescope.builtin")
 
             telescope.load_extension("fzf")
 
@@ -232,7 +235,7 @@ require("lazy").setup({
     -- Utility for line and block comments.
     {
         "numToStr/Comment.nvim",
-        event = "VeryLazy",
+        event  = "VeryLazy",
         config = function()
             require("Comment").setup({
                 toggler = {
@@ -248,24 +251,24 @@ require("lazy").setup({
     -- Automatic formatting on save.
     {
         "stevearc/conform.nvim",
-        event = "VeryLazy",
-        ft = { "c", "cpp", "glsl", "lua", "python", "go" },
+        event  = "VeryLazy",
+        ft     = { "c", "cpp", "glsl", "lua", "python", "go" },
         config = function()
             require("conform").setup({
                 formatters = {
                     stylua = { append_args = { "--indent-type=Spaces" } },
                 },
                 formatters_by_ft = {
-                    c = { "clang-format" },
-                    cpp = { "clang-format" },
-                    glsl = { "clang-format" },
+                    c      = { "clang-format" },
+                    cpp    = { "clang-format" },
+                    glsl   = { "clang-format" },
                     python = { "black" },
-                    go = { "gofmt" },
+                    go     = { "gofmt" },
                 },
             })
 
             vim.api.nvim_create_autocmd("BufWritePre", {
-                pattern = { "*" },
+                pattern  = { "*" },
                 callback = function(args)
                     require("conform").format({ bufnr = args.buf })
                 end,
@@ -283,8 +286,8 @@ require("lazy").setup({
 
     {
         "L3MON4D3/LuaSnip",
-        build = "make install_jsregexp",
-        ft = { "tex", "c", "cpp", "glsl" },
+        build  = "make install_jsregexp",
+        ft     = { "tex", "c", "cpp", "glsl" },
         config = function()
             local ls = require("luasnip")
 
@@ -299,9 +302,9 @@ require("lazy").setup({
 
     {
         "hrsh7th/nvim-cmp",
-        cond = not vim.g.lsp_enabled,
+        cond         = not vim.g.lsp_enabled,
         dependencies = { "hrsh7th/cmp-buffer" },
-        config = function()
+        config       = function()
             local cmp = require("cmp")
 
             cmp.setup({
