@@ -16,14 +16,14 @@ local nvim_dir   = home_dir .. "/.config/mugdot/nvim"
 vim.g.mapleader = " "
 
 -- Find python and set its provider path.
-local python_path_proc = io.popen('python3 -c "import sys;print(sys.executable)"')
-if python_path_proc ~= nil then
-    local python_path = python_path_proc:read("l")
-    if python_path ~= nil and python_path ~= "" then
-        vim.g.python3_host_prog = python_path
-    end
-    python_path_proc:close()
-end
+-- local python_path_proc = io.popen('python3 -c "import sys;print(sys.executable)"')
+-- if python_path_proc ~= nil then
+--     local python_path = python_path_proc:read("l")
+--     if python_path ~= nil and python_path ~= "" then
+--         vim.g.python3_host_prog = python_path
+--     end
+--     python_path_proc:close()
+-- end
 
 -- Disable useless language providers.
 vim.g.loaded_ruby_provider = 0
@@ -80,6 +80,17 @@ vim.g.netrw_sort_sequence = "[\\/],*"
 vim.opt.encoding          = "utf8"
 vim.opt.clipboard         = "unnamedplus" -- Copy to and from vim using the system clipboard register
 
+
+-- Buffer reloading
+--
+-- Automatically reload buffers which changed outside of the editor.
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
+    callback = function()
+        vim.cmd("checktime")
+    end,
+})
+
 -- Key mapping responsiveness
 vim.o.timeout    = true
 vim.o.timeoutlen = 500
@@ -90,8 +101,7 @@ vim.o.timeoutlen = 500
 
 local mug_group = vim.api.nvim_create_augroup("mug", { clear = true })
 
-local c_like =
-    { "*.c", "*.h", "*.cc", "*.cpp", "*.hpp", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" }
+local c_like = { "*.c", "*.h", "*.cc", "*.cpp", "*.hpp", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" }
 
 function trim_whitespaces()
     local view = vim.fn.winsaveview()
@@ -167,7 +177,7 @@ vim.keymap.set(
 
 -- Terminal mode.
 vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
-vim.keymap.set({"n", "t"}, "<leader>t", vim.cmd.FloatingTerminalToggle, { desc = "Toggle the floating terminal window" })
+vim.keymap.set({"n", "t"}, "<leader>tt", vim.cmd.FloatingTerminalToggle, { desc = "Toggle the floating terminal window" })
 
 -- -----------------------------------------------------------------------------
 -- Colors
@@ -194,8 +204,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-    { "dstein64/vim-startuptime" },
-
     -- -------------------------------------------------------------------------
     -- Utilities for better development.
     -- -------------------------------------------------------------------------
@@ -227,7 +235,7 @@ require("lazy").setup({
             end, { desc = "Find file" })
             vim.keymap.set("n", "<leader>bb", builtin.buffers, { desc = "Find open buffer" })
             vim.keymap.set("n", "<leader>fz", function()
-                builtin.grep_string({ search = vim.fn.input("> ") })
+                builtin.grep_string({ search = vim.fn.input("grep> ") })
             end, { desc = "Fuzzy find string" })
         end,
     },
@@ -267,12 +275,12 @@ require("lazy").setup({
                 },
             })
 
-            vim.api.nvim_create_autocmd("BufWritePre", {
-                pattern  = { "*" },
-                callback = function(args)
-                    require("conform").format({ bufnr = args.buf })
-                end,
-            })
+            -- vim.api.nvim_create_autocmd("BufWritePre", {
+            --     pattern  = { "*" },
+            --     callback = function(args)
+            --         require("conform").format({ bufnr = args.buf })
+            --     end,
+            -- })
 
             vim.keymap.set(non_insert_modes, "<leader>fb", function()
                 require("conform").format({ bufnr = 0 })

@@ -14,8 +14,13 @@ wezterm.on("gui-startup", function()
     window:gui_window():maximize()
 end)
 
+local font_name = {
+    terminus  = "Terminus (TTF) for Windows",
+    fira_code = "FiraCode Nerd Font Mono",
+}
+
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-    config.font = wezterm.font("FiraCode Nerd Font Mono") -- "Terminus (TTF) for Windows")
+    config.font = wezterm.font(font_name.fira_code)
 
     config.default_prog = {
         "cmd.exe",
@@ -32,20 +37,20 @@ else
     config.font = wezterm.font("Terminus")
 
     config.default_prog = { "zsh" }
-    config.default_cwd = "~/"
+    config.default_cwd  = "~/"
 end
 
-config.font_size = 12
+config.font_size    = 12
 config.window_frame = { font = config.font, font_size = 9 }
 
 local colors = {
-    grey = "#2b3045",
-    blue = "#79a8ff",
-    green = "#6ae4b9",
+    grey    = "#2b3045",
+    blue    = "#79a8ff",
+    green   = "#6ae4b9",
     magenta = "#b6a0ff",
-    red = "#ff7f9f",
-    white = "#C8C093",
-    yellow = "#f1b090",
+    red     = "#ff7f9f",
+    white   = "#C8C093",
+    yellow  = "#f1b090",
 }
 config.colors = {
     background = "#0d0e1c",
