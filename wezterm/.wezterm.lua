@@ -20,7 +20,7 @@ local font_name = {
 }
 
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-    config.font = wezterm.font(font_name.fira_code)
+    config.font = wezterm.font(font_name.terminus)
 
     config.default_prog = {
         "cmd.exe",
@@ -31,6 +31,7 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
         "x64",
         ">",
         "NUL",
+        "2>&1",
     }
     config.default_cwd = "D:\\"
 else
