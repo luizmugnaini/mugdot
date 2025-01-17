@@ -4,9 +4,31 @@
 -- Author: Luiz G. Mugnaini A. <luizmugnaini@gmail.com>
 -- =============================================================================
 
+-- -----------------------------------------------------------------------------
+-- System information
+-- -----------------------------------------------------------------------------
+
 local os_windows = package.config:sub(1, 1) == "\\"
+local path_sep    = os_windows and "\\" or "/"
+
+local function make_path(components)
+    if #components < 1 then
+        return ""
+    end
+
+    local path = components[1]
+    for i = 2, #components do
+        path = path .. path_sep .. components[i]
+    end
+
+    return path
+end
+
+local work_dir   = vim.fn.getcwd()
 local home_dir   = os_windows and os.getenv("USERPROFILE") or os.getenv("HOME")
-local nvim_dir   = home_dir .. "/.config/mugdot/nvim"
+local config_dir = make_path({ home_dir, ".config", "mugdot" } )
+local nvim_dir   = make_path({ config_dir, "nvim" })
+local lua_exe    = (type(jit) == "table") and "luajit" or "lua"
 
 -- -----------------------------------------------------------------------------
 -- General settings
@@ -15,20 +37,11 @@ local nvim_dir   = home_dir .. "/.config/mugdot/nvim"
 -- Use SPACE as the leader key.
 vim.g.mapleader = " "
 
--- Find python and set its provider path.
--- local python_path_proc = io.popen('python3 -c "import sys;print(sys.executable)"')
--- if python_path_proc ~= nil then
---     local python_path = python_path_proc:read("l")
---     if python_path ~= nil and python_path ~= "" then
---         vim.g.python3_host_prog = python_path
---     end
---     python_path_proc:close()
--- end
-
 -- Disable useless language providers.
-vim.g.loaded_ruby_provider = 0
-vim.g.loaded_node_provider = 0
-vim.g.loaded_perl_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider    = 0
+vim.g.loaded_node_provider    = 0
+vim.g.loaded_perl_provider    = 0
 
 -- Visuals
 vim.opt.guicursor     = ""    -- Use a block as the cursor.
@@ -95,6 +108,14 @@ vim.o.timeout    = true
 vim.o.timeoutlen = 500
 
 -- -----------------------------------------------------------------------------
+-- Project integration
+-- -----------------------------------------------------------------------------
+
+local build_file_name = "build.lua"
+local build_file_path = make_path({ work_dir, build_file_name })
+local has_build_file  = (vim.fn.filereadable(build_file_path) == 1)
+
+-- -----------------------------------------------------------------------------
 -- Auto-commands.
 -- -----------------------------------------------------------------------------
 
@@ -136,6 +157,131 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 })
 
 -- -----------------------------------------------------------------------------
+-- Terminal integration
+-- -----------------------------------------------------------------------------
+
+local terminal = {
+    buf = -1,
+    win = -1,
+}
+
+local last_marker_line = 0
+
+local function terminal_get_last_marker_line()
+    local value      = previous_marker_line
+    last_marker_line = vim.api.nvim_buf_line_count(terminal.buf)
+    return value
+end
+
+local function make_floating_terminal(terminal_buf)
+    local instance_columns = vim.o.columns
+    local instance_lines   = vim.o.lines
+
+    local win_config    = {}
+    win_config.relative = "editor"
+    win_config.width    = math.floor(instance_columns * 0.8)
+    win_config.height   = math.floor(instance_lines * 0.8)
+    win_config.col      = math.floor((instance_columns - win_config.width) / 2.0)
+    win_config.row      = math.floor((instance_lines - win_config.height) / 2.0)
+    win_config.style    = "minimal"
+    win_config.border   = "rounded"
+
+    local buf = vim.api.nvim_buf_is_valid(terminal_buf) and terminal_buf or vim.api.nvim_create_buf(false, true)
+    local win = vim.api.nvim_open_win(buf, true, win_config)
+
+    if vim.bo[buf].buftype ~= "terminal" then
+        vim.cmd.terminal()
+    end
+
+    return { buf = buf, win = win }
+end
+
+local function toggle_floating_terminal_visibility()
+    if not vim.api.nvim_win_is_valid(terminal.win) then
+        terminal = make_floating_terminal(terminal.buf)
+    else
+        vim.api.nvim_win_hide(terminal.win)
+    end
+end
+
+vim.api.nvim_create_user_command(
+    "FloatingTerminalToggle",
+    toggle_floating_terminal_visibility,
+    { desc = "Toggle the visibility floating terminal buffer." }
+)
+
+-- -----------------------------------------------------------------------------
+-- Build system integration
+-- -----------------------------------------------------------------------------
+
+local cached_build_cmd = ""
+
+local function parse_last_build_command_errors_in_terminal()
+    if not vim.api.nvim_buf_is_valid(terminal.buf) then
+        vim.api.nvim_notify("No terminal buffer found - can't parse non-existing build command.", vim.log.levels.ERROR, {})
+        return
+    end
+
+    vim.fn.setqflist({})
+
+    local errors = {}
+    local lines = vim.api.nvim_buf_get_lines(terminal.buf, terminal_get_last_marker_line(), -1, false)
+    for _, line in ipairs(lines) do
+        -- Parse Clang compiler errors.
+        local file, line_number, msg = line:match("([%.\\/%w%._\\-]+)%((%d+),%d+%)%:%s*(.*)")
+        if not file then
+            -- Parse MSVC compiler errors.
+            file, line_number, msg = line:match("([A-Za-z]:[%w%._\\/-]+)%((%d+)%):%s*(.*)")
+        end
+
+        if file and line_number then
+          table.insert(errors, { filename = file, lnum = tonumber(line_number), text = msg })
+        end
+    end
+
+    if #errors > 0 then
+        vim.api.nvim_notify("Compiler output parsed: errors found, adding to the quickfix list.", vim.log.levels.WARN, {})
+        vim.fn.setqflist(errors)
+
+        local current_win = vim.api.nvim_get_current_win()
+        vim.cmd("botright copen") -- Open the quickfix window at the bottom without changing focus
+        vim.api.nvim_set_current_win(current_win)
+    else
+        vim.api.nvim_notify("Compiler output parsed: no errors found.", vim.log.levels.INFO, {})
+        vim.cmd("cclose")
+    end
+end
+
+local function send_build_command_to_terminal(args)
+    if terminal.buf == vim.api.nvim_get_current_buf() then
+        vim.api.nvim_notify("Don't be silly, just write the damn command directly...", vim.log.levels.WARN, {})
+        return
+    end
+
+    if not vim.api.nvim_win_is_valid(terminal.win) then
+        terminal = make_floating_terminal(terminal.buf)
+    end
+
+    cached_build_cmd = table.concat(args, " ")
+    vim.api.nvim_notify(string.format("Sending the command '%s'...", cached_build_cmd), vim.log.levels.INFO, {})
+    vim.api.nvim_chan_send(terminal.buf, cached_build_cmd .. "\r")
+end
+
+vim.api.nvim_create_user_command(
+    "Build",
+    function(opts)
+        send_build_command_to_terminal(opts.fargs)
+    end,
+    { nargs = "*", desc  = "Run a build command in a terminal buffer." }
+)
+
+vim.api.nvim_create_user_command(
+    "ParseCompilerOutput",
+    parse_last_build_command_errors_in_terminal,
+    { desc  = "Parse the compiler output of the last build command ran in the floating terminal." }
+)
+
+-- -----------------------------------------------------------------------------
 -- Keybindings
 -- -----------------------------------------------------------------------------
 
@@ -145,28 +291,25 @@ local non_insert_modes = { "n", "v", "x", "o" }
 vim.keymap.set(all_modes, "<C-k>", "<Esc>", { silent = true })
 
 vim.keymap.set(non_insert_modes, "<leader>w", vim.cmd.write, { desc = "[W]rite file" })
-vim.keymap.set(non_insert_modes, "<leader>q", function()
-    vim.cmd("q")
-end, { desc = "Kill the current buffer" })
-vim.keymap.set(non_insert_modes, "<leader>e", vim.cmd.Ex, { desc = "Explore files" })
+vim.keymap.set(non_insert_modes, "<leader>q", function() vim.cmd("q") end, { desc = "Kill the current buffer" })
+
+-- vim.keymap.set(non_insert_modes, "<leader>e", vim.cmd.Ex, { desc = "Explore files" })
 
 -- Window splits
 vim.keymap.set(non_insert_modes, "<leader>s", vim.cmd.vsplit, { desc = "Split Vertically", silent = true })
 vim.keymap.set(non_insert_modes, "<leader>h", vim.cmd.split, { desc = "Split horizontally", silent = true })
 
 -- Window movement
-vim.keymap.set(non_insert_modes, "<leader>o", function()
-    vim.cmd.wincmd("w")
-end, { desc = "Move to next window", silent = true })
+vim.keymap.set(non_insert_modes, "<leader>o", function() vim.cmd.wincmd("w") end, { desc = "Move to next window", silent = true })
 
 -- Tags
 vim.keymap.set(non_insert_modes, "gd", "<C-]>", { desc = "Go to definition" })
 vim.keymap.set(non_insert_modes, "gt", vim.cmd.tselect, { desc = "Get all tags under this identifier" })
 vim.keymap.set(non_insert_modes, "gp", vim.cmd.pop, { desc = "Go to [P]revious [T]ag" })
 
+-- CTags
 local ctags_exe = os_windows and (home_dir .. "/scoop/apps/universal-ctags/current/ctags.exe") or "/usr/bin/ctags"
-local ctags_args =
-    "-o .tags --languages=c,c++,lua,python --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
+local ctags_args = "-o .tags --languages=c,c++,lua,python --fields=NPESZaimnorts --exclude=.git --exclude=build --recurse"
 vim.keymap.set(
     non_insert_modes,
     "<leader>ut",
@@ -176,7 +319,21 @@ vim.keymap.set(
 
 -- Terminal mode.
 vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
-vim.keymap.set({"n", "t"}, "<leader>tt", vim.cmd.FloatingTerminalToggle, { desc = "Toggle the floating terminal window" })
+vim.keymap.set({ "n", "t" }, "<leader>tt", vim.cmd.FloatingTerminalToggle, { desc = "Toggle the floating terminal window" })
+
+-- Build system.
+vim.keymap.set(
+    non_insert_modes,
+    "<leader>cc",
+    ":Build " .. cached_build_cmd,
+    { noremap = true, silent = false }
+)
+vim.keymap.set(
+    non_insert_modes,
+    "<leader>pc",
+    vim.cmd.ParseCompilerOutput,
+    { noremap = true, silent = true }
+)
 
 -- -----------------------------------------------------------------------------
 -- Colors
@@ -227,16 +384,68 @@ require("lazy").setup({
             local telescope = require("telescope")
             local builtin   = require("telescope.builtin")
 
+            telescope.setup({
+                defaults = {
+                    file_ignore_patterns = {
+                        -- Extension based.
+                        "%.exe$", "%.dll$", "%.so$", "%.obj", "%.pdb$", "%.ilk$", "%.lib$", "%.a$", "%.ttf$",
+                        "%.xml$", "%.in$", "%.ini$", "%.lock$", "%.png$", "%.aseprite$", "%.gpl$", "%.blend$",
+                        "%.kra$", "%.jpg$", "%.jpeg$", "%.rdbg",
+                        -- Directory based.
+                        "%.git", "build" .. path_sep, "%.ignore" .. path_sep,
+                        -- Directory + extension.
+                        "thirdparty.*%.cmake$", "deps.*%.cmake$",
+                        -- Name based.
+                        ".*LICENSE.*", "tags", "%.tags",
+                    },
+                }
+            })
+
             telescope.load_extension("fzf")
 
             vim.keymap.set("n", "<leader>ff", function()
-                builtin.find_files({ hidden = true, file_ignore_patterns = { ".git" } })
+                builtin.find_files({ hidden = true })
             end, { desc = "Find file" })
             vim.keymap.set("n", "<leader>bb", builtin.buffers, { desc = "Find open buffer" })
             vim.keymap.set("n", "<leader>fz", function()
                 builtin.grep_string({ search = vim.fn.input("grep> ") })
             end, { desc = "Fuzzy find string" })
         end,
+    },
+
+    -- File explorer.
+    {
+        "stevearc/oil.nvim",
+        config = function()
+            require("oil").setup({
+                default_file_explorer = true,
+                columns = {
+                    "permissions",
+                    "mtime",
+                    "size",
+                },
+                view_options = {
+                    show_hidden = true,
+                },
+                use_default_keymaps = false,
+                keymaps = {
+                    ["?"]     = { "actions.show_help", mode = "n" },
+                    ["<CR>"]  = { "actions.select" },
+                    ["<C-s>"] = { "actions.select", opts = { vertical = true } },
+                    ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
+                    ["<C-p>"] = { "actions.preview" },
+                    ["<C-c>"] = { "actions.close", mode = "n" },
+                    ["<C-l>"] = { "actions.refresh" },
+                    ["-"]     = { "actions.parent", mode = "n" },
+                    ["_"]     = { "actions.open_cwd", mode = "n" },
+                    ["`"]     = { "actions.cd", mode = "n" },
+                    ["~"]     = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+                    ["gs"]    = { "actions.change_sort", mode = "n" },
+                    ["gx"]    = { "actions.open_external" },
+                },
+            })
+            vim.keymap.set(non_insert_modes, "<leader>e", "<cmd>Oil<cr>", { })
+        end
     },
 
     -- Utility for line and block comments.
@@ -256,36 +465,36 @@ require("lazy").setup({
     },
 
     -- Automatic formatting on save.
-    {
-        "stevearc/conform.nvim",
-        event  = "VeryLazy",
-        ft     = { "c", "cpp", "glsl", "lua", "python", "go" },
-        config = function()
-            require("conform").setup({
-                formatters = {
-                    stylua = { append_args = { "--indent-type=Spaces" } },
-                },
-                formatters_by_ft = {
-                    c      = { "clang-format" },
-                    cpp    = { "clang-format" },
-                    glsl   = { "clang-format" },
-                    python = { "black" },
-                    go     = { "gofmt" },
-                },
-            })
-
-            -- vim.api.nvim_create_autocmd("BufWritePre", {
-            --     pattern  = { "*" },
-            --     callback = function(args)
-            --         require("conform").format({ bufnr = args.buf })
-            --     end,
-            -- })
-
-            vim.keymap.set(non_insert_modes, "<leader>fb", function()
-                require("conform").format({ bufnr = 0 })
-            end, { desc = "Format current buffer", silent = true })
-        end,
-    },
+    -- {
+    --     "stevearc/conform.nvim",
+    --     event  = "VeryLazy",
+    --     ft     = { "c", "cpp", "glsl", "lua", "python", "go" },
+    --     config = function()
+    --         require("conform").setup({
+    --             formatters = {
+    --                 stylua = { append_args = { "--indent-type=Spaces" } },
+    --             },
+    --             formatters_by_ft = {
+    --                 c      = { "clang-format" },
+    --                 cpp    = { "clang-format" },
+    --                 glsl   = { "clang-format" },
+    --                 python = { "black" },
+    --                 go     = { "gofmt" },
+    --             },
+    --         })
+    --
+    --         -- vim.api.nvim_create_autocmd("BufWritePre", {
+    --         --     pattern  = { "*" },
+    --         --     callback = function(args)
+    --         --         require("conform").format({ bufnr = args.buf })
+    --         --     end,
+    --         -- })
+    --
+    --         vim.keymap.set(non_insert_modes, "<leader>fb", function()
+    --             require("conform").format({ bufnr = 0 })
+    --         end, { desc = "Format current buffer", silent = true })
+    --     end,
+    -- },
 
     -- -------------------------------------------------------------------------
     -- Snippets

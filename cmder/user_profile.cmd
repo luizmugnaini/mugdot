@@ -24,3 +24,5 @@ set "PATH=%HOME%\AppData\Local\Programs\MiKTeX\miktex\bin\x64;%PATH%"
 set "GOPATH=D:\packages\go"
 set "GOBIN=D:\packages\go\bin"
 set "PATH=%GOPATH%;%GOBIN%;%PATH%"
+
+call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64 > NUL 2>&1

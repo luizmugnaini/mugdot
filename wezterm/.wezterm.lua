@@ -14,25 +14,17 @@ wezterm.on("gui-startup", function()
     window:gui_window():maximize()
 end)
 
-local font_name = {
-    terminus  = "Terminus (TTF) for Windows",
-    fira_code = "FiraCode Nerd Font Mono",
+local font = {
+    terminus  = { name = "Terminus (TTF) for Windows", size = 12 },
+    fira_code = { name = "FiraCode Nerd Font Mono",    size = 10  },
 }
 
-if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-    config.font = wezterm.font(font_name.terminus)
+local default_font = font.terminus
 
-    config.default_prog = {
-        "cmd.exe",
-        "/k",
-        "%CMDER_ROOT%\\vendor\\init.bat",
-        "&&",
-        "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat",
-        "x64",
-        ">",
-        "NUL",
-        "2>&1",
-    }
+if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+    config.font = wezterm.font(default_font.name)
+
+    config.default_prog = { "cmd.exe", "/k", "%CMDER_ROOT%\\vendor\\init.bat" }
     config.default_cwd = "D:\\"
 else
     config.font = wezterm.font("Terminus")
@@ -41,7 +33,7 @@ else
     config.default_cwd  = "~/"
 end
 
-config.font_size    = 12
+config.font_size    = default_font.size
 config.window_frame = { font = config.font, font_size = 9 }
 
 local colors = {

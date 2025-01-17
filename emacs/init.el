@@ -284,9 +284,8 @@
 
   ;; Set the default font
   (set-face-attribute 'default nil
-                      :font (mug-win-or-linux "Terminus (TTF) for Windows"
-                                              "Terminus")
-                      :height 120)
+                      :font "FiraCode Nerd Font Mono"
+                      :height 110)
 
   ;; Window resizing
   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
@@ -305,7 +304,7 @@
   (dolist (fn '(basic-save-buffer undo undo-redo beginning-of-line end-of-line))
     (advice-add fn :around #'mug--suppress-message))
 
-  ;; Annoying keybindings:
+  ;; Remove annoying keybindings:
   (dolist (key '("C-x C-b" "C-x C-c" "C-x C-d" "C-x C-z" "C-x C-s" "C-x s" "C-x f" "C-h h"
                  "C-h k" "C-h j" "C-h l" "C-f" "C-z" "C-j" "M-j"))
     (keymap-global-unset key))
@@ -331,16 +330,12 @@
 ;; Dired setup
 ;; -----------------------------------------------------------------------------
 
-(use-package dired
-  :straight (:type built-in)
-  :custom
-  (dired-listing-switches "-agho --group-directories-first")
-  :init
-  (put 'dired-find-alternate-file 'disabled nil)
+(setq dired-listing-switches "-agho --group-directories-first")
+(put 'dired-find-alternate-file 'disabled nil)
 
   ;; Helper packages for a better dired experience
-  (straight-use-package 'dired-single)
-  (straight-use-package 'dired-collapse))
+(straight-use-package 'dired-single)
+(straight-use-package 'dired-collapse)
 
 ;; -----------------------------------------------------------------------------
 ;; Emacs theme and styling
@@ -357,9 +352,9 @@
       (fnname   fg-main)))
   (load-theme 'modus-vivendi-tinted))
 
-;; -----------------------------------------------------------------------------
-;; General utilities
-;; -----------------------------------------------------------------------------
+;;; ============================================================================
+;;; General development setup
+;;; ============================================================================
 
 ;; Better grep alternative
 (defconst mug--ripgrep-available (eval-when-compile (executable-find "rg"))
@@ -376,6 +371,194 @@
               ("C-n" . vertico-next))
   :custom   (vertico-cycle t))
 
+(use-package xref
+  :custom
+  ;; Show results in the minibuffer
+  (xref-show-definitions-function #'xref-show-definitions-completing-read)
+  (xref-show-xrefs-function       #'xref-show-definitions-completing-read)
+  :config
+  ;; Use ripgrep when available
+  (if mug--ripgrep-available
+    (setq xref-search-program 'ripgrep)))
+
+;; (use-package citre
+;;   :defer t
+;;   :bind (:map citre-mode-map
+;;               ("C-c u" . citre-update-this-tags-file))
+;;   :init
+;;   (require 'citre-config)
+;;   :config
+;;   ;; Citre setup
+;;   (setq citre-ctags-program (mug-win-or-linux
+;;                              (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe")
+;;                              "/usr/bin/ctags")
+;;         citre-tags-global-cache-dir             (concat mug-emacs-cache-dir "/tags")
+;;         citre-default-create-tags-file-location 'in-dir
+;;         citre-auto-enable-citre-mode-modes '(prog-mode)))
+
+(use-package corfu
+  :custom
+  (corfu-cycle t) ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto  t) ;; Enable auto completion
+  :init
+  (global-corfu-mode))
+
+(use-package yasnippet
+  :custom
+  (yas-snippet-dirs (concat mug-emacs-dir "/snippets")))
+
+;; Git management with Magit for the win
+(straight-use-package 'magit)
+
+;; -----------------------------------------------------------------------------
+;; Handle the Windows MSVC environment hell
+;; -----------------------------------------------------------------------------
+
+(defun mug-c-msvc-toolchain ()
+  "Set MSVC toolchain environment variables.
+
+This is extremely non-portable so my tip for working with this shitty
+Windows environment is: open a decent shell, run `vcvarsall.bat x64`
+there and copy the results coming from `echo %[INCLUDE | LIB | LIBPATH | PATH]%`
+that are relevant for your installation. "
+  (interactive)
+  (message "Setting MSVC x64 environment variables.")
+  (setenv "INCLUDE"
+          (concat
+           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/include"
+           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/VS/include"
+           ";" "C:/Program Files (x86)/Windows Kits/10/include/10.0.22621.0/ucrt"
+           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/um"
+           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/shared"
+           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/winrt"
+           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/cppwinrt"
+           ";" "C:/Program Files (x86)/Windows Kits/NETFXSDK/4.8/include/um"))
+
+  (setenv "LIB"
+          (concat
+           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/lib/x64"
+           ";" "C:/Program Files (x86)/Windows Kits/NETFXSDK/4.8/lib/um/x64"
+           ";" "C:/Program Files (x86)/Windows Kits/10/lib/10.0.22621.0/ucrt/x64"
+           ";" "C:/Program Files (x86)/Windows Kits/10//lib/10.0.22621.0//um/x64"))
+
+  (setenv  "LIBPATH"
+           (concat
+            "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/lib/x64"
+            ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/lib/x86/store/references"
+            ";" "C:/Program Files (x86)/Windows Kits/10/UnionMetadata/10.0.22621.0"
+            ";" "C:/Program Files (x86)/Windows Kits/10/References/10.0.22621.0"
+            ";" "C:/Windows/Microsoft.NET/Framework64/v4.0.30319"))
+
+  (setenv "PATH"
+          (concat
+           mug-path-env
+           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/bin/HostX64/x64"
+           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/VC/VCPackages"
+           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow"
+           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer"
+           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/bin/Roslyn"
+           ";" "C:/Program Files (x86)/Windows Kits/10/bin/10.0.22621.0//x64"
+           ";" "C:/Program Files (x86)/Windows Kits/10/bin//x64"
+           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community//MSBuild/Current/Bin/amd64"
+           ";" "C:/Windows/Microsoft.NET/Framework64/v4.0.30319"
+           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/"
+           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/Tools/")))
+
+(if mug-sys-is-win
+    (add-hook 'after-init-hook #'mug-c-msvc-toolchain))
+
+;; -----------------------------------------------------------------------------
+;; C/C++ utility functions
+;; -----------------------------------------------------------------------------
+
+(defconst mug-c-formatter "clang-format"
+  "The name of the C/C++ formatter executable")
+
+(defconst mug-c-formatter-found (eval-when-compile (executable-find mug-c-formatter))
+  "Whether the C/C++ formatter `mug--c-formatter' executable was found or not.")
+
+(defun mug-c-format-buffer ()
+  "Format the current buffer."
+  (interactive)
+  (let ((current-point        (point))
+        (current-window-start (window-start)))
+    (shell-command-on-region (point-min) (point-max) mug-c-formatter nil t)
+    ;; Return the user to the previous state
+    (set-window-start (selected-window) current-window-start)
+    (goto-char current-point)))
+
+;; TODO: support project include/ directories, not only same-directory structures
+(defun mug--c-find-impl-or-decl-file-name ()
+  "Find name of the implementation or header of the current buffer."
+  (let ((base-file-name (file-name-sans-extension buffer-file-name)))
+    (cond
+     ;; In case of an implementation file, we search for the header
+     ((string-match "\\.c" buffer-file-name)   (concat base-file-name ".h"))
+     ((string-match "\\.cpp" buffer-file-name) (concat base-file-name ".hpp"))
+     ;; In case of a header, we search for the implementation
+     ((string-match "\\.h" buffer-file-name)
+      (cond
+       ((file-exists-p (concat base-file-name ".c"))   (concat base-file-name ".c"))
+       ((file-exists-p (concat base-file-name ".cpp")) (concat base-file-name ".cpp")))))))
+
+(defun mug-c-find-corresponding ()
+  "Find the impl/header of the current buffer and open in the current window."
+  (interactive)
+  (let ((file-name (mug--c-find-impl-or-decl-file-name)))
+    (if file-name
+        (find-file file-name)
+      (error "Unable to find a file corresponding to %s" buffer-file-name))))
+
+(defun mug-c-find-corresponding-other-window ()
+  "Find the impl/header of the current buffer and open in the adjacent window."
+  (interactive)
+  (let ((file-name (mug--c-find-impl-or-decl-file-name)))
+    (if file-name
+        (find-file-other-window file-name)
+      (error "Unable to find a file corresponding to %s" buffer-file-name))))
+
+(defun mug-c-scratch-buf ()
+  "Make a C scratch buffer"
+  (interactive)
+  (find-file (concat mug-emacs-temp-dir "/scratch.c")))
+
+;; Lightweight C-mode
+(require 'simpc-mode)
+
+(add-hook 'simpc-mode-hook (lambda () 'before-save-hook #'mug-c-format-buffer nil t))
+(add-hook 'simpc-mode-hook #'yas-minor-mode)
+
+;; -----------------------------------------------------------------------------
+;; Misc. secondary langs
+;; -----------------------------------------------------------------------------
+
+(autoload 'go-mode "go-mode" nil t)
+
+;; -----------------------------------------------------------------------------
+;; General programming setup
+;; -----------------------------------------------------------------------------
+
+(setq auto-mode-alist
+      (append
+       '(("\\.h\\(h\\|pp\\)?\\'"                                . simpc-mode)
+         ("\\.c\\(c\\|pp\\)?\\'"                                . simpc-mode)
+         ("\\.\\(?:comp\\|vert\\|geom\\|frag\\|tesc\\|tese\\)$" . simpc-mode)
+         ("\\.go$"                                              . go-mode)
+         ("\\.lua$"                                             . lua-mode)
+         ("\\.txt$"                                             . indented-text-mode))
+       auto-mode-alist))
+
+;; Allow ansi colors in the compilation mode and such.
+(require 'ansi-color)
+
+(defun mug--colourful-compilation ()
+  "Handle ansi escape sequences from `compilation-filter-start' to `point'."
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region
+     compilation-filter-start (point))))
+
+(add-hook 'compilation-filter-hook #'mug--colourful-compilation)
+
 ;;; ============================================================================
 ;;; Getting EVIL
 ;;; ============================================================================
@@ -384,8 +567,8 @@
   :defines  (evil-mode evil-emacs-state-modes evil-normal-state-map)
   :commands (evil-yank evil-global-set-key)
   :init
-  (setq-default evil-want-keybinding     nil)
-  (setq evil-want-integration              t
+  (setq-default evil-want-keybinding nil)
+  (setq evil-want-integration                  t
 	    evil-want-C-u-scroll                 nil
 	    evil-want-C-i-jump                   nil
 	    evil-respect-visual-line-mode          t
@@ -409,7 +592,12 @@
               ("SPC f p" . project-find-file)
               ("SPC c c" . project-compile)
               ("SPC r r" . project-recompile)
-              ("SPC f z" . rg))
+              ("SPC f z" . rg)
+              ("g d"     . citre-jump)
+              ("g b"     . citre-jump-back)
+              ("g o"     . xref-find-definitions-other-window)
+              ("SPC f c" . mug-c-find-corresponding)
+              ("SPC f b" . mug-c-format-buffer))
   :config
   (defun mug-evil-hook ()
     "My evil mode."
@@ -451,216 +639,6 @@
   (use-package evil-nerd-commenter
     :bind ("M-;" . evilnc-comment-or-uncomment-lines)))
 
-;;; ============================================================================
-;;; General development setup
-;;; ============================================================================
-
-(use-package xref
-  :custom
-  ;; Show results in the minibuffer
-  (xref-show-definitions-function #'xref-show-definitions-completing-read)
-  (xref-show-xrefs-function       #'xref-show-definitions-completing-read)
-  :config
-  ;; Use ripgrep when available
-  (if mug--ripgrep-available
-    (setq xref-search-program 'ripgrep)))
-
-(use-package citre
-  :defer t
-  :bind (:map citre-mode-map
-              ("C-c u" . citre-update-this-tags-file))
-  :init
-  (require 'citre-config)
-  :config
-  ;; Citre setup
-  (setq citre-ctags-program (mug-win-or-linux
-                             (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe")
-                             "/usr/bin/ctags")
-        citre-tags-global-cache-dir             (concat mug-emacs-cache-dir "/tags")
-        citre-default-create-tags-file-location 'in-dir
-        citre-auto-enable-citre-mode-modes      '(prog-mode)))
-
-(use-package corfu
-  :custom
-  (corfu-cycle t) ;; Enable cycling for `corfu-next/previous'
-  (corfu-auto t)  ;; Enable auto completion
-  :init
-  (global-corfu-mode))
-
-(use-package cape
-  :init
-  (add-hook 'completion-at-point-functions #'cape-dabbrev)
-  :custom
-  (cape-dabbrev-min-length 3))
-
-(use-package yasnippet
-  :custom
-  (yas-snippet-dirs (concat mug-emacs-dir "/snippets")))
-
-;; Git management with Magit for the win
-(straight-use-package 'magit)
-
-;; -----------------------------------------------------------------------------
-;; Handle the Windows MSVC environment hell
-;; -----------------------------------------------------------------------------
-
-(defun mug-c-msvc-toolchain ()
-  "Set MSVC toolchain environment variables.
-
-This is extremely non-portable so my tip for working with this shitty
-Windows environment is: open a decent shell, run `vcvarsall.bat x64`
-there and copy the results coming from `echo %[INCLUDE | LIB | LIBPATH | PATH]%`
-that are relevant for your installation. "
-  (interactive)
-  (message "Setting 64 bits building tools.")
-  (setenv "PATH" mug-path-env)
-  (setenv "INCLUDE"
-          (concat
-           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/include"
-           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/VS/include"
-           ";" "C:/Program Files (x86)/Windows Kits/10/include/10.0.22621.0/ucrt"
-           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/um"
-           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/shared"
-           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/winrt"
-           ";" "C:/Program Files (x86)/Windows Kits/10//include/10.0.22621.0/cppwinrt"
-           ";" "C:/Program Files (x86)/Windows Kits/NETFXSDK/4.8/include/um"))
-
-  (setenv "LIB"
-          (concat
-           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/lib/x64"
-           ";" "C:/Program Files (x86)/Windows Kits/NETFXSDK/4.8/lib/um/x64"
-           ";" "C:/Program Files (x86)/Windows Kits/10/lib/10.0.22621.0/ucrt/x64"
-           ";" "C:/Program Files (x86)/Windows Kits/10//lib/10.0.22621.0//um/x64"))
-
-  (setenv  "LIBPATH"
-           (concat
-            "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/lib/x64"
-            ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/lib/x86/store/references"
-            ";" "C:/Program Files (x86)/Windows Kits/10/UnionMetadata/10.0.22621.0"
-            ";" "C:/Program Files (x86)/Windows Kits/10/References/10.0.22621.0"
-            ";" "C:/Windows/Microsoft.NET/Framework64/v4.0.30319"))
-
-  (setenv "PATH"
-          (concat
-           (getenv "PATH")
-           "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64"
-           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/VC/VCPackages"
-           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow"
-           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer"
-           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/bin/Roslyn"
-           ";" "C:/Program Files (x86)/Windows Kits/10/bin/10.0.22621.0//x64"
-           ";" "C:/Program Files (x86)/Windows Kits/10/bin//x64"
-           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community//MSBuild/Current/Bin/amd64"
-           ";" "C:/Windows/Microsoft.NET/Framework64/v4.0.30319"
-           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/"
-           ";" "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/Tools/")))
-
-;; -----------------------------------------------------------------------------
-;; C/C++ utility functions
-;; -----------------------------------------------------------------------------
-
-(defconst mug-c-formatter "clang-format"
-  "The name of the C/C++ formatter executable")
-
-(defconst mug-c-formatter-found (eval-when-compile (executable-find mug-c-formatter))
-  "Whether the C/C++ formatter `mug--c-formatter' executable was found or not.")
-
-(defun mug-c-format-buffer ()
-  "Format the current buffer."
-  (interactive)
-  (let ((current-point        (point))
-        (current-window-start (window-start)))
-    (shell-command-on-region (point-min) (point-max) mug-c-formatter nil t)
-    ;; Return the user to the previous state
-    (set-window-start (selected-window) current-window-start)
-    (goto-char current-point)))
-
-;; TODO: support project include/ directories, not only same-directory structures
-(defun mug--c-find-impl-or-decl-file-name ()
-  "Find name of the implementation or header of the current buffer."
-  (let ((base-file-name (file-name-sans-extension buffer-file-name)))
-    (cond
-     ;; In case of an implementationfile, we search for the header
-     ((string-match "\\.c" buffer-file-name)   (concat base-file-name ".h"))
-     ((string-match "\\.cc" buffer-file-name)  (concat base-file-name ".h"))
-     ((string-match "\\.cpp" buffer-file-name) (concat base-file-name ".h"))
-     ;; In case of a header, we search for the implementation
-     ((string-match "\\.h" buffer-file-name)
-      (cond
-       ((file-exists-p (concat base-file-name ".c"))    (concat base-file-name ".c"))
-       ((file-exists-p (concat base-file-name ".cc"))   (concat base-file-name ".cc"))
-       ((file-exists-p (concat base-file-name ".cpp"))  (concat base-file-name ".cpp")))))))
-
-(defun mug-c-find-corresponding ()
-  "Find the impl/header of the current buffer and open in the current window."
-  (interactive)
-  (let ((file-name (mug--c-find-impl-or-decl-file-name)))
-    (if file-name
-        (find-file file-name)
-      (error "Unable to find a file corresponding to %s" buffer-file-name))))
-
-(defun mug-c-find-corresponding-other-window ()
-  "Find the impl/header of the current buffer and open in the adjacent window."
-  (interactive)
-  (let ((file-name (mug--c-find-impl-or-decl-file-name)))
-    (if file-name
-        (find-file-other-window file-name)
-      (error "Unable to find a file corresponding to %s" buffer-file-name))))
-
-(defun mug-c-scratch-buf ()
-  "Make a C scratch buffer"
-  (interactive)
-  (find-file (concat mug-emacs-temp-dir "/scratch.c")))
-
-;; Lightweight C-mode
-(require 'simpc-mode)
-
-(add-hook 'simpc-mode-hook (lambda () 'before-save-hook #'mug-c-format-buffer nil t))
-
-;; -----------------------------------------------------------------------------
-;; Misc. secondary langs
-;; -----------------------------------------------------------------------------
-
-(autoload 'go-mode "go-mode" nil t)
-
-(use-package lua-mode
-  :custom
-  (lua-indent-level 4))
-
-;; -----------------------------------------------------------------------------
-;; General programming setup
-;; -----------------------------------------------------------------------------
-
-(setq auto-mode-alist
-      (append
-       '(("\\.h\\(h\\|pp\\)?\\'"                                . simpc-mode)
-         ("\\.c\\(c\\|pp\\)?\\'"                                . simpc-mode)
-         ("\\.\\(?:comp\\|vert\\|geom\\|frag\\|tesc\\|tese\\)$" . simpc-mode)
-         ("\\.go$"                                              . go-mode)
-         ("\\.lua$"                                             . lua-mode)
-         ("\\.txt$"                                             . indented-text-mode))
-       auto-mode-alist))
-
-(require 'ansi-color)
-
-(defun mug--colourful-compilation ()
-  "Handle ansi escape sequences from `compilation-filter-start' to `point'."
-  (let ((inhibit-read-only t))
-    (ansi-color-apply-on-region
-     compilation-filter-start (point))))
-
-(add-hook 'compilation-filter-hook #'mug--colourful-compilation)
-
-(use-package prog-mode
-  :straight (:type built-in)
-  :hook ((prog-mode . yas-minor-mode)
-         (prog-mode . citre-mode))
-  :bind (:map evil-normal-state-map
-              ("g d"     . citre-jump)
-              ("g b"     . citre-jump-back)
-              ("g o"     . xref-find-definitions-other-window)
-              ("SPC f c" . mug-c-find-corresponding)
-              ("SPC f b" . mug-c-format-buffer)))
 
 ;; -----------------------------------------------------------------------------
 
