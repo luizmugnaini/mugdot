@@ -108,7 +108,10 @@
 (defconst mug-temp-dir (eval-when-compile (mug-win-or-linux (getenv "TEMP") "/tmp"))
   "User temporary directory.")
 
-(defconst mug-emacs-dir (eval-when-compile (concat mug-home-dir "/.config/mugdot/emacs"))
+(defconst mug-mugdot-dir (eval-when-compile (concat mug-home-dir "/.config/mugdot"))
+  "Directory where the Emacs configuration resides.")
+
+(defconst mug-emacs-dir (eval-when-compile (concat mug-mugdot-dir "/emacs"))
   "Directory where the Emacs configuration resides.")
 
 (defconst mug-emacs-cache-dir (eval-when-compile (concat mug-cache-dir "/emacs"))
@@ -164,6 +167,11 @@
     (select-window new-window)
     (find-file filename)))
 
+(defun mug-find-mugdot ()
+  "Find dot-files directory."
+  (interactive)
+  (find-file mug-mugdot-dir))
+
 (defun mug-find-emacs-config ()
   "Load the Emacs init.el file to the current window."
   (interactive)
@@ -190,7 +198,20 @@
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
+
+(setq straight-use-package-by-default t
+      straight-repository-branch "develop"
+      ;; Since byte-code is rarely compatible across different versions of
+      ;; Emacs, it's best we build them in separate directories, per emacs
+      ;; version.
+      straight-build-dir (format "build-%s" emacs-version)
+      straight-cache-autoloads nil ; we already do this, and better.
+      ;; Doom doesn't encourage you to modify packages in place. Disabling this
+      ;; makes 'doom sync' instant (once everything set up), which is much nicer
+      ;; UX than the several seconds modification checks.
+      straight-check-for-modifications nil
+      ;; We handle package.el ourselves (and a little more comprehensively)
+      straight-enable-package-integration nil)
 
 ;;; ============================================================================
 ;;; Emacs global setup
@@ -381,20 +402,20 @@
   (if mug--ripgrep-available
     (setq xref-search-program 'ripgrep)))
 
-;; (use-package citre
-;;   :defer t
-;;   :bind (:map citre-mode-map
-;;               ("C-c u" . citre-update-this-tags-file))
-;;   :init
-;;   (require 'citre-config)
-;;   :config
-;;   ;; Citre setup
-;;   (setq citre-ctags-program (mug-win-or-linux
-;;                              (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe")
-;;                              "/usr/bin/ctags")
-;;         citre-tags-global-cache-dir             (concat mug-emacs-cache-dir "/tags")
-;;         citre-default-create-tags-file-location 'in-dir
-;;         citre-auto-enable-citre-mode-modes '(prog-mode)))
+(use-package citre
+  :defer t
+  :bind (:map citre-mode-map
+              ("C-c u" . citre-update-this-tags-file))
+  :init
+  (require 'citre-config)
+  :config
+  ;; Citre setup
+  (setq citre-ctags-program (mug-win-or-linux
+                             (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe")
+                             "/usr/bin/ctags")
+        citre-tags-global-cache-dir             (concat mug-emacs-cache-dir "/tags")
+        citre-default-create-tags-file-location 'in-dir
+        citre-auto-enable-citre-mode-modes      '(prog-mode)))
 
 (use-package corfu
   :custom
@@ -524,7 +545,6 @@ that are relevant for your installation. "
 
 ;; Lightweight C-mode
 (require 'simpc-mode)
-
 (add-hook 'simpc-mode-hook (lambda () 'before-save-hook #'mug-c-format-buffer nil t))
 (add-hook 'simpc-mode-hook #'yas-minor-mode)
 
