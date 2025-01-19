@@ -305,8 +305,8 @@
 
   ;; Set the default font
   (set-face-attribute 'default nil
-                      :font "FiraCode Nerd Font Mono"
-                      :height 110)
+                      :font   "Fira Code"
+                      :height 100)
 
   ;; Window resizing
   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
@@ -345,7 +345,7 @@
 
 ;; Evaluate the entirety of the current buffer
 (add-hook 'emacs-lisp-mode-hook
-	  (lambda () (local-set-key (kbd "C-c e") 'eval-buffer)))
+	      (lambda () (local-set-key (kbd "C-c e") 'eval-buffer)))
 
 ;; -----------------------------------------------------------------------------
 ;; Dired setup
@@ -354,7 +354,7 @@
 (setq dired-listing-switches "-agho --group-directories-first")
 (put 'dired-find-alternate-file 'disabled nil)
 
-  ;; Helper packages for a better dired experience
+;; Helper packages for a better dired experience
 (straight-use-package 'dired-single)
 (straight-use-package 'dired-collapse)
 
@@ -376,6 +376,9 @@
 ;;; ============================================================================
 ;;; General development setup
 ;;; ============================================================================
+
+;; Default compile command hint.
+(setq compile-command "luajit build.lua")
 
 ;; Better grep alternative
 (defconst mug--ripgrep-available (eval-when-compile (executable-find "rg"))
@@ -564,7 +567,7 @@ that are relevant for your installation. "
          ("\\.c\\(c\\|pp\\)?\\'"                                . simpc-mode)
          ("\\.\\(?:comp\\|vert\\|geom\\|frag\\|tesc\\|tese\\)$" . simpc-mode)
          ("\\.go$"                                              . go-mode)
-         ("\\.lua$"                                             . lua-mode)
+         ;; ("\\.lua$"                                             . lua-mode)
          ("\\.txt$"                                             . indented-text-mode))
        auto-mode-alist))
 
@@ -601,15 +604,16 @@ that are relevant for your installation. "
   (evil-mode 1)
   :bind (:map evil-normal-state-map
               ("Y"       . (lambda () (interactive) (evil-yank (point) (line-end-position))))
+              ("SPC e"   . (lambda () (interactive) (dired (file-name-directory buffer-file-name))))
               ("SPC w"   . save-buffer)
               ("SPC q"   . kill-buffer-and-window)
               ("SPC s"   . split-window-right)
               ("SPC h"   . split-window-below)
               ("SPC o"   . other-window)
               ("SPC b b" . switch-to-buffer)
-              ("SPC f f" . find-file)
+              ("SPC f e" . project-find-file)
               ("SPC f o" . find-file-other-window)
-              ("SPC f p" . project-find-file)
+              ("SPC f f" . project-find-file)
               ("SPC c c" . project-compile)
               ("SPC r r" . project-recompile)
               ("SPC f z" . rg)
@@ -640,7 +644,7 @@ that are relevant for your installation. "
     :requires evil
     :defines  (evil-collection-mode-list)
     :commands (evil-collection-init evil-collection-define-key)
-    :init     (evil-collection-init)
+    :init     (evil-collection-init '(dired))
     :custom
     (evil-collection-outline-bind-tab-p nil)
     (evil-collection-want-unimpaired-p  nil)
