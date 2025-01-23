@@ -97,43 +97,23 @@ vim.opt.clipboard         = "unnamedplus" -- Copy to and from vim using the syst
 --
 -- Automatically reload buffers which changed outside of the editor.
 vim.opt.autoread = true
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
-    callback = function()
-        vim.cmd("checktime")
-    end,
-})
+vim.api.nvim_create_autocmd(
+    { "FocusGained", "BufEnter" },
+    { callback = function() vim.cmd("checktime") end }
+)
 
 -- Key mapping responsiveness
 vim.o.timeout    = true
 vim.o.timeoutlen = 500
 
--- -----------------------------------------------------------------------------
--- Project integration
--- -----------------------------------------------------------------------------
-
-local build_file_name = "build.lua"
-local build_file_path = make_path({ work_dir, build_file_name })
-local has_build_file  = (vim.fn.filereadable(build_file_path) == 1)
-
--- -----------------------------------------------------------------------------
--- Auto-commands.
--- -----------------------------------------------------------------------------
-
 local mug_group = vim.api.nvim_create_augroup("mug", { clear = true })
 
-local c_like = { "*.c", "*.h", "*.cc", "*.cpp", "*.hpp", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" }
+local all_modes        = { "n", "i", "x", "v", "s", "c", "o", "l", "t" }
+local non_insert_modes = { "n", "v", "x", "o" }
 
-function trim_whitespaces()
-    local view = vim.fn.winsaveview()
-    vim.api.nvim_exec([[keepjumps keeppatterns silent! %s/\s\+$//e]], { output = false })
-    vim.fn.winrestview(view)
-end
-
-function fmt_buf(formatter)
-    local view = vim.fn.winsaveview()
-    vim.api.nvim_exec([[keepjumps keeppatterns silent %!]] .. formatter, { output = false })
-    vim.fn.winrestview(view)
-end
+-- -----------------------------------------------------------------------------
+-- File-types
+-- -----------------------------------------------------------------------------
 
 vim.api.nvim_create_autocmd("BufEnter", {
     desc    = "Treat miscelaneous files as C for syntax highlighting",
@@ -149,22 +129,70 @@ vim.api.nvim_create_autocmd("BufEnter", {
     command = "set filetype=tex",
 })
 
+-- -----------------------------------------------------------------------------
+-- Formatting
+-- -----------------------------------------------------------------------------
+
+local function trim_whitespaces()
+    local view = vim.fn.winsaveview()
+    vim.api.nvim_exec([[keepjumps keeppatterns silent! %s/\s\+$//e]], { output = false })
+    vim.fn.winrestview(view)
+end
+
+local function fmt_buf(formatter)
+    local view = vim.fn.winsaveview()
+    vim.api.nvim_exec([[keepjumps keeppatterns silent %!]] .. formatter, { output = false })
+    vim.fn.winrestview(view)
+end
+
 vim.api.nvim_create_autocmd("BufWritePre", {
     desc     = "Trim whitespaces in text files",
     group    = mug_group,
-    pattern  = { "*.md", "*.txt", "*.tex" },
+    pattern  = { "*" },
     callback = trim_whitespaces,
 })
+
+-- -----------------------------------------------------------------------------
+-- Auto-commands.
+-- -----------------------------------------------------------------------------
+
+local c_like = { "*.c", "*.h", "*.cc", "*.cpp", "*.hpp", "*.glsl", "*.vert", "*.tesc", "*.tese", "*.geom", "*.frag", "*.comp" }
+
+local function insert_code_section_header()
+    local comment_header_separator = "// " .. string.rep("-", 97)
+    vim.api.nvim_put({ comment_header_separator, "// " }, "l", true, true)
+    vim.api.nvim_put({ comment_header_separator }, "l", true, false)
+end
+
+vim.api.nvim_create_user_command(
+    "CodeSection",
+    insert_code_section_header,
+    { desc = "Write a code section header for C-like languages." }
+)
+
+local function comment_visual_selection()
+    local start_line, _, end_line = unpack(vim.fn.getpos("'<")), unpack(vim.fn.getpos("'>"))
+
+    for line = start_line, end_line do
+        local line_content = vim.fn.getline(line)
+        if line_content ~= "" then
+            vim.fn.setline(line, "// " .. line_content)
+        end
+    end
+end
+
+vim.api.nvim_create_user_command(
+    "CommentSelection",
+    comment_visual_selection,
+    { desc = "Comment-out the selected lines" }
+)
+vim.keymap.set("v", "<A-;>", function() comment_visual_selection() end, { noremap = true, silent = true })
 
 -- -----------------------------------------------------------------------------
 -- Terminal integration
 -- -----------------------------------------------------------------------------
 
-local terminal = {
-    buf = -1,
-    win = -1,
-}
-
+local terminal         = { buf = -1, win = -1 }
 local last_marker_line = 0
 
 local function terminal_get_last_marker_line()
@@ -210,10 +238,17 @@ vim.api.nvim_create_user_command(
     { desc = "Toggle the visibility floating terminal buffer." }
 )
 
+-- Terminal mode.
+vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
+vim.keymap.set({ "n", "t" }, "<leader>tt", vim.cmd.FloatingTerminalToggle, { desc = "Toggle the floating terminal window" })
+
 -- -----------------------------------------------------------------------------
 -- Build system integration
 -- -----------------------------------------------------------------------------
 
+local build_file_name  = "build.lua"
+local build_file_path  = make_path({ work_dir, build_file_name })
+local has_build_file   = (vim.fn.filereadable(build_file_path) == 1)
 local cached_build_cmd = ""
 
 local function parse_last_build_command_errors_in_terminal()
@@ -281,12 +316,22 @@ vim.api.nvim_create_user_command(
     { desc  = "Parse the compiler output of the last build command ran in the floating terminal." }
 )
 
+vim.keymap.set(
+    non_insert_modes,
+    "<leader>cc",
+    ":Build " .. cached_build_cmd,
+    { noremap = true, silent = false }
+)
+vim.keymap.set(
+    non_insert_modes,
+    "<leader>pc",
+    vim.cmd.ParseCompilerOutput,
+    { noremap = true, silent = true }
+)
+
 -- -----------------------------------------------------------------------------
 -- Keybindings
 -- -----------------------------------------------------------------------------
-
-local all_modes        = { "n", "i", "x", "v", "s", "c", "o", "l", "t" }
-local non_insert_modes = { "n", "v", "x", "o" }
 
 vim.keymap.set(all_modes, "<C-k>", "<Esc>", { silent = true })
 
@@ -313,26 +358,8 @@ local ctags_args = "-o .tags --languages=c,c++,lua,python --fields=NPESZaimnorts
 vim.keymap.set(
     non_insert_modes,
     "<leader>ut",
-    "<cmd>!" .. ctags_exe .. " " .. ctags_args .. "<cr>",
+    "<cmd>!" .. ctags_exe .. " " .. ctags_args .. "<cr><cr>",
     { desc = "Update the tag cache" }
-)
-
--- Terminal mode.
-vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
-vim.keymap.set({ "n", "t" }, "<leader>tt", vim.cmd.FloatingTerminalToggle, { desc = "Toggle the floating terminal window" })
-
--- Build system.
-vim.keymap.set(
-    non_insert_modes,
-    "<leader>cc",
-    ":Build " .. cached_build_cmd,
-    { noremap = true, silent = false }
-)
-vim.keymap.set(
-    non_insert_modes,
-    "<leader>pc",
-    vim.cmd.ParseCompilerOutput,
-    { noremap = true, silent = true }
 )
 
 -- -----------------------------------------------------------------------------
@@ -342,7 +369,7 @@ vim.keymap.set(
 vim.cmd.colorscheme("mug")
 
 -- -----------------------------------------------------------------------------
--- Packages
+-- Bootstrap lazy.nvim
 -- -----------------------------------------------------------------------------
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -359,11 +386,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
-    -- -------------------------------------------------------------------------
-    -- Utilities for better development.
-    -- -------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+-- Packages
+-- -----------------------------------------------------------------------------
 
+require("lazy").setup({
     {
         "nvim-telescope/telescope.nvim",
         tag = "0.1.6",
@@ -372,11 +399,7 @@ require("lazy").setup({
             {
                 "nvim-telescope/telescope-fzf-native.nvim",
                 build = "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release"
-                    .. (
-                        os_windows -- Yep... stupid, I know.
-                            and " && mv build/Release/libfzf.dll build/libfzf.dll && mv build/Release/fzf.lib build/fzf.lib"
-                        or ""
-                    ),
+                    .. ( os_windows and " && mv build/Release/libfzf.dll build/libfzf.dll && mv build/Release/fzf.lib build/fzf.lib" or ""),
             },
         },
         event  = "VeryLazy",
@@ -403,13 +426,9 @@ require("lazy").setup({
 
             telescope.load_extension("fzf")
 
-            vim.keymap.set("n", "<leader>ff", function()
-                builtin.find_files({ hidden = true })
-            end, { desc = "Find file" })
-            vim.keymap.set("n", "<leader>bb", builtin.buffers, { desc = "Find open buffer" })
-            vim.keymap.set("n", "<leader>fz", function()
-                builtin.grep_string({ search = vim.fn.input("grep> ") })
-            end, { desc = "Fuzzy find string" })
+            vim.keymap.set("n", "<leader>ff", function() builtin.find_files({ hidden = true }) end)
+            vim.keymap.set("n", "<leader>bb", builtin.buffers)
+            vim.keymap.set("n", "<leader>fz", function() builtin.grep_string({ search = vim.fn.input("grep> ") }) end)
         end,
     },
 
@@ -427,98 +446,21 @@ require("lazy").setup({
                 view_options = {
                     show_hidden = true,
                 },
-                use_default_keymaps = false,
-                keymaps = {
-                    ["?"]     = { "actions.show_help", mode = "n" },
+                use_default_keymaps = true,
+                keymap = {
                     ["<CR>"]  = { "actions.select" },
-                    ["<C-s>"] = { "actions.select", opts = { vertical = true } },
-                    ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
-                    ["<C-p>"] = { "actions.preview" },
-                    ["<C-c>"] = { "actions.close", mode = "n" },
-                    ["<C-l>"] = { "actions.refresh" },
-                    ["-"]     = { "actions.parent", mode = "n" },
-                    ["_"]     = { "actions.open_cwd", mode = "n" },
-                    ["`"]     = { "actions.cd", mode = "n" },
-                    ["~"]     = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
-                    ["gs"]    = { "actions.change_sort", mode = "n" },
-                    ["gx"]    = { "actions.open_external" },
+                    ["-"]     = { "actions.parent",    mode = "n" },
+                    ["_"]     = { "actions.open_cwd",  mode = "n" },
+                    ["cd"]    = { "actions.cd",        mode = "n" },
+                    ["gr"]    = { "actions.refresh",   mode = "n" },
                 },
             })
-            vim.keymap.set(non_insert_modes, "<leader>e", "<cmd>Oil<cr>", { })
+            vim.keymap.set(non_insert_modes, "<leader>e", "<cmd>Oil<cr>")
         end
-    },
-
-    -- Utility for line and block comments.
-    {
-        "numToStr/Comment.nvim",
-        event  = "VeryLazy",
-        config = function()
-            require("Comment").setup({
-                toggler = {
-                    line = "<A-;>",
-                },
-                opleader = {
-                    line = "<A-;>",
-                },
-            })
-        end,
-    },
-
-    -- Automatic formatting on save.
-    -- {
-    --     "stevearc/conform.nvim",
-    --     event  = "VeryLazy",
-    --     ft     = { "c", "cpp", "glsl", "lua", "python", "go" },
-    --     config = function()
-    --         require("conform").setup({
-    --             formatters = {
-    --                 stylua = { append_args = { "--indent-type=Spaces" } },
-    --             },
-    --             formatters_by_ft = {
-    --                 c      = { "clang-format" },
-    --                 cpp    = { "clang-format" },
-    --                 glsl   = { "clang-format" },
-    --                 python = { "black" },
-    --                 go     = { "gofmt" },
-    --             },
-    --         })
-    --
-    --         -- vim.api.nvim_create_autocmd("BufWritePre", {
-    --         --     pattern  = { "*" },
-    --         --     callback = function(args)
-    --         --         require("conform").format({ bufnr = args.buf })
-    --         --     end,
-    --         -- })
-    --
-    --         vim.keymap.set(non_insert_modes, "<leader>fb", function()
-    --             require("conform").format({ bufnr = 0 })
-    --         end, { desc = "Format current buffer", silent = true })
-    --     end,
-    -- },
-
-    -- -------------------------------------------------------------------------
-    -- Snippets
-    -- -------------------------------------------------------------------------
-
-    {
-        "L3MON4D3/LuaSnip",
-        build  = "make install_jsregexp",
-        ft     = { "tex", "c", "cpp", "glsl" },
-        config = function()
-            local ls = require("luasnip")
-
-            require("luasnip.loaders.from_lua").lazy_load({ paths = nvim_dir .. "/snippets" })
-            ls.config.setup({ enable_autosnippets = true })
-
-            vim.keymap.set({ "i" }, "<C-e>", function()
-                ls.expand()
-            end, { silent = true, desc = "Expand snippet" })
-        end,
     },
 
     {
         "hrsh7th/nvim-cmp",
-        cond         = not vim.g.lsp_enabled,
         dependencies = { "hrsh7th/cmp-buffer" },
         config       = function()
             local cmp = require("cmp")
@@ -534,7 +476,7 @@ require("lazy").setup({
                     ["<C-j>"] = cmp.mapping.select_prev_item(),
                     ["<C-n>"] = cmp.mapping.select_next_item(),
                 }),
-                sources = { { name = "luasnip" }, { name = "buffer" } },
+                sources = { { name = "buffer" } },
             })
         end,
     },
