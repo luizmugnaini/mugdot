@@ -90,7 +90,7 @@
 
 ;; Add scoop-installed binaries.
 (if mug-sys-is-win
-    (dolist (bin-dir '(list (concat mug-home-dir "scoop/shims") (concat "d:/app/bin")))
+    (dolist (bin-dir '(list (concat mug-home-dir "scoop/shims") "d:/app/bin"))
       (add-to-list 'exec-path bin-dir)))
 
 ;; Auxiliar system directories
