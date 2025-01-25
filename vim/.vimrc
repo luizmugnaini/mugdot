@@ -74,11 +74,11 @@ set smarttab             " Makes tabbing smarter will realize you have 2 vs 4
 set expandtab            " Converts tabs to spaces
 set smartindent          " Makes indenting smart
 set autoindent           " Good auto indent
+set textwidth=0
 
 set cmdheight=1
 set scrolloff=4
 set pumheight=10
-
 
 set iskeyword+=-         " treat dash separated words as a word text object
 set encoding=utf-8       " The encoding displayed
@@ -90,7 +90,7 @@ set nobackup
 set nowritebackup
 
 " Timings
-set updatetime=300
+set updatetime=50
 set timeout
 set timeoutlen=500
 
@@ -106,15 +106,8 @@ autocmd FileType c,cpp abbr cmt // ---------------------------------------------
 call plug#begin()
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'vim-autoformat/vim-autoformat'
 call plug#end()
-
-augroup autoformat_on_save
-    autocmd!
-    autocmd BufWrite *.c,*.cc,*.cpp,*.h,*.hh,*.hpp,*.lua :Autoformat
-augroup END
 
 nnoremap <leader>ff :FZF<CR>
 nnoremap <leader>bb :Buffers<CR>
 nnoremap <leader>fz :Rg<Space>
-
