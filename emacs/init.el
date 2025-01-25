@@ -88,6 +88,11 @@
 (defconst mug-dev-dir (eval-when-compile (mug-win-or-linux "d:/" (concat mug-home-dir "/projects")))
   "Development directory.")
 
+;; Add scoop-installed binaries.
+(if mug-sys-is-win
+    (dolist (bin-dir '(list (concat mug-home-dir "scoop/shims") (concat "d:/app/bin")))
+      (add-to-list 'exec-path bin-dir)))
+
 ;; Auxiliar system directories
 (defconst mug-cache-dir (eval-when-compile (mug-win-or-linux (getenv "LOCALAPPDATA") "~/.cache"))
   "User general cache directory.")
@@ -130,7 +135,7 @@
 
 ;; Set the default directories
 (setq default-directory    mug-dev-dir
-      custom-file          (eval-when-compile (concat mug-emacs-dir "/custom.el"))
+      custom-file          (expand-file-name "custom.el" mug-emacs-dir)
       user-emacs-directory mug-emacs-dir)
 
 ;;; ----------------------------------------------------------------------------
@@ -222,9 +227,6 @@
 ;; Don't wrap the lines!!
 (set-default 'truncate-lines t)
 
-;; Use the Terminus font for the win!!!
-(set-frame-font "Terminus:pixelsize-18:antialias-none" nil t)
-
 ;; Leaner scrolling experience - like... for real, it is smooooth
 (setq scroll-step             3
       scroll-margin           0
@@ -247,12 +249,6 @@
 (if (boundp 'use-short-answers)
     (setq use-short-answers t))
 (define-key y-or-n-p-map " " nil) ; Disable `SPC' as a `yes' alias.
-
-;; Just stop bothering me with irrelevant shit
-(setq custom-safe-themes t)
-
-;; Set the title of the frame to "[current buffer name] - Emacs"
-(setq-default frame-title-format '("%b - Emacs"))
 
 ;;; ----------------------------------------------------------------------------
 ;;; Performance hacks
@@ -295,29 +291,6 @@
       gcmh-auto-idle-delay-factor 10
       gcmh-high-cons-threshold    (* 64 1024 1024)) ; 64mb
 
-;;; ----------------------------------------------------------------------------
-;;; Keybindings
-;;; ----------------------------------------------------------------------------
-
-;; <Escape> from anything
-(keymap-global-set "<escape>" 'keyboard-escape-quit)
-
-;; Translate <C-k> into an escape key press
-(define-key key-translation-map (kbd "C-k") (kbd "<escape>"))
-
-;; Remove annoying keybindings:
-(dolist (key '("C-x C-b" "C-x C-c" "C-x C-d" "C-x C-z" "C-x C-s" "C-x s" "C-x f" "C-h h"
-               "C-h k" "C-h j" "C-h l" "C-f" "C-z" "C-j" "M-j"))
-    (keymap-global-unset key))
-
-;; This is needed for me because my keyboard uses the Caps Lock as a "magic" key
-;; when pressed together with some other key, in order to prevent such a fucking
-;; bullshit, I translated every possible shit that could happen into the right
-;; thing that it should be binded in the first place.
-(define-key key-translation-map (kbd "C-<up>")    (kbd "C-w"))
-(define-key key-translation-map (kbd "C-<left>")  (kbd "C-a"))
-(define-key key-translation-map (kbd "C-<down>")  (kbd "C-s"))
-(define-key key-translation-map (kbd "C-<right>") (kbd "C-d"))
 
 ;;; ----------------------------------------------------------------------------
 ;;; Backup/history config
@@ -334,13 +307,13 @@
 
 ;; Setup Emacs backups and auto-saves
 (setq backup-directory-alist '(,mug-emacs-backup-dir) ; Set the backup directory
-      make-backup-files      t  ; Make backups frequently
-      backup-by-copying      t  ; Copy the files instead of renaming them
-      kept-new-versions     10  ; Number of new versions to maintain
-      kept-old-versions      1  ; Number of old versions to maintain
-      delete-old-versions    t  ; Clean the backup directory
-      version-control        t  ; Use numbering of the backup files
-      vc-make-backup-files   t) ; Store even files controlled by a version-control system
+      make-backup-files       t  ; Make backups frequently
+      backup-by-copying       t  ; Copy the files instead of renaming them
+      kept-new-versions      10  ; Number of new versions to maintain
+      kept-old-versions       1  ; Number of old versions to maintain
+      delete-old-versions     t  ; Clean the backup directory
+      version-control         t  ; Use numbering of the backup files
+      vc-make-backup-files    t) ; Store even files controlled by a version-control system
 
 ;;; ----------------------------------------------------------------------------
 ;;; Post initialization
@@ -366,10 +339,6 @@
 
 ;; Annoying as hell
 (setq byte-compile-warnings '(not free-vars unresolved))
-
-;; Evaluate the entirety of the current buffer
-(add-hook 'emacs-lisp-mode-hook
-	      (lambda () (local-set-key (kbd "C-c e") 'eval-buffer)))
 
 ;;; ----------------------------------------------------------------------------
 ;;; straight.el package manager bootstrapping
@@ -426,6 +395,16 @@
 ;;; Emacs theme and styling
 ;;; -----------------------------------------------------------------------------
 
+;; Set the font
+;; (set-frame-font "Terminus:pixelsize-18:antialias-none" nil t)
+(set-frame-font "Tamsyn10x20:pixelsize-12:antialias-none" nil t)
+
+;; Set the title of the frame to "[current buffer name] - Emacs"
+(setq-default frame-title-format '("%b - Emacs"))
+
+;; Just stop bothering me with irrelevant shit
+(setq custom-safe-themes t)
+
 (use-package modus-themes
   :init
   (defconst modus-vivendi-tinted-palette-overrides
@@ -443,6 +422,13 @@
 
 ;; Git management with Magit for the win
 (straight-use-package 'magit)
+
+;;; ----------------------------------------------------------------------------
+;;; Spell checking
+;;; ----------------------------------------------------------------------------
+
+(setq ispell-program-name "aspell")
+(require 'ispell)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Project/compilation config
@@ -514,18 +500,20 @@
   (xref-show-definitions-function #'xref-show-definitions-completing-read)
   (xref-show-xrefs-function       #'xref-show-definitions-completing-read))
 
-;;(use-package citre
-;;  :defer t
-;;  :bind (:map citre-mode-map
-;;              ("C-c u" . citre-update-this-tags-file))
-;;  :init (require 'citre-config)
-;;  :config
-;;  ;; Citre setup
-;;  (setq citre-ctags-program                     (mug-win-or-linux (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe") "/usr/bin/ctags")
-;;        citre-tags-global-cache-dir             (concat mug-emacs-cache-dir "/tags")
-;;        citre-default-create-tags-file-location 'in-dir
-;;        citre-auto-enable-citre-mode-modes      '(prog-mode))
-;;  (setq-default citre-enable-capf-integration nil))
+(use-package citre
+ :defer t
+ :bind (:map citre-mode-map
+             ("C-c u" . citre-update-this-tags-file))
+ :init (require 'citre-config)
+ :custom
+ (citre-ctags-program                     "ctags")
+ (citre-tags-global-cache-dir             (concat mug-emacs-cache-dir "/tags"))
+ (citre-default-create-tags-file-location 'in-dir)
+ (citre-auto-enable-citre-mode-modes      '(prog-mode))
+ :config
+ ;; Citre setup
+ (setq-default citre-enable-capf-integration nil))
+(add-hook 'find-file-hook #'citre-auto-enable-citre-mode)
 
 ;;; ----------------------------------------------------------------------------
 ;;; In-buffer completion and snippets
@@ -672,8 +660,7 @@ that are relevant for your installation. "
 ;;; ----------------------------------------------------------------------------
 
 (use-package evil
-  :defines  (evil-mode evil-emacs-state-modes evil-normal-state-map)
-  :commands (evil-yank evil-set-leader evil-global-set-key)
+  :defines  (evil-mode evil-emacs-state-modes)
   :init
   (setq-default evil-want-keybinding nil)
   (setq evil-want-integration         t
@@ -686,36 +673,7 @@ that are relevant for your installation. "
 	    evil-normal-state-cursor      'box
 	    evil-esc-delay                0)
   (evil-mode 1)
-  :bind (:map evil-normal-state-map
-              ("Y"   . (lambda () (interactive) (evil-yank (point) (line-end-position))))
-              ;; ("g d" . citre-jump)
-              ;; ("g b" . citre-jump-back)
-              ("g o" . xref-find-definitions-other-window))
   :config
-  ;; Use the space key as the leader for keybindings
-  (evil-set-leader '(normal visual emacs) (kbd "SPC") nil)
-
-  ;; Kind-of global motion with j and k
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
-  ;; Normal mode keybindings
-  (evil-global-set-key 'normal (kbd "<leader>e")  '(lambda () (interactive) (dired (file-name-directory buffer-file-name))))
-  (evil-global-set-key 'normal (kbd "<leader>w")  'save-buffer)
-  (evil-global-set-key 'normal (kbd "<leader>q")  'kill-buffer-and-window)
-  (evil-global-set-key 'normal (kbd "<leader>s")  'split-window-right)
-  (evil-global-set-key 'normal (kbd "<leader>h")  'split-window-below)
-  (evil-global-set-key 'normal (kbd "<leader>o")  'other-window)
-  (evil-global-set-key 'normal (kbd "<leader>bb") 'switch-to-buffer)
-  (evil-global-set-key 'normal (kbd "<leader>fe") 'find-file)
-  (evil-global-set-key 'normal (kbd "<leader>fo") 'find-file-other-window)
-  (evil-global-set-key 'normal (kbd "<leader>ff") 'project-find-file)
-  (evil-global-set-key 'normal (kbd "<leader>fc") 'mug-c-find-corresponding)
-  (evil-global-set-key 'normal (kbd "<leader>cc") 'project-compile)
-  (evil-global-set-key 'normal (kbd "<leader>rr") 'project-recompile)
-  (evil-global-set-key 'normal (kbd "<leader>fz") 'rg)
-  (evil-global-set-key 'normal (kbd "<leader>fb") 'mug-c-format-buffer)
-
   (defun mug-evil-hook ()
     "My evil mode."
     (dolist (mode '(custom-mode
@@ -733,25 +691,95 @@ that are relevant for your installation. "
   (use-package evil-collection
     :requires evil
     :defines  (evil-collection-mode-list)
-    :commands (evil-collection-init evil-collection-define-key)
-    :init     (evil-collection-init '(dired compile help magit eww rg))
+    :commands (evil-collection-init)
+    :init
+    (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list))
+    (evil-collection-init)
     :custom
     (evil-collection-outline-bind-tab-p nil)
-    (evil-collection-want-unimpaired-p  nil)
-    :config
-    (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list))
-
-    (evil-collection-define-key 'normal 'dired-mode-map
-      "h" (lambda () (interactive) (find-alternate-file ".."))
-      "H" 'dired-omit-mode
-      "l" 'dired-single-buffer
-      "y" 'dired-ranger-copy
-      "X" 'dired-ranger-move
-      "p" 'dired-ranger-paste))
+    (evil-collection-want-unimpaired-p  nil))
 
   ;; Commenting made easier
   (use-package evil-nerd-commenter
-    :bind ("M-;" . evilnc-comment-or-uncomment-lines)))
+    :requires evil))
+
+;;; ----------------------------------------------------------------------------
+;;; Keybindings
+;;; ----------------------------------------------------------------------------
+
+;; <Escape> from anything
+(keymap-global-set "<escape>" 'keyboard-escape-quit)
+
+;; Translate <C-k> into an escape key press
+(define-key key-translation-map (kbd "C-k") (kbd "<escape>"))
+
+;; Remove annoying keybindings
+(dolist (key '("C-SPC" "C-x C-b" "C-x C-c" "C-x C-d" "C-x C-z" "C-x C-s" "C-x s" "C-x f" "C-h h"
+               "C-h k" "C-h j" "C-h l" "C-f" "C-z" "C-j" "M-j"))
+    (keymap-global-unset key))
+
+;; This is needed for me because my keyboard uses the Caps Lock as a "magic" key
+;; when pressed together with some other key, in order to prevent such a fucking
+;; bullshit, I translated every possible shit that could happen into the right
+;; thing that it should be bound in the first place.
+(define-key key-translation-map (kbd "C-<up>")    (kbd "C-w"))
+(define-key key-translation-map (kbd "C-<left>")  (kbd "C-a"))
+(define-key key-translation-map (kbd "C-<down>")  (kbd "C-s"))
+(define-key key-translation-map (kbd "C-<right>") (kbd "C-d"))
+
+;; Kind-of global motion with j and k
+(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+;; We'll be using general for a easier time setting up keybindings.
+(require 'general)
+
+;; Keybindings that work for ALL modes when in normal state.
+;;
+;; @NOTE: I couldn't get this working without general. That's the actual only reason why we
+;;        use it in the first place.
+(general-override-mode)
+(general-def 'normal 'override
+  "SPC e"   '(lambda () (interactive) (dired (file-name-directory buffer-file-name)))
+  "SPC w"   'save-buffer
+  "SPC q"   'kill-buffer-and-window
+  "SPC s"   'split-window-right
+  "SPC h"   'split-window-below
+  "SPC o"   'other-window
+  "SPC b b" 'switch-to-buffer
+  "SPC f e" 'find-file
+  "SPC f o" 'find-file-other-window
+  "SPC f f" 'project-find-file
+  "SPC f c" 'mug-c-find-corresponding
+  "SPC c c" 'project-compile
+  "SPC r r" 'project-recompile
+  "SPC f z" 'rg
+  "SPC f b" 'mug-c-format-buffer)
+
+;; Normal mode keymapping
+(general-def 'normal
+  "Y"   '(lambda () (interactive) (evil-yank (point) (line-end-position)))
+  "g d" 'citre-jump
+  "g b" 'citre-jump-back
+  "g o" 'xref-find-definitions-other-window
+  "M-;" 'evilnc-comment-or-uncomment-lines)
+
+;; Dired specific keymapping
+(general-define-key
+ :states  'normal
+ :keymaps 'dired-mode-map
+ "h" '(lambda () (interactive) (find-alternate-file ".."))
+ "H" 'dired-omit-mode
+ "l" 'dired-single-buffer
+ "y" 'dired-ranger-copy
+ "X" 'dired-ranger-move
+ "p" 'dired-ranger-paste)
+
+;; Elisp specific keymapping
+(general-define-key
+ :states  'normal
+ :keymaps 'emacs-lisp-mode-map
+ "C-c e" 'eval-buffer)
 
 ;;; -----------------------------------------------------------------------------
 

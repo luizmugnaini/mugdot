@@ -1,12 +1,9 @@
-# ncspot
-ncspot/userstate.cbor
-
-
-# Ruff linter
-/.ruff_cache
-
 # nvim
 nvim/lazy-lock.json
+
+# Vim
+vim/.netrwhist
+vim/plugged
 
 # dwm stuff
 *.o
@@ -26,6 +23,7 @@ emacs/straight/
 emacs/eshell/
 emacs/elpa/
 emacs/eln-cache/
+emacs/org-persist/
 emacs/.cask/
 emacs/projectile-bookmarks.eld
 emacs/transient/
