@@ -26,7 +26,10 @@
       column-number-mode         -1
       display-line-numbers-mode  -1)
 
-;; Prefer fullscreen
+;; Start with a black screen to prevent white flashing when opening emacs.
+(add-to-list 'default-frame-alist '(background-color . "black"))
+
+;; Startup with a fullscreen.
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
