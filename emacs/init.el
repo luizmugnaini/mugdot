@@ -694,7 +694,7 @@ that are relevant for your installation. "
 (keymap-global-set "<escape>" 'keyboard-escape-quit)
 
 ;; Translate <C-k> into an escape key press
-(define-key key-translation-map "C-k" "<escape>")
+(define-key key-translation-map (kbd "C-k") (kbd "<escape>"))
 
 ;; Remove annoying keybindings
 (dolist (key '("C-SPC" "C-x C-b" "C-x C-c" "C-x C-d" "C-x C-z" "C-x C-s"
@@ -705,10 +705,10 @@ that are relevant for your installation. "
 ;; when pressed together with some other key, in order to prevent such a fucking
 ;; bullshit, I translated every possible shit that could happen into the right
 ;; thing that it should be bound in the first place.
-(define-key key-translation-map (kbd "C-<up>")    "C-w")
-(define-key key-translation-map (kbd "C-<left>")  "C-a")
-(define-key key-translation-map (kbd "C-<down>")  "C-s")
-(define-key key-translation-map (kbd "C-<right>") "C-d")
+(define-key key-translation-map (kbd "C-<up>")    (kbd "C-w"))
+(define-key key-translation-map (kbd "C-<left>")  (kbd "C-a"))
+(define-key key-translation-map (kbd "C-<down>")  (kbd "C-s"))
+(define-key key-translation-map (kbd "C-<right>") (kbd "C-d"))
 
 ;; Kind-of global motion with j and k
 (evil-global-set-key 'motion "j" 'evil-next-visual-line)
