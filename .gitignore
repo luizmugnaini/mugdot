@@ -30,6 +30,7 @@ emacs/transient/
 emacs/var/
 emacs/projects
 emacs/.last-package-update-day
+emacs/tramp
 .yas-compiled-snippets.el
 *.elc
 *\#

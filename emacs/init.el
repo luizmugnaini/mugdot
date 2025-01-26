@@ -51,10 +51,6 @@
 
 (defconst mug-emacs-start-time (current-time))
 
-;; Avoid garbage collection at startup.
-(setq gc-cons-percentage 0.5
-      gc-cons-threshold (* 128 1024 1024))
-
 (defun mug-display-startup-time ()
   "Display the Emacs startup time."
   (message "Emacs loaded in %s with %d garbage collections."
@@ -129,9 +125,9 @@
 (add-to-list 'load-path (concat mug-emacs-dir "/lisp"))
 
 ;; Set the default directories
-(setq default-directory    mug-dev-dir
-      custom-file          (expand-file-name "custom.el" mug-emacs-dir)
-      user-emacs-directory mug-emacs-dir)
+(setopt default-directory    mug-dev-dir
+        custom-file          (expand-file-name "custom.el" mug-emacs-dir)
+        user-emacs-directory mug-emacs-dir)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Misc helper functions
@@ -148,19 +144,6 @@
 ;;; UI/UX
 ;;; ----------------------------------------------------------------------------
 
-;; HACK: Avoid calling `menu-bar-mode', `tool-bar-mode', and
-;;   `scroll-bar-mode' because their manipulation of frame parameters
-;;   can trigger/queue a superfluous frame redraw at startup.
-(push '(menu-bar-lines . 0)   default-frame-alist)
-(push '(tool-bar-lines . 0)   default-frame-alist)
-(push '(vertical-scroll-bars) default-frame-alist)
-(setq menu-bar-mode             nil
-      tool-bar-mode             nil
-      scroll-bar-mode           nil
-      tooltip-mode               -1
-      column-number-mode         -1
-      display-line-numbers-mode  -1)
-
 (defun mug--suppress-message (orig-fun &rest args)
   "Suppress message in the *Messages* buffer."
   (let ((inhibit-message t))
@@ -171,82 +154,67 @@
   (advice-add fn :around #'mug--suppress-message))
 
 ;; Reduce the clutter in the fringes
-(setq indicate-buffer-boundaries nil
-      indicate-empty-lines       nil)
+(setopt indicate-buffer-boundaries nil
+        indicate-empty-lines       nil)
 (set-fringe-mode '(2 . 2))
 
 ;; Disable irrelevant stuff
-(setq inhibit-startup-screen       t
-      inhibit-startup-message      t
-      initial-scratch-message    nil
-      mode-line-percent-position nil)
+(setopt inhibit-startup-screen       t
+        inhibit-startup-message      t
+        initial-scratch-message    nil
+        mode-line-percent-position nil)
 
 ;; Emacs, just shut the fuck up!
-(setq visible-bell nil)
+(setopt visible-bell nil)
 (set-message-beep 'silent)
 
 ;; Put a low limit on the `*Messages*' buffer
-(setq message-log-max 10)
-
-;; Don't resize the frames in steps; it looks weird, especially in tiling window
-;; managers, where it can leave unseemly gaps.
-(setq frame-resize-pixelwise t)
-
-;; Don't resize windows pixelwise, this can cause crashes in some cases
-;; when resizing too many windows at once or rapidly.
-(setq window-resize-pixelwise nil)
-
-;; Prefer fullscreen
-(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(setopt message-log-max 10)
 
 ;; The native border "consumes" a pixel of the fringe on righter-most
 ;; splits, `window-divider' does not.
-(setq window-divider-default-places       t
-      window-divider-default-bottom-width 1
-      window-divider-default-right-width  1
-      window-divider-mode                 t)
+(setopt window-divider-default-places       t
+        window-divider-default-bottom-width 1
+        window-divider-default-right-width  1
+        window-divider-mode                 t)
 
 ;; Minibuffer tweaks
-(setq enable-recursive-minibuffers    t
-      minibuffer-prompt-properties    '(read-only t cursor-intangible t face minibuffer-prompt)
-      completion-ignored-extensions   '(".a" ".o" ".so" ".lib" ".elf" ".pdb" ".bin" ".exe" ".elc" ".aux" ".bbl" ".toc" ".blg" "~")
-      ;; Hide commands in M-x which do not work in the current mode.
-      read-extended-command-predicate #'command-completion-default-include-p)
+(setopt enable-recursive-minibuffers    t
+        minibuffer-prompt-properties    '(read-only t cursor-intangible t face minibuffer-prompt)
+        completion-ignored-extensions   '(".a" ".o" ".so" ".lib" ".elf" ".pdb" ".bin" ".exe" ".elc" ".aux" ".bbl" ".toc" ".blg" "~")
+        ;; Hide commands in M-x which do not work in the current mode.
+        read-extended-command-predicate #'command-completion-default-include-p)
 
 ;; Inhibit the use of system based dialog boxes.
-(setq use-dialog-box nil)
+(setopt use-dialog-box nil)
 
 ;; Cursor config
 (blink-cursor-mode -1)          ; Stop the blinky-blink stuff
-(setq show-paren-delay       0  ; Don't delay when trying to find a matching parenthesis
-      blink-matching-paren nil  ; Don't be fucking annoying
-      x-stretch-cursor     nil) ; Don't stretch the cursor to fit wide characters
+(setopt show-paren-delay       0  ; Don't delay when trying to find a matching parenthesis
+        blink-matching-paren nil  ; Don't be fucking annoying
+        x-stretch-cursor     nil) ; Don't stretch the cursor to fit wide characters
 
 ;; Don't wrap the lines!!
-(set-default 'truncate-lines t)
+(setopt truncate-lines t)
 
 ;; Leaner scrolling experience - like... for real, it is smooooth
-(setq scroll-step             3
-      scroll-margin           0
-      scroll-conservatively 101
-      auto-window-vscroll   nil)
+(setopt scroll-step             3
+        scroll-margin           0
+        scroll-conservatively 101
+        auto-window-vscroll   nil)
 (require 'ultra-scroll)
 (ultra-scroll-mode 1)
 
 ;; Always use UTF-8 encoding
 (set-language-environment "UTF-8")
 
-;; Prefer opening the latest version of the file
-(setq load-prefer-newer t)
-
 ;; Code indentation
-(setq indent-tabs-mode nil ; Don't use tabs for indentation
-      tab-width        4)  ; If you gotta render a tab, at least use a resonable width...
+(setopt indent-tabs-mode nil ; Don't use tabs for indentation
+        tab-width        4)  ; If you gotta render a tab, at least use a resonable width...
 
 ;; Make it easier to answer stuff.
 (if (boundp 'use-short-answers)
-    (setq use-short-answers t))
+    (setopt use-short-answers t))
 (define-key y-or-n-p-map " " nil) ; Disable `SPC' as a `yes' alias.
 
 (defun mug--hide-minor-mode-from-mode-line (mode)
@@ -259,30 +227,26 @@
 ;;; ----------------------------------------------------------------------------
 
 ;; Font compacting can be terribly expensive, especially for rendering icon
-;; fonts on Windows.
-(setq inhibit-compacting-font-caches t)
+;; fonts on Windows. Whether disabling it has a notable affect on Linux and Mac
+;; hasn't been determined, but do it anyway, just in case. This increases memory
+;; usage, however!
+(setq-default inhibit-compacting-font-caches t)
 
 ;; Performance on Windows is considerably worse than elsewhere. We'll need
 ;; everything we can get.
 (when (boundp 'w32-get-true-file-attributes)
-  (setq w32-get-true-file-attributes nil           ; decrease file IO workload
-        w32-pipe-read-delay          0             ; faster IPC
-        w32-pipe-buffer-size         (* 64 1024))) ; read more at a time (was 4K)
+  (setq-default w32-get-true-file-attributes nil           ; decrease file IO workload
+                w32-pipe-read-delay          0             ; faster IPC
+                w32-pipe-buffer-size         (* 64 1024))) ; read more at a time (was 4K)
 
 ;; More performant rapid scrolling over unfontified regions. May cause brief
 ;; spells of inaccurate syntax highlighting right after scrolling, which should
 ;; quickly self-correct.
-(setq fast-but-imprecise-scrolling t)
-
-;; Font compacting can be terribly expensive, especially for rendering icon
-;; fonts on Windows. Whether disabling it has a notable affect on Linux and Mac
-;; hasn't been determined, but do it anyway, just in case. This increases memory
-;; usage, however!
-(setq inhibit-compacting-font-caches t)
+(setopt fast-but-imprecise-scrolling t)
 
 ;; Inhibits fontification while receiving input, which should help a little
 ;; with scrolling performance.
-(setq redisplay-skip-fontification-on-input t)
+(setq-default redisplay-skip-fontification-on-input t)
 
 ;; The GC introduces annoying pauses and stuttering into our Emacs experience,
 ;; so we use `gcmh' to stave off the GC while we're using Emacs, and provoke it
@@ -291,9 +255,9 @@
 ;; well not be using gcmh at all.
 (require 'gcmh)
 (gcmh-mode 1)
-(setq gcmh-idle-delay             'auto             ; The default is 15s
-      gcmh-auto-idle-delay-factor 10
-      gcmh-high-cons-threshold    (* 64 1024 1024)) ; 64mb
+(setopt gcmh-idle-delay             'auto             ; The default is 15s
+        gcmh-auto-idle-delay-factor 10
+        gcmh-high-cons-threshold    (* 64 1024 1024)) ; 64mb
 
 ;; GCMH is enabled in every buffer but we don't really care to know so we hide it.
 (mug--hide-minor-mode-from-mode-line 'gcmh-mode)
@@ -302,24 +266,41 @@
 ;;; Backup/history config
 ;;; ----------------------------------------------------------------------------
 
+;; Prefer opening the latest version of the file
+(setopt load-prefer-newer t)
+
+;; Automatically reread from disk if the underlying file changes
+(setopt auto-revert-avoid-polling t
+        auto-revert-interval      5
+        auto-revert-check-vc-info t)
+(global-auto-revert-mode)
+
 ;; Stop Emacs from losing undo information by setting very high
 ;; limits for undo buffers
-(setq undo-limit        20000000
-      undo-strong-limit 40000000)
+(setopt undo-limit        20000000
+        undo-strong-limit 40000000)
 
-;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
-(custom-set-variables
-  '(backup-directory-alist '((".*" . ,mug-emacs-backup-dir))))
+;; Don't litter file system with *~ backup files; put them all inside
+;; ~/.emacs.d/backup or wherever
+(defun mug--backup-file-name (fpath)
+  "Return a new file path of a given file path.
+If the new path's directories does not exist, create them."
+  (let* ((backup-root-dir mug-emacs-backup-dir)
+         (file-path (replace-regexp-in-string "[A-Za-z]:" "" fpath)) ; remove Windows driver letter in path
+         (backup-file-path (replace-regexp-in-string "//" "/" (concat backup-root-dir file-path "~"))))
+    (make-directory (file-name-directory backup-file-path) (file-name-directory backup-file-path))
+    backup-file-path))
+(setopt make-backup-file-name-function 'mug--backup-file-name)
+
 
 ;; Setup Emacs backups and auto-saves
-(setq backup-directory-alist '(,mug-emacs-backup-dir) ; Set the backup directory
-      make-backup-files       t  ; Make backups frequently
-      backup-by-copying       t  ; Copy the files instead of renaming them
-      kept-new-versions      10  ; Number of new versions to maintain
-      kept-old-versions       1  ; Number of old versions to maintain
-      delete-old-versions     t  ; Clean the backup directory
-      version-control         t  ; Use numbering of the backup files
-      vc-make-backup-files    t) ; Store even files controlled by a version-control system
+(setopt make-backup-files       t  ; Make backups frequently
+        backup-by-copying       t  ; Copy the files instead of renaming them
+        kept-new-versions      10  ; Number of new versions to maintain
+        kept-old-versions       1  ; Number of old versions to maintain
+        delete-old-versions     t  ; Clean the backup directory
+        version-control         t  ; Use numbering of the backup files
+        vc-make-backup-files    t) ; Store even files controlled by a version-control system
 
 ;;; ----------------------------------------------------------------------------
 ;;; Post initialization
@@ -339,12 +320,11 @@
 ;;; Elisp settings
 ;;; ----------------------------------------------------------------------------
 
-;; Ignore useless compiler warnings that actually don't even concern this init.el
-(setq native-comp-async-report-warnings-errors nil)
-(remove-hook 'native-comp-async-compile-warnings-hook 'native-comp-async-compile-warnings-logger)
-
-;; Annoying as hell
+;; Ignore useless compiler warnings that actually don't even concern this init.el or
+;; are annoying as hell
 (setq byte-compile-warnings '(not free-vars unresolved))
+(setopt native-comp-async-report-warnings-errors nil)
+(remove-hook 'native-comp-async-compile-warnings-hook 'native-comp-async-compile-warnings-logger)
 
 ;;; ----------------------------------------------------------------------------
 ;;; straight.el package manager bootstrapping
@@ -368,10 +348,10 @@
 
 ;; Set the builtin `straight.el' integration with `use-package'
 (straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
+(setopt straight-use-package-by-default t)
 
 ;; Compile packages for better performance.
-(setq package-native-compile t)
+(setopt package-native-compile t)
 
 ;;; -----------------------------------------------------------------------------
 ;;; Asynchronous capabilities
@@ -386,7 +366,7 @@
 ;;; Dired setup
 ;;; -----------------------------------------------------------------------------
 
-(setq dired-listing-switches "-agho --group-directories-first")
+(setopt dired-listing-switches "-agho --group-directories-first")
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; Helper packages for a better dired experience
@@ -409,7 +389,7 @@
 (setq-default frame-title-format '("%b - Emacs"))
 
 ;; Just stop bothering me with irrelevant shit
-(setq custom-safe-themes t)
+(setopt custom-safe-themes t)
 
 (use-package modus-themes
   :init
@@ -433,7 +413,7 @@
 ;;; Spell checking
 ;;; ----------------------------------------------------------------------------
 
-(setq ispell-program-name "aspell")
+(setopt ispell-program-name "aspell")
 (require 'ispell)
 
 ;;; ----------------------------------------------------------------------------
@@ -441,13 +421,13 @@
 ;;; ----------------------------------------------------------------------------
 
 ;; Improve finding the root of projects
-(setq project-vc-extra-root-markers
+(setopt project-vc-extra-root-markers
     '("build.lua" "build.bat" "build.sh" "CMakeLists.txt" "Makefile" ".git"))
 
-(setq compilation-always-kill    t                  ; kill compilation process before starting another
-      compilation-ask-about-save nil                ; save all buffers on `compile'
-      compilation-scroll-output 'first-error
-      compile-command           "luajit build.lua") ; Default compile command.
+(setopt compilation-always-kill    t                  ; kill compilation process before starting another
+        compilation-ask-about-save nil                ; save all buffers on `compile'
+        compilation-scroll-output 'first-error
+        compile-command           "luajit build.lua") ; Default compile command.
 
 ;; Allow ansi colors in the compilation mode and such.
 (require 'ansi-color)
@@ -468,13 +448,13 @@
 (require 'simpc-mode)
 
 ;; Correctly map file-types to their corresponding modes
-(setq auto-mode-alist
-      (append
-       '(("\\.h\\(h\\|pp\\)?\\'"                                . simpc-mode)
-         ("\\.c\\(c\\|pp\\)?\\'"                                . simpc-mode)
-         ("\\.\\(?:comp\\|vert\\|geom\\|frag\\|tesc\\|tese\\)$" . simpc-mode)
-         ("\\.\\(?:txt\\|md\\)$"                                . indented-text-mode))
-       auto-mode-alist))
+(setq-default auto-mode-alist
+              (append
+               '(("\\.h\\(h\\|pp\\)?\\'"                                . simpc-mode)
+                 ("\\.c\\(c\\|pp\\)?\\'"                                . simpc-mode)
+                 ("\\.\\(?:comp\\|vert\\|geom\\|frag\\|tesc\\|tese\\)$" . simpc-mode)
+                 ("\\.\\(?:txt\\|md\\)$"                                . indented-text-mode))
+               auto-mode-alist))
 
 ;;; ----------------------------------------------------------------------------
 ;;; Improving utilities
@@ -485,7 +465,7 @@
   "Whether the program Ripgrep is available or not.")
 (if mug--ripgrep-available
     (straight-use-package 'rg)
-    (setq xref-search-program 'ripgrep))
+    (setopt xref-search-program 'ripgrep))
 
 ;; Mini-buffer completion
 (use-package vertico
@@ -512,16 +492,13 @@
              ("C-c u" . citre-update-this-tags-file))
  :init (require 'citre-config)
  :custom
- (citre-ctags-program                     "ctags")
+ (citre-ctags-program (mug-win-or-linux
+                       (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe")
+                       "/usr/bin/ctags"))
+ (citre-enable-capf-integration           nil)
  (citre-tags-global-cache-dir             (concat mug-emacs-cache-dir "/tags"))
  (citre-default-create-tags-file-location 'in-dir)
- (citre-auto-enable-citre-mode-modes      '(prog-mode))
- :config
- ;; Citre setup
- (setq-default citre-enable-capf-integration nil)
- (setq citre-ctags-program (mug-win-or-linux
-                            (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe")
-                            "/usr/bin/ctags")))
+ (citre-auto-enable-citre-mode-modes      '(prog-mode)))
 (add-hook 'find-file-hook #'citre-auto-enable-citre-mode)
 
 ;;; ----------------------------------------------------------------------------
@@ -671,44 +648,43 @@ that are relevant for your installation. "
 (use-package evil
   :defines  (evil-mode evil-emacs-state-modes)
   :init
-  (setq-default evil-want-keybinding nil)
-  (setq evil-want-integration         t
-	    evil-want-C-u-scroll          nil
-	    evil-want-C-i-jump            nil
-	    evil-respect-visual-line-mode t
-	    evil-undo-system              'undo-redo
-	    evil-shift-width              4
-	    evil-insert-state-cursor      'box
-	    evil-normal-state-cursor      'box
-	    evil-esc-delay                0)
+  (setopt evil-want-keybinding          nil
+          evil-want-integration         t
+	      evil-want-C-u-scroll          nil
+	      evil-want-C-i-jump            nil
+	      evil-respect-visual-line-mode t
+	      evil-undo-system              'undo-redo
+	      evil-shift-width              4
+	      evil-insert-state-cursor      'box
+	      evil-normal-state-cursor      'box
+	      evil-esc-delay                0)
   (evil-mode 1)
   :config
   (defun mug-evil-hook ()
     "My evil mode."
     (dolist (mode '(custom-mode
                     eshell-mode
-                    git-rebase-mode
                     term-mode))
       (add-to-list 'evil-emacs-state-modes mode)))
   (add-hook 'evil-mode-hook #'mug-evil-hook)
 
   ;; Disable useless messages...
   (dolist (fn '(evil-forward-char evil-backward-char evil-next-line evil-previous-line evil-line-move))
-    (advice-add fn :around #'mug--suppress-message))
+    (advice-add fn :around #'mug--suppress-message)))
 
-  ;; Keybinding goodies
-  (use-package evil-collection
-    :requires evil
-    :commands (evil-collection-init)
-    :init
-    (evil-collection-init)
-    :custom
-    (evil-collection-outline-bind-tab-p nil)
-    (evil-collection-want-unimpaired-p  nil))
+;; Keybinding goodies
+(use-package evil-collection
+  :requires evil
+  :commands (evil-collection-init)
+  :init
+  (evil-collection-init)
+  :custom
+  (evil-collection-outline-bind-tab-p nil)
+  (evil-collection-want-unimpaired-p  nil))
 
-  ;; Commenting made easier
-  (use-package evil-nerd-commenter
-    :requires evil))
+;; Commenting made easier
+(use-package evil-nerd-commenter
+  :requires evil)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Keybindings
@@ -718,21 +694,21 @@ that are relevant for your installation. "
 (keymap-global-set "<escape>" 'keyboard-escape-quit)
 
 ;; Translate <C-k> into an escape key press
-(define-key key-translation-map (kbd "C-k") (kbd "<escape>"))
+(define-key key-translation-map "C-k" "<escape>")
 
 ;; Remove annoying keybindings
-(dolist (key '("C-SPC" "C-x C-b" "C-x C-c" "C-x C-d" "C-x C-z" "C-x C-s" "C-x s" "C-x f" "C-h h"
-               "C-h k" "C-h j" "C-h l" "C-f" "C-z" "C-j" "M-j"))
+(dolist (key '("C-SPC" "C-x C-b" "C-x C-c" "C-x C-d" "C-x C-z" "C-x C-s"
+               "C-x s" "C-x f" "C-h h" "C-h k" "C-h j" "C-h l" "C-f" "C-z" "C-j" "M-j"))
     (keymap-global-unset key))
 
 ;; This is needed for me because my keyboard uses the Caps Lock as a "magic" key
 ;; when pressed together with some other key, in order to prevent such a fucking
 ;; bullshit, I translated every possible shit that could happen into the right
 ;; thing that it should be bound in the first place.
-(define-key key-translation-map (kbd "C-<up>")    (kbd "C-w"))
-(define-key key-translation-map (kbd "C-<left>")  (kbd "C-a"))
-(define-key key-translation-map (kbd "C-<down>")  (kbd "C-s"))
-(define-key key-translation-map (kbd "C-<right>") (kbd "C-d"))
+(define-key key-translation-map (kbd "C-<up>")    "C-w")
+(define-key key-translation-map (kbd "C-<left>")  "C-a")
+(define-key key-translation-map (kbd "C-<down>")  "C-s")
+(define-key key-translation-map (kbd "C-<right>") "C-d")
 
 ;; Kind-of global motion with j and k
 (evil-global-set-key 'motion "j" 'evil-next-visual-line)
