@@ -88,11 +88,6 @@
 (defconst mug-dev-dir (eval-when-compile (mug-win-or-linux "d:/" (concat mug-home-dir "/projects")))
   "Development directory.")
 
-;; Add scoop-installed binaries.
-(if mug-sys-is-win
-    (dolist (bin-dir '(list (concat mug-home-dir "scoop/shims") "d:/app/bin"))
-      (add-to-list 'exec-path bin-dir)))
-
 ;; Auxiliar system directories
 (defconst mug-cache-dir (eval-when-compile (mug-win-or-linux (getenv "LOCALAPPDATA") "~/.cache"))
   "User general cache directory.")
@@ -110,10 +105,10 @@
   "Find dot-files directory."
   (interactive)
   (find-file mug-mugdot-dir))
-(defun mug-find-emacs-config ()
+(defun mug-init-el ()
   "Load the Emacs init.el file to the current window."
   (interactive)
-  (find-file (concat mug-emacs-dir "/init.el")))
+  (find-file (expand-file-name "init.el" mug-emacs-dir)))
 
 ;; Specific cache directories
 (defconst mug-emacs-cache-dir (concat mug-cache-dir "/emacs")
@@ -166,7 +161,12 @@
       column-number-mode         -1
       display-line-numbers-mode  -1)
 
-;; Suppress meaningless messages in the *Messages* buffer:
+(defun mug--suppress-message (orig-fun &rest args)
+  "Suppress message in the *Messages* buffer."
+  (let ((inhibit-message t))
+    (apply orig-fun args)))
+
+;; Suppress meaningless messages in the *Messages* buffer
 (dolist (fn '(basic-save-buffer undo undo-redo beginning-of-line end-of-line))
   (advice-add fn :around #'mug--suppress-message))
 
@@ -179,13 +179,12 @@
 (setq inhibit-startup-screen       t
       inhibit-startup-message      t
       initial-scratch-message    nil
-      mode-line-percent-position nil
-      visible-bell               nil)
+      mode-line-percent-position nil)
 
-(defun mug--suppress-message (orig-fun &rest args)
-  "Suppress message in the *Messages* buffer."
-  (let ((inhibit-message t))
-    (apply orig-fun args)))
+;; Emacs, just shut the fuck up!
+(setq visible-bell nil)
+(set-message-beep 'silent)
+
 ;; Put a low limit on the `*Messages*' buffer
 (setq message-log-max 10)
 
@@ -219,7 +218,7 @@
 (setq use-dialog-box nil)
 
 ;; Cursor config
-(blink-cursor-mode -1) ; Stop the blinky-blink stuff
+(blink-cursor-mode -1)          ; Stop the blinky-blink stuff
 (setq show-paren-delay       0  ; Don't delay when trying to find a matching parenthesis
       blink-matching-paren nil  ; Don't be fucking annoying
       x-stretch-cursor     nil) ; Don't stretch the cursor to fit wide characters
@@ -250,6 +249,11 @@
     (setq use-short-answers t))
 (define-key y-or-n-p-map " " nil) ; Disable `SPC' as a `yes' alias.
 
+(defun mug--hide-minor-mode-from-mode-line (mode)
+  "Remove a minor MODE from the mode line."
+  (setq minor-mode-alist
+        (assq-delete-all mode minor-mode-alist)))
+
 ;;; ----------------------------------------------------------------------------
 ;;; Performance hacks
 ;;; ----------------------------------------------------------------------------
@@ -276,8 +280,8 @@
 ;; usage, however!
 (setq inhibit-compacting-font-caches t)
 
-;; Introduced in Emacs HEAD (b2f8c9f), this inhibits fontification while
-;; receiving input, which should help a little with scrolling performance.
+;; Inhibits fontification while receiving input, which should help a little
+;; with scrolling performance.
 (setq redisplay-skip-fontification-on-input t)
 
 ;; The GC introduces annoying pauses and stuttering into our Emacs experience,
@@ -291,6 +295,8 @@
       gcmh-auto-idle-delay-factor 10
       gcmh-high-cons-threshold    (* 64 1024 1024)) ; 64mb
 
+;; GCMH is enabled in every buffer but we don't really care to know so we hide it.
+(mug--hide-minor-mode-from-mode-line 'gcmh-mode)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Backup/history config
@@ -512,7 +518,10 @@
  (citre-auto-enable-citre-mode-modes      '(prog-mode))
  :config
  ;; Citre setup
- (setq-default citre-enable-capf-integration nil))
+ (setq-default citre-enable-capf-integration nil)
+ (setq citre-ctags-program (mug-win-or-linux
+                            (concat mug-home-dir "/scoop/apps/universal-ctags/current/ctags.exe")
+                            "/usr/bin/ctags")))
 (add-hook 'find-file-hook #'citre-auto-enable-citre-mode)
 
 ;;; ----------------------------------------------------------------------------
@@ -690,10 +699,8 @@ that are relevant for your installation. "
   ;; Keybinding goodies
   (use-package evil-collection
     :requires evil
-    :defines  (evil-collection-mode-list)
     :commands (evil-collection-init)
     :init
-    (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list))
     (evil-collection-init)
     :custom
     (evil-collection-outline-bind-tab-p nil)
