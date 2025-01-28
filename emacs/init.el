@@ -620,8 +620,14 @@ that are relevant for your installation. "
   (find-file (concat mug-emacs-temp-dir "/scratch.c")))
 
 ;;; ----------------------------------------------------------------------------
-;;; Automatic buffer editing
+;;; Buffer editing
 ;;; ----------------------------------------------------------------------------
+
+;; Set the "max" column to 100 for a more modern experience.
+;; This won't automatically enable the use of auto-truncating lines as you type,
+;; which can be annoying. Its primary purpose is to use something like `g q' in
+;; the Evil visual-mode state.
+(setopt fill-column 100)
 
 ;; Trim the extraneous whitespaces before saving files.
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
