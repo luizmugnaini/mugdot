@@ -1,3 +1,10 @@
+# DISCLAIMER
+
+> This project is now hosted at https://git.sr.ht/~presheaf/mugdot
+>
+> This repository will no longer be updated. Please refer to the new hosting
+> page for new development and contributions or contact me via e-mail.
+
 # Dotfiles 🖇️
 
 These are my config files I use across all of my machines, be it Linux or Windows! I'm currently using my
